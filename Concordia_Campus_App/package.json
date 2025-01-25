@@ -1,0 +1,34 @@
+{
+  "name": "concordia_campus_app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "test": "jest --coverage"
+  },
+  "jest": {
+  "preset": "jest-expo",
+  "testPathIgnorePatterns": [
+    "/node_modules/"
+  ],
+  "testMatch": [
+    "**/__tests__/*.js"
+  ]
+},
+  "dependencies": {
+    "expo": "~52.0.27",
+    "expo-status-bar": "~2.0.1",
+    "react": "18.3.1",
+    "react-native": "0.76.6",
+    "react-test-renderer": "^18.3.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@testing-library/react-native": "^11.2.0",
+    "jest-expo": "^52.0.3"
+  },
+  "private": true
+}
