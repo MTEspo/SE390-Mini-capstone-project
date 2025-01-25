@@ -7,17 +7,20 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "test": "jest --coverage"
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "uploadCodeCove": "codecov"
   },
   "jest": {
-  "preset": "jest-expo",
-  "testPathIgnorePatterns": [
-    "/node_modules/"
-  ],
-  "testMatch": [
-    "**/__tests__/*.js"
-  ]
-},
+    "preset": "jest-expo",
+    "coverageReporters": ["json", "lcov", "clover"],
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testMatch": [
+      "**/__tests__/*.js"
+    ]
+  },
   "dependencies": {
     "expo": "~52.0.27",
     "expo-status-bar": "~2.0.1",
@@ -28,6 +31,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@testing-library/react-native": "^11.2.0",
+    "codecov": "^3.8.3",
     "jest-expo": "^52.0.3"
   },
   "private": true
