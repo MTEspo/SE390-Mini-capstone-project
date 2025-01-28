@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jonathandannessa.Concordia-Campus-App"
+      "bundleIdentifier": "com.concordia.campusapp"
     },
     "android": {
       "adaptiveIcon": {
