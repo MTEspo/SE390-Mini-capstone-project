@@ -45,3 +45,6 @@ npx expo run ios
 - Run the following command to run your test file
   ```bash
     maestro test testFile.yml
+
+### Possible issue with System events error with simulator
+- System settings in mac privacy automation for vscode toggled on
