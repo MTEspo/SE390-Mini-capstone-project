@@ -1,12 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
+import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { StatusBar } from 'expo-status-bar';
 
-export default function App() {
+import Calendar from './calendar/calendar';
+
+const Drawer = createDrawerNavigator();
+
+// Edits the main screen of the app
+function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
       <StatusBar style="auto" />
     </View>
+  );
+}
+
+// Add more navigation menus
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Screen name="Home" component={HomeScreen} />
+        <Drawer.Screen name="Calendar" component={Calendar}/>
+      </Drawer.Navigator>
+    </NavigationContainer>
   );
 }
 
