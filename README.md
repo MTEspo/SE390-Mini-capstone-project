@@ -1,3 +1,6 @@
+# SE390-Mini-capstone-project
+
+
 # Concordia Campus App - iOS Setup and E2E Testing Guide
 
 ## Description
