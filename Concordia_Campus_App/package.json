@@ -1,10 +1,14 @@
 {
   "name": "concordia_campus_app",
+<<<<<<< HEAD
   "license": "0BSD",
+=======
+>>>>>>> origin/pipeline-e2e-maestroVersion
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "start": "expo start",
+<<<<<<< HEAD
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web"
@@ -21,6 +25,41 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "jest": "^29.7.0"
+=======
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "uploadCodeCove": "codecov"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "clover"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testMatch": [
+      "**/__tests__/*.js"
+    ]
+  },
+  "dependencies": {
+    "expo": "~52.0.27",
+    "expo-status-bar": "~2.0.1",
+    "react": "18.3.1",
+    "react-native": "0.76.6",
+    "react-test-renderer": "^18.3.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@testing-library/react-native": "^11.2.0",
+    "codecov": "^3.8.3",
+    "jest-expo": "^52.0.3"
+>>>>>>> origin/pipeline-e2e-maestroVersion
   },
   "private": true
 }
