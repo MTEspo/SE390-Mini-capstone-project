@@ -13,12 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-<<<<<<< HEAD
-      "supportsTablet": true
-=======
       "supportsTablet": true,
       "bundleIdentifier": "com.concordia.campusapp"
->>>>>>> origin/pipeline-e2e-maestroVersion
     },
     "android": {
       "adaptiveIcon": {
@@ -28,9 +24,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-<<<<<<< HEAD
-    }
-=======
     },
     "extra": {
       "eas": {
@@ -38,6 +31,5 @@
       }
     },
     "owner": "jonathandannessa"
->>>>>>> origin/pipeline-e2e-maestroVersion
   }
 }
