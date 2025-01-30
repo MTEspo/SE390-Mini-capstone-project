@@ -27,7 +27,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>com.jonathandannessa.Concordia-Campus-App</string>
+          <string>com.concordia.campusapp</string>
         </array>
       </dict>
     </array>
