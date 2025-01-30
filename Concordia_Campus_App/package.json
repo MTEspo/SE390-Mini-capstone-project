@@ -33,7 +33,6 @@
     "expo-status-bar": "~2.0.1",
     "react": "18.3.1",
     "react-native": "0.76.6",
-    "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "^2.22.1",
     "react-native-maps": "^1.20.1",
     "react-native-reanimated": "^3.16.7",
@@ -45,7 +44,8 @@
     "@babel/core": "^7.20.0",
     "@testing-library/react-native": "^11.2.0",
     "codecov": "^3.8.3",
-    "jest-expo": "^52.0.3"
+    "jest-expo": "^52.0.3",
+    "react-native-dotenv": "^3.4.11"
   },
   "private": true
 }
