@@ -1,9 +1,12 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSession } from '@supabase/auth-helpers-react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as WebBrowser from 'expo-web-browser';
+import * as Linking from 'expo-linking';
 
 import { createClient } from '@supabase/supabase-js';
-
+WebBrowser.maybeCompleteAuthSession();
 const SUPABASE_URL =  "https://mmzllysbkfjeypyuodqr.supabase.co";
 const SUPABASE_ANON_KEY =  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1temxseXNia2ZqZXlweXVvZHFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgxOTg3MDAsImV4cCI6MjA1Mzc3NDcwMH0.bMYbKNUeMiToPKbEnN7ypk1lG2IWN7tEOrnGw57RuX0";
 
@@ -13,18 +16,27 @@ export default function Calendar() {
   const session = useSession();
 
   async function googleSignIn() {
+    const redirectUri = Linking.createURL('');
+
     const {data, error} = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        scopes: 'https://www.googleapis.com/auth/calendar'
+        scopes: 'https://www.googleapis.com/auth/calendar',
+        redirectTo: redirectUri
       }
     });
 
-    console.log(data);
-    console.log("SESSION: " + session);
-    
-  }
+    if (data?.url) {
+      const result = await WebBrowser.openAuthSessionAsync(data.url);
+      console.log('Auth session result:', result);
+    } else {
+      console.error('Error starting OAuth:', error);
+    }
 
+    console.log("HELLO");
+  }
+  console.log("SESSION: " + session);
+  
   return (
     <View>
       {session ?
