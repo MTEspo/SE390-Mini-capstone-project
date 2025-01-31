@@ -88,7 +88,8 @@ const styles = StyleSheet.create({
   searchBarContainer: {
     position: 'absolute',
     top: 20,
-    width: '90%',
+    width: '70%',
+    left: 20,
     zIndex: 1,
     backgroundColor: 'white',
     borderRadius: 10,
