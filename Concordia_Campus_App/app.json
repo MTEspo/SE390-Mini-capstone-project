@@ -31,7 +31,6 @@
       }
     },
     "owner": "jonathandannessa",
-    "scheme": "exp://localhost:8081",
-    "platforms": ["ios", "android", "web"]
+    "scheme": "myproject"
   }
 }
