@@ -64,6 +64,31 @@ const styles = StyleSheet.create({
   normalText: {
     color: 'grey',
   },
+  zoomButtonContainer: {
+    position: 'absolute',
+    bottom: 165,
+    right: 10,
+    zIndex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  zoomButton: {
+    backgroundColor: 'white', 
+    borderRadius: 5,
+    width: 42,  
+    height: 42, 
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 0, 
+    borderWidth: 1, 
+    borderColor: 'black', 
+  },
+  zoomButtonText: {
+    fontSize: 24, 
+    fontWeight: 'bold',
+    color: '#800000', 
+  },
 });
 
 export default styles;

@@ -6,6 +6,8 @@ import buildingsData from './buildingCoordinates.js';
 
 const MapScreen = () => {
   const [campus, setCampus] = useState('SGW');
+  const [zoomLevel, setZoomLevel] = useState(0.005); // Initial zoom level (medium zoom)
+  
   const campusLocations = {
     SGW: {
       latitude: 45.49532997441208,
@@ -23,7 +25,15 @@ const MapScreen = () => {
 
   const location = campusLocations[campus];
 
+  const handleZoomIn = () => {
+    // Zoom in by decreasing the delta more significantly
+    setZoomLevel((prevZoom) => Math.max(prevZoom * 0.7, 0.0005)); // Zoom in more per click
+  };
 
+  const handleZoomOut = () => {
+    // Zoom out by increasing the delta more significantly
+    setZoomLevel((prevZoom) => Math.min(prevZoom / 0.7, 0.05)); // Zoom out more per click
+  };
 
   return (
     <View style={styles.container}>
@@ -53,14 +63,14 @@ const MapScreen = () => {
         initialRegion={{
           latitude: location.latitude,
           longitude: location.longitude,
-          latitudeDelta: 0.0005,  // Zoomed out for better view of polyline
-          longitudeDelta: 0.0005,
+          latitudeDelta: zoomLevel, // Use zoomLevel for zooming
+          longitudeDelta: zoomLevel,
         }}
         region={{
           latitude: location.latitude,
           longitude: location.longitude,
-          latitudeDelta: 0.0005,
-          longitudeDelta: 0.0005,
+          latitudeDelta: zoomLevel,
+          longitudeDelta: zoomLevel,
         }}
       >
         {/* Marker for the campus */}
@@ -83,10 +93,18 @@ const MapScreen = () => {
           />
         ))}
       </MapView>
+
+      {/* Zoom in/out buttons */}
+      <View style={styles.zoomButtonContainer}>
+        <TouchableOpacity style={styles.zoomButton} onPress={handleZoomIn}>
+          <Text style={styles.zoomButtonText}>+</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.zoomButton} onPress={handleZoomOut}>
+          <Text style={styles.zoomButtonText}>−</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 export default MapScreen;
-
-
