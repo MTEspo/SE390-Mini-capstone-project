@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
 import App, { HomeScreen } from '../App';
-
+// test file to be removed eventually
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   NavigationContainer: ({ children }) => <>{children}</>,
