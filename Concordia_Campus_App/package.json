@@ -24,7 +24,10 @@
     ],
     "testMatch": [
       "**/__tests__/*.js"
-    ]
+    ],
+    "moduleNameMapper": {
+    "form-data": "<rootDir>/__mocks__/FormData.js"
+  }
   },
   "dependencies": {
     "@react-navigation/drawer": "^7.1.1",
