@@ -9,7 +9,7 @@ import Calendar from './calendar/calendar';
 const Drawer = createDrawerNavigator();
 
 // Edits the main screen of the app
-function HomeScreen() {
+export function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
