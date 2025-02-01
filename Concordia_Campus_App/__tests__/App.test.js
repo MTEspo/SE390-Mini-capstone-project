@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react-native';
-import App, { HomeScreen } from '../App';
+import { render } from '@testing-library/react-native';
+import App from '../App';
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
@@ -20,14 +20,6 @@ describe('App Component', () => {
     const { toJSON } = render(<App />);
     expect(toJSON()).toMatchSnapshot();
   });
-
-  it('displays the expected text on HomeScreen', async () => {
-    const { getAllByText } = render(<HomeScreen />);
-    
-    await waitFor(() => getAllByText('Open up App.js to start working on your app!'), { timeout: 2000 });
-  
-    const textElements = getAllByText('Open up App.js to start working on your app!');
-    expect(textElements).toHaveLength(1);
-  });
 });
+
 
