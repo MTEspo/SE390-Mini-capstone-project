@@ -15,7 +15,10 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "John Molson School of Business" }
+      "popUp": { 
+      "name": "John Molson School of Business",
+      "address": "1450 Rue Guy, Montréal, QC H3H 0A1"
+    }
     },
     {
       "name": "Faubourg Tower",
@@ -30,7 +33,7 @@ const buildingsData = {
         ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Faubourg Tower" }
+      "popUp": { "name": "Faubourg Tower", "address":"1600 Saint-Catherine St W, Montreal, QC H3H 2S7" }
     },
     {
       "name": "FB Building",
@@ -57,7 +60,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000", 
       "strokeColor": "#000000",
-      "popUp": { "name": "EV Building" }
+      "popUp": { "name": "EV Building","address":"1515 Saint-Catherine St, Montreal, QC H3G 1S6" }
     },
     {
       "name": "Centre for Structural and Functional Genomics (GE)",
@@ -69,7 +72,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Centre for Structural and Functional Genomics (GE)" }
+      "popUp": { "name": "Centre for Structural and Functional Genomics (GE)","address":"7141 Rue Sherbrooke O, Montréal, QC H4B 1R6" }
     },
     {
       "name": "Communication Studies and Journalism Building",
@@ -90,7 +93,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Communication Studies and Journalism Building" }
+      "popUp": { "name": "Communication Studies and Journalism Building" ,"address":"7141 Rue Sherbrooke O, Montréal, QC H4B 1R6"}
     },
     {
       "name": "Concordia Gymnasium",
@@ -110,7 +113,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Concordia Gymnasium" }
+      "popUp": { "name": "Concordia Gymnasium" ,"address":"7200 Rue Sherbrooke O, Montréal, QC H4B 1R6"}
     },
     {
       "name": "PERFORM Centre",
@@ -122,7 +125,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "PERFORM Centre" }
+      "popUp": { "name": "PERFORM Centre","address": "7200 Sherbrooke St W, Montreal, Quebec H4B 1R6"}
     },
     {
       "name": "Stinger Dome",
@@ -134,7 +137,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Stinger Dome" }
+      "popUp": { "name": "Stinger Dome","address":"7200 Rue Sherbrooke O, Montréal, QC H4B 1R3" }
     },
     {
       "name": "Concordia Stadium",
@@ -150,7 +153,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Concordia Stadium" }
+      "popUp": { "name": "Concordia Stadium","address": "7200 Rue Sherbrooke O, Montréal, QC H4B 2A4"}
     },
     {
       "name": "Richard J. Renaud Science Complex",
@@ -166,7 +169,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Richard J. Renaud Science Complex" }
+      "popUp": { "name": "Richard J. Renaud Science Complex","address": "3475 Rue West Broadway, Montreal, QC H4B 2A7"}
     },
     {
       "name": "Administration Building",
@@ -190,7 +193,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Administration Building" }
+      "popUp": { "name": "Administration Building","address":"7141 Sherbrooke W." }
     },{
       "name": "F.C. Smith Building",
       "coordinates": [
@@ -227,7 +230,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "F.C. Smith Building" }
+      "popUp": { "name": "F.C. Smith Building" ,"address":"7141 Sherbrooke St. W"}
     },
     {
       "name": "Central Building",
@@ -239,7 +242,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Central Building" }
+      "popUp": { "name": "Central Building","address": "7141 Sherbrooke St. W"}
     },{
       "name": "Loyola Jesuit Hall and Conference Centre",
       "coordinates": [
@@ -258,7 +261,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Loyola Jesuit Hall and Conference Centre" }
+      "popUp": { "name": "Loyola Jesuit Hall and Conference Centre","address": "7141 Rue Sherbrooke O, Montréal, QC H4B 1E1"}
     },
     {
       "name": "Psychology Building",
@@ -272,7 +275,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Psychology Building" }
+      "popUp": { "name": "Psychology Building","address": "1610 St. Catherine W. Faubourg Ste-Catherine"}
     },
     {
       "name": "St. Ignatius of Loyola Church",
@@ -291,7 +294,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "St. Ignatius of Loyola Church" }
+      "popUp": { "name": "St. Ignatius of Loyola Church","address": "4455 Rue West Broadway, Montréal, QC H4B 2A7"}
     },
     {
       "name": "Jesuit Residence",
@@ -303,7 +306,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Jesuit Residence" }
+      "popUp": { "name": "Jesuit Residence","address":"1455 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8" }
     },
     {
       "name": "Applied Science Hub",
@@ -315,7 +318,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Applied Science Hub" }
+      "popUp": { "name": "Applied Science Hub","address": "7141 Sherbrooke Street W. in Montreal, QC"}
     },
     {
       "name": "Hingston Hall, Wing HB",
@@ -336,7 +339,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Hingston Hall, Wing HB" }
+      "popUp": { "name": "Hingston Hall, Wing HB","address":"7141 Sherbrooke Street W. Montreal, QC H4B 1R6"}
     },
     {
       "name": "Hingston Hall, Wing HC",
@@ -352,7 +355,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Hingston Hall, Wing HC" }
+      "popUp": { "name": "Hingston Hall, Wing HC","address":"7141 Sherbrooke Street W. Montreal, Quebec, Canada. H4B 1R6" }
     },
     {
       "name": "Hingston Hall, Wing HA",
@@ -364,7 +367,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Hingston Hall, Wing HA" }
+      "popUp": { "name": "Hingston Hall, Wing HA" ,"address":"7141 Sherbrooke Street W. Montreal, Quebec, Canada. H4B 1R6"}
     },
     {
       "name": "Terrebonne Building",
@@ -380,8 +383,90 @@ const buildingsData = {
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
-      "popUp": { "name": "Terrebonne Building" }
+      "popUp": { "name": "Terrebonne Building" ,"address":"P"}
+    },
+    {
+      "name": "Physical Services Building",
+      "coordinates": [
+        { "latitude": 45.45998857157555, "longitude": -73.64013362438531 },
+        { "latitude": 45.4597157794257, "longitude": -73.64034015446242 },
+        { "latitude": 45.4594128845268, "longitude": -73.63954890286833 },
+        { "latitude": 45.45935080027824, "longitude": -73.63959718262662 },
+        { "latitude": 45.459292478649175, "longitude": -73.63945234335176 },
+        { "latitude": 45.459582204857185, "longitude": -73.63922972002192 },
+        { "latitude": 45.45963676352198, "longitude": -73.639358466044 },
+        { "latitude": 45.45968003414962, "longitude": -73.63933164395606 }
+      ],
+      "fillColor": "#800000",
+      "strokeColor": "#000000",
+      "popUp": { "name": "Physical Services Building","address": "7141 Sherbrooke St W, Montreal, QC H4B 2A7"}
+    },
+    {
+      "name": "BH Annex",
+      "coordinates": [
+        { "latitude": 45.459815489812264, "longitude": -73.63916937025576 },
+        { "latitude": 45.45975340600703, "longitude": -73.63901782545892 },
+        { "latitude": 45.45966498349976, "longitude": -73.63909426840954 },
+        { "latitude": 45.45972424540827, "longitude": -73.63924313099758 }
+      ],
+      "fillColor": "#800000",
+      "strokeColor": "#000000",
+      "popUp": { "name": "BH Annex","address":"3500 Belmore" }
+    },
+    {
+      "name": "Student Centre",
+      "coordinates": [
+        { "latitude": 45.459317876776176, "longitude": -73.63918009906476 },
+        { "latitude": 45.45926613981954, "longitude": -73.63922301442453 },
+        { "latitude": 45.459303766701495, "longitude": -73.6393249383587 },
+        { "latitude": 45.459232275604315, "longitude": -73.63937858253456 },
+        { "latitude": 45.45921722483545, "longitude": -73.63933566719386 },
+        { "latitude": 45.45910810664113, "longitude": -73.63941881566646 },
+        { "latitude": 45.45899146282058, "longitude": -73.63912645490797 },
+        { "latitude": 45.45909681854001, "longitude": -73.63904330643537 },
+        { "latitude": 45.45908176773501, "longitude": -73.63900039109467 },
+        { "latitude": 45.45913820823307, "longitude": -73.63895747575398 },
+        { "latitude": 45.45914949632591, "longitude": -73.63898429784192 },
+        { "latitude": 45.45918147924335, "longitude": -73.63896284017156 },
+        { "latitude": 45.45921816550903, "longitude": -73.63892797143815 },
+      ],
+      "fillColor": "#800000",
+      "strokeColor": "#000000",
+      "popUp": { "name": "Student Centre" ,"address":"7141 Sherbrooke W."}
+    },
+    {
+      "name": "Vanier Library Building",
+      "coordinates": [
+        { "latitude": 45.45931317341766, "longitude": -73.63866511498837 },
+        { "latitude": 45.45915702171947, "longitude": -73.63878849659288 },
+        { "latitude": 45.45919464867425, "longitude": -73.63889042052703 },
+        { "latitude": 45.459091174488194, "longitude": -73.63896820458206 },
+        { "latitude": 45.45904978476062, "longitude": -73.6388635984391 },
+        { "latitude": 45.45884847974324, "longitude": -73.63902721317551 },
+        { "latitude": 45.458632123082104, "longitude": -73.63846663153767 },
+        { "latitude": 45.45896512385879, "longitude": -73.63820913948784 },
+        { "latitude": 45.45890115776002, "longitude": -73.63800260939931 },
+        { "latitude": 45.45910152191424, "longitude": -73.63784704128929 },
+        { "latitude": 45.45921064012132, "longitude": -73.6381326965258 },
+        { "latitude": 45.45913350485889, "longitude": -73.63819706953683 }
+      ],
+      "fillColor": "#800000",
+      "strokeColor": "#000000",
+      "popUp": { "name": "Vanier Library Building","address": "7141 Sherbrooke St W, Montreal, Quebec H4B 1R6"}
+    },
+    {
+      "name": "Oscar Peterson Concert Hall",
+      "coordinates": [
+        { "latitude": 45.4594815533795, "longitude": -73.63913450151526 },
+        { "latitude": 45.45934421557199, "longitude": -73.63924447207579 },
+        { "latitude": 45.459165487787295, "longitude": -73.63878313216331 },
+        { "latitude": 45.459304707373626, "longitude": -73.63867584381157 }
+      ],
+      "fillColor": "#800000",
+      "strokeColor": "#000000",
+      "popUp": { "name": "Oscar Peterson Concert Hall", "address": "7141 Rue Sherbrooke O, Montréal, QC H4B 2B9"}
     }
+    
   
   ]
 };

@@ -1,5 +1,3 @@
-// maps/styles/mapScreenStyles.js
-
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -32,7 +30,7 @@ const styles = StyleSheet.create({
   },
   map: {
     width: '100%',
-    height: '80%',
+    height: '75%', // Slightly reduce map height to accommodate popup
   },
   toggleButtonContainer: {
     position: 'absolute',
@@ -66,7 +64,7 @@ const styles = StyleSheet.create({
   },
   zoomButtonContainer: {
     position: 'absolute',
-    bottom: 165,
+    bottom: 200,
     right: 10,
     zIndex: 1,
     alignItems: 'center',
@@ -92,3 +90,4 @@ const styles = StyleSheet.create({
 });
 
 export default styles;
+

@@ -3,11 +3,13 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; // Import styles here
 import buildingsData from './buildingCoordinates.js';
+import BuildingPopup from './BuildingPopup'; // Import the new BuildingPopup component
 
 const MapScreen = () => {
   const [campus, setCampus] = useState('SGW');
   const [zoomLevel, setZoomLevel] = useState(0.005); // Initial zoom level (medium zoom)
-  
+  const [selectedBuilding, setSelectedBuilding] = useState(null); // To store the selected building info
+
   const campusLocations = {
     SGW: {
       latitude: 45.49532997441208,
@@ -33,6 +35,14 @@ const MapScreen = () => {
   const handleZoomOut = () => {
     // Zoom out by increasing the delta more significantly
     setZoomLevel((prevZoom) => Math.min(prevZoom / 0.7, 0.05)); // Zoom out more per click
+  };
+
+  const handlePolygonPress = (building) => {
+    setSelectedBuilding(building); // Update the selected building info
+  };
+
+  const handleClosePopup = () => {
+    setSelectedBuilding(null); // Close the popup by clearing the selected building
   };
 
   return (
@@ -90,9 +100,13 @@ const MapScreen = () => {
             fillColor={building.fillColor}
             strokeColor={building.strokeColor}
             strokeWidth={2}
+            onPress={() => handlePolygonPress(building)} // Handle the polygon press
           />
         ))}
       </MapView>
+
+      {/* Render the BuildingPopup component with the close handler */}
+      <BuildingPopup building={selectedBuilding} onClose={handleClosePopup} />
 
       {/* Zoom in/out buttons */}
       <View style={styles.zoomButtonContainer}>
@@ -108,3 +122,4 @@ const MapScreen = () => {
 };
 
 export default MapScreen;
+
