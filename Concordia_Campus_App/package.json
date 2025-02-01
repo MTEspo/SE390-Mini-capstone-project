@@ -24,10 +24,7 @@
     ],
     "testMatch": [
       "**/__tests__/*.js"
-    ],
-    "setupFilesAfterEnv": [
-    "<rootDir>/__mocks__/FormData.js"
-  ]
+    ]
   },
   "dependencies": {
     "@react-navigation/drawer": "^7.1.1",

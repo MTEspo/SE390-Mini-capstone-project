@@ -1,7 +1,20 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
 import App, { HomeScreen } from '../App';
-
+jest.mock('form-data', () => {
+  return class FormData {
+    append() {}
+    get() {}
+    getAll() {}
+    has() {}
+    set() {}
+    delete() {}
+    keys() {}
+    values() {}
+    entries() {}
+    forEach() {}
+  };
+});
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   NavigationContainer: ({ children }) => <>{children}</>,
