@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; // Import styles here
 import buildingsData from './buildingCoordinates.js';
+import ShuttleBusMarker from './ShuttleBusMarker';
 
 const MapScreen = () => {
   const [campus, setCampus] = useState('SGW');
@@ -82,6 +83,8 @@ const MapScreen = () => {
           title={location.title}
           description={location.description}
         />
+
+        <ShuttleBusMarker/>
 
         {buildingsData.buildings.map((building, index) => (
           <Polygon
