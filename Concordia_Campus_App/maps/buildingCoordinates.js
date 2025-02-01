@@ -36,7 +36,7 @@ const buildingsData = {
       "popUp": { "name": "Faubourg Tower", "address":"1600 Saint-Catherine St W, Montreal, QC H3H 2S7" }
     },
     {
-      "name": "FB Building",
+      "name": "EV Building",
       "coordinates": [
         { "latitude": 45.49604560545516, "longitude": -73.57771621742774 },
         { "latitude": 45.49583127169303, "longitude": -73.57726024189787 },
@@ -48,10 +48,10 @@ const buildingsData = {
       ],
       "fillColor": "#800000", 
       "strokeColor": "#000000",
-      "popUp": { "name": "FB Building" }
+      "popUp": { "name": "EV Building", "address":"1515 Saint-Catherine St W, Montreal, QC H3G 1S6" }
     },
     {
-      "name": "EV Building",
+      "name": "Henry F.Hall Building",
       "coordinates": [
         { "latitude": 45.497712304674806, "longitude": -73.57903318205052 },
         { "latitude": 45.49716708420179, "longitude": -73.57954280176037 },
@@ -60,7 +60,7 @@ const buildingsData = {
       ],
       "fillColor": "#800000", 
       "strokeColor": "#000000",
-      "popUp": { "name": "EV Building","address":"1515 Saint-Catherine St, Montreal, QC H3G 1S6" }
+      "popUp": { "name": "Henry F.Hall Building","address":"1515 Saint-Catherine St, Montreal, QC H3G 1S6" }
     },
     {
       "name": "Centre for Structural and Functional Genomics (GE)",
@@ -465,8 +465,187 @@ const buildingsData = {
       "fillColor": "#800000",
       "strokeColor": "#000000",
       "popUp": { "name": "Oscar Peterson Concert Hall", "address": "7141 Rue Sherbrooke O, Montréal, QC H4B 2B9"}
-    }
+    },
+    {
+      "name": "CL Annex",
+      "coordinates": [
+        { "latitude": 45.49398260612232, "longitude": -73.57933821489304 },
+        { "latitude": 45.49416498387085, "longitude": -73.57965605664079 },
+        { "latitude": 45.49447239245092, "longitude": -73.57928457071628 },
+        { "latitude": 45.49426087296646, "longitude": -73.5789372246702 }
+      ],
+      "fillColor": "#800000",
+      "strokeColor": "#000000",
+      "popUp": { 
+        "name": "CL Annex",
+        "address": "1665 Saint-Catherine St W, Montreal, Quebec H3H 1L9"
+      }
+    },
+    {
+      "name": "Learning Square (LS Building)",
+      "coordinates": [
+        { "latitude": 45.49653388133102, "longitude": -73.57957153950831 },
+        { "latitude": 45.496418255010674, "longitude": -73.57968151007081 },
+        { "latitude": 45.49636749216087, "longitude": -73.57958495055253 },
+        { "latitude": 45.496270666598186, "longitude": -73.57967346344675 },
+        { "latitude": 45.496163500247405, "longitude": -73.57944681679963 },
+        { "latitude": 45.49638159295696, "longitude": -73.57923894561439 }
+      ],
+      "fillColor": "#800000",
+      "strokeColor": "#000000",
+      "popUp": { 
+        "name": "Learning Square (LS Building)",
+        "address": "Montreal, QC, Canada"
+      }
+    },
+    {
+      "name": "GS Building",
+      "coordinates": [
+        { "latitude": 45.49675272890034, "longitude": -73.58136295427875 },
+        { "latitude": 45.49674238838495, "longitude": -73.58132674445939 },
+        { "latitude": 45.49675648908727, "longitude": -73.58131333341517 },
+        { "latitude": 45.496726407584724, "longitude": -73.58121945610571 },
+        { "latitude": 45.496709486732485, "longitude": -73.58122616162782 },
+        { "latitude": 45.496654023903346, "longitude": -73.58105852357521 },
+        { "latitude": 45.49663334283445, "longitude": -73.58106925241059 },
+        { "latitude": 45.496549678432686, "longitude": -73.58081578367505 },
+        { "latitude": 45.49653745777932, "longitude": -73.58082114809274 },
+        { "latitude": 45.49652993737593, "longitude": -73.58079834931758 },
+        { "latitude": 45.4964218314663, "longitude": -73.58086540453861 },
+        { "latitude": 45.4966032612661, "longitude": -73.58146219600589 }
+      ],
+      "fillColor": "#800000",
+      "strokeColor": "#000000",
+      "popUp": { 
+        "name": "GS Building",
+        "address": "1538 Sherbrooke St W, Montreal, QC H3G 1L5"
+      }
+    },
     
+    {
+      "name": "Grey Nuns Building",
+      "coordinates": [
+        { "latitude": 45.49259456543636, "longitude": -73.57653927337935 },
+        { "latitude": 45.492752504733176, "longitude": -73.57687186727571 },
+        { "latitude": 45.492673535140135, "longitude": -73.57693624028792 },
+        { "latitude": 45.49271866063544, "longitude": -73.5770327998062 },
+        { "latitude": 45.492801390616215, "longitude": -73.57696306237634 },
+        { "latitude": 45.492899162255014, "longitude": -73.57715618141293 },
+        { "latitude": 45.49285403690434, "longitude": -73.57719909675438 },
+        { "latitude": 45.49292548535952, "longitude": -73.57737612253794 },
+        { "latitude": 45.4929950535051, "longitude": -73.57731711394342 },
+        { "latitude": 45.49308718416023, "longitude": -73.57750486856234 },
+        { "latitude": 45.493198116789884, "longitude": -73.5774056268352 },
+        { "latitude": 45.49310974674668, "longitude": -73.57720982558978 },
+        { "latitude": 45.493446304256445, "longitude": -73.57685845622439 },
+        { "latitude": 45.493478737764804, "longitude": -73.57693624028077 },
+        { "latitude": 45.49345006466417, "longitude": -73.57696507402584 },
+        { "latitude": 45.49352950321864, "longitude": -73.57712667710854 },
+        { "latitude": 45.493576978278966, "longitude": -73.57708309121314 },
+        { "latitude": 45.49359954066919, "longitude": -73.5771327120767 },
+        { "latitude": 45.49358261887738, "longitude": -73.57715282864302 },
+        { "latitude": 45.4936352644352, "longitude": -73.5772668225188 },
+        { "latitude": 45.49374619598621, "longitude": -73.57715685195566 },
+        { "latitude": 45.493673808474085, "longitude": -73.57700128384283 },
+        { "latitude": 45.4937264539467, "longitude": -73.576947639666 },
+        { "latitude": 45.49366628768826, "longitude": -73.57682425805929 },
+        { "latitude": 45.49361364215942, "longitude": -73.57687253781845 },
+        { "latitude": 45.4935534757805, "longitude": -73.57674647400287 },
+        { "latitude": 45.49389661130386, "longitude": -73.57640851566637 },
+        { "latitude": 45.49419274028019, "longitude": -73.57702140039684 },
+        { "latitude": 45.49386840846482, "longitude": -73.57734192438674 },
+        { "latitude": 45.49397463909013, "longitude": -73.57755918330292 },
+        { "latitude": 45.49412317361377, "longitude": -73.57741300291612 },
+        { "latitude": 45.494094970886806, "longitude": -73.57734862990392 },
+        { "latitude": 45.49438921864577, "longitude": -73.57705761023465 },
+        { "latitude": 45.49401861515498, "longitude": -73.57628212224145 },
+        { "latitude": 45.49411920495176, "longitude": -73.57618220993646 },
+        { "latitude": 45.494033186584325, "longitude": -73.57599914918302 },
+        { "latitude": 45.493934006771916, "longitude": -73.57609570869907 },
+        { "latitude": 45.49371319913651, "longitude": -73.5756440696858 },
+        { "latitude": 45.49357077418262, "longitude": -73.57578488565791 },
+        { "latitude": 45.4937929911216, "longitude": -73.57624464731329 },
+        { "latitude": 45.493492864454566, "longitude": -73.57654073931623 },
+        { "latitude": 45.493471242123164, "longitude": -73.57649916507918 },
+        { "latitude": 45.493342839840786, "longitude": -73.57662615417068 },
+        { "latitude": 45.49336352211814, "longitude": -73.5766724222732 },
+        { "latitude": 45.493025679467515, "longitude": -73.5770064533055 },
+        { "latitude": 45.492940129485035, "longitude": -73.5768321097308 },
+        { "latitude": 45.49294812042298, "longitude": -73.5767932177026 },
+        { "latitude": 45.49292602782554, "longitude": -73.57674627903744 },
+        { "latitude": 45.49289782449905, "longitude": -73.57674225572416 },
+        { "latitude": 45.49273424492504, "longitude": -73.57640027408848 },
+        { "latitude": 45.49259604801976, "longitude": -73.57653304342614 },
+        
+        
+      ],
+      "fillColor": "#800000",
+      "strokeColor": "#000000",
+      "popUp": { 
+        "name": "Grey Nuns Building",
+        "address": "1190 Guy St, Montreal, QC H3H 2L4"
+      }
+    },
+    {
+      "name": "J.W McConnell Building",
+      "coordinates": [
+        { "latitude": 45.49726116828886, "longitude": -73.57806422535033 },
+        { "latitude": 45.49670466287796, "longitude": -73.57860066711866 },
+        { "latitude": 45.49626095867734, "longitude": -73.57770480936556 },
+        { "latitude": 45.49650161223698, "longitude": -73.5774687749875 },
+        { "latitude": 45.49658433666056, "longitude": -73.57764043635336 },
+        { "latitude": 45.49689267207789, "longitude": -73.577307842457 },
+        { "latitude": 45.49726116828886, "longitude": -73.57806422535033 }
+      ],
+      "fillColor": "#800000",
+      "strokeColor": "#000000",
+      "popUp": { 
+        "name": "J.W McConnell Building",
+        "address": "1400 Maisonneuve Blvd W, Montreal, QC H3G 1M8, Canada"
+      }
+    },
+    {
+      "name": "ER Building",
+      "coordinates": [
+        { "latitude": 45.49641728001318, "longitude": -73.58035255814781 },
+        { "latitude": 45.496293192964096, "longitude": -73.58043838883074 },
+        { "latitude": 45.49617756614951, "longitude": -73.58010981824765 },
+        { "latitude": 45.496197307329794, "longitude": -73.58008970168133 },
+        { "latitude": 45.49616440535884, "longitude": -73.57999716547629 },
+        { "latitude": 45.496252300581205, "longitude": -73.5799334630163 },
+        { "latitude": 45.496240079863306, "longitude": -73.57989054767484 },
+        { "latitude": 45.4963604068163, "longitude": -73.57980337588748 },
+        { "latitude": 45.49635758665628, "longitude": -73.57978862373885 },
+        { "latitude": 45.496530556209414, "longitude": -73.5796692654454 },
+        { "latitude": 45.49666404322003, "longitude": -73.58005416241551 },
+        { "latitude": 45.496653702688356, "longitude": -73.58006623235529 },
+        { "latitude": 45.496677203893945, "longitude": -73.58013596978518 },
+        { "latitude": 45.49641116967379, "longitude": -73.58032372440408 }
+      ],
+      "fillColor": "#800000",
+      "strokeColor": "#000000",
+      "popUp": { 
+        "name": "ER Building",
+        "address": "2155 Guy St, Montreal, QC H3H 2L9, Canada"
+      }
+    },
+    {
+      "name": "Visual Arts Building",
+      "coordinates": [
+        { "latitude": 45.496183459950764, "longitude": -73.57379504496822 },
+        { "latitude": 45.495666426628794, "longitude": -73.57431002906581 },
+        { "latitude": 45.49540508797991, "longitude": -73.57376285846213 },
+        { "latitude": 45.49566830675856, "longitude": -73.57350804862216 },
+        { "latitude": 45.49582059706151, "longitude": -73.57381113822127 },
+        { "latitude": 45.49606877296905, "longitude": -73.573561692799 }
+      ],
+      "fillColor": "#800000",
+      "strokeColor": "#000000",
+      "popUp": { 
+        "name": "Visual Arts Building",
+        "address": "1395 René-Lévesque Blvd W, Montreal, QC H3G 2M5, Canada"
+      }
+    }
   
   ]
 };
