@@ -2,15 +2,22 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import App from '../App';
 
-describe('App', () => {
-  it('renders correctly', () => {
-    const tree = render(<App />);
-    expect(tree).toMatchSnapshot();
-  });
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  NavigationContainer: ({ children }) => <>{children}</>,
+}));
 
-  it('displays the correct text', () => {
-    const { getByText } = render(<App />);
-    const textElement = getByText('Open up App.js to start working on your app!');
-    expect(textElement).toBeTruthy();
+jest.mock('@react-navigation/drawer', () => ({
+  ...jest.requireActual('@react-navigation/drawer'),
+  createDrawerNavigator: () => ({
+    Navigator: ({ children }) => <>{children}</>,
+    Screen: ({ children }) => <>{children}</>,
+  }),
+}));
+
+describe('App Component', () => {
+  it('renders correctly', () => {
+    const { toJSON } = render(<App />);
+    expect(toJSON()).toMatchSnapshot();
   });
 });
