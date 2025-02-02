@@ -18,7 +18,8 @@ const buildingsData = {
       "popUp": { 
       "name": "John Molson School of Business",
       "address": "1450 Rue Guy, Montréal, QC H3H 0A1"
-    }
+    },
+    "markerCoord": {"latitude": 45.49518949486195, "longitude": -73.5789761223161}
     },
     {
       "name": "Faubourg Tower",
@@ -602,7 +603,8 @@ const buildingsData = {
       "popUp": { 
         "name": "J.W McConnell Building",
         "address": "1400 Maisonneuve Blvd W, Montreal, QC H3G 1M8, Canada"
-      }
+      },
+      "markerCoord":{}
     },
     {
       "name": "ER Building",

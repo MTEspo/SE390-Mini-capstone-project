@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import 'react-native-get-random-values';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
-import styles from './styles/mapScreenStyles'; // Import styles here
+import styles from './styles/mapScreenStyles'; 
 import buildingsData from './buildingCoordinates.js';
-import BuildingPopup from './BuildingPopup'; // Import the new BuildingPopup component
+import BuildingPopup from './BuildingPopup'; 
 
 const MapScreen = () => {
   const [campus, setCampus] = useState('SGW');
-  const [zoomLevel, setZoomLevel] = useState(0.005); // Initial zoom level (medium zoom)
-  const [selectedBuilding, setSelectedBuilding] = useState(null); // To store the selected building info
+  const [zoomLevel, setZoomLevel] = useState(0.005); 
+  const [selectedBuilding, setSelectedBuilding] = useState(null); 
+  const mapRef = useRef(null);
+  const [selectedMarker, setSelectedMarker] = useState(null);
 
   const campusLocations = {
     SGW: {
@@ -27,6 +31,18 @@ const MapScreen = () => {
 
   const location = campusLocations[campus];
 
+  async function moveToLocation(latitude, longitude) {
+    mapRef.current.animateToRegion(
+      {
+        latitude,
+        longitude,
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.0121,
+      },
+      2000 //amount of time it takes to animate
+    )
+  }
+
   const handleZoomIn = () => {
     // Zoom in by decreasing the delta more significantly
     setZoomLevel((prevZoom) => Math.max(prevZoom * 0.7, 0.0005)); // Zoom in more per click
@@ -39,6 +55,10 @@ const MapScreen = () => {
 
   const handlePolygonPress = (building) => {
     setSelectedBuilding(building); // Update the selected building info
+    setSelectedMarker({
+      latitude: building.markerCoord.latitude,
+      longitude: building.markerCoord.longitude
+    });
   };
 
   const handleClosePopup = () => {
@@ -48,10 +68,27 @@ const MapScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.searchBarContainer}>
-        <TextInput
+        <GooglePlacesAutocomplete
+          fetchDetails={true}
           placeholder="Search Building or Class..."
-          style={styles.searchBar}
-          onChangeText={(text) => console.log(`Searching for: ${text}`)}
+          styles={{
+            textInput: styles.searchBar, 
+          }}
+          query={{
+            key: 'AIzaSyBsSr4QBEbAs3REWH0_-fszgm6HYqIh1pM',
+            language: 'en',
+          }}
+          onPress={(data, details = null) => {
+            console.log(JSON.stringify(details?.geometry?.location));
+            moveToLocation(details?.geometry?.location.lat, details?.geometry?.location.lng);
+            setSelectedMarker({
+              latitude: details?.geometry?.location.lat,
+              longitude: details?.geometry?.location.lng,
+            });
+              console.log('Selected Marker:', selectedMarker); // Debug marker state
+          }}
+          onFail={(error) => console.log('Error:', error)}
+      
         />
       </View>
 
@@ -69,6 +106,7 @@ const MapScreen = () => {
       </View>
 
       <MapView
+        ref = {mapRef}
         style={styles.map}
         initialRegion={{
           latitude: location.latitude,
@@ -83,15 +121,19 @@ const MapScreen = () => {
           longitudeDelta: zoomLevel,
         }}
       >
-        {/* Marker for the campus */}
-        <Marker
-          coordinate={{
-            latitude: location.latitude,
-            longitude: location.longitude,
-          }}
-          title={location.title}
-          description={location.description}
-        />
+        {selectedMarker && (
+          <Marker
+            coordinate={{
+              latitude: selectedMarker.latitude,
+              longitude: selectedMarker.longitude,
+            }}
+            pinColor="blue"
+            title="Selected Location"
+            style={{
+              zIndex: 1000,
+            }}
+          />
+        )}
 
         {buildingsData.buildings.map((building, index) => (
           <Polygon
@@ -122,4 +164,5 @@ const MapScreen = () => {
 };
 
 export default MapScreen;
+
 
