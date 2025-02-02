@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 
-const ScheduleDisplay = ({ stop }) => {
+const ArrivalDisplay = ({ stop }) => {
     const currentTime = new Date();
     const [nextBus, setNextBus] = useState(findNextBus);
     const [loading, setLoading] = useState(true);
@@ -108,4 +108,4 @@ const ScheduleDisplay = ({ stop }) => {
     );
 };
 
-export default ScheduleDisplay;
+export default ArrivalDisplay;

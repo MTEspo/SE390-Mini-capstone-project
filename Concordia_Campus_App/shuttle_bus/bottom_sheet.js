@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Text } from 'react-native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './styles/bottom_sheet_styles';
-import ScheduleDisplay from './schedule';
+import ArrivalDisplay from './next_shuttle_arrival';
 
 const BottomSheetComponent = ({ selectedStop, bottomSheetIndex, onSheetChanges, onShowDirections }) => {
     const bottomSheetRef = useRef(null);
@@ -50,7 +50,7 @@ const BottomSheetComponent = ({ selectedStop, bottomSheetIndex, onSheetChanges, 
                                 <Text style={styles.buttonText}>Directions</Text>
                             </TouchableOpacity>
                         </View>
-                        { showSchedule && (<ScheduleDisplay stop={selectedStop} ></ScheduleDisplay> )}
+                        { showSchedule && (<ArrivalDisplay stop={selectedStop} ></ArrivalDisplay> )}
                         { !showSchedule && (
                             <View style={styles.defaultTextContainer}>
                                 <Text style={styles.defaultText}>{'\u2022'} Schedule in effect: Jan. 6 – Apr. 14, 2025</Text>
