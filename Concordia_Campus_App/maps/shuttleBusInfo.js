@@ -4,7 +4,7 @@ const shuttleStops = [
         latitude:45.497163,
         longitude:-73.578535,
         title:'SGW Shuttle Bus Stop',
-        from: 'SWG Campus',
+        from: 'SGW Campus',
         to: 'Loyola Campus',
         departureTimes: {
             monday_to_thursday: 
@@ -23,7 +23,7 @@ const shuttleStops = [
         longitude:-73.638369,
         title:'Loyola Shuttle Bus Stop',
         from: 'Loyola Campus',
-        to: 'SWG Campus',
+        to: 'SGW Campus',
         departureTimes: {
             monday_to_thursday: 
                 ['9:15 AM','9:30 AM', '09:45 AM', '10:00 AM', '10:15 AM', '10:30 AM', '10:45 AM', '11:00 AM', '11:15 AM', '11:30 AM', 
