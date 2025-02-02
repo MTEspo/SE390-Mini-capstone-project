@@ -6,6 +6,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 const GOOGLE_MAPS_API_KEY = 'keyForMaps'; // Hardcoded API Key
 import MapScreen from './maps/MapScreen';
 import Calendar from './calendar/calendar';
+import FullShuttleSchedule from './shuttle_bus/full_schedule'
 const Drawer = createDrawerNavigator();
 
 
@@ -17,6 +18,7 @@ export default function App() {
       <Drawer.Navigator initialRouteName="Map">
         <Drawer.Screen name="Map" component={MapScreen} />
         <Drawer.Screen name="Calendar" component={Calendar}/>
+        <Drawer.Screen name="Shuttle Bus Schedule" component={FullShuttleSchedule}/>
       </Drawer.Navigator>
     </NavigationContainer>
   );
