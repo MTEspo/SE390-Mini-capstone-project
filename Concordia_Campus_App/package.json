@@ -14,6 +14,7 @@
   },
   "jest": {
     "preset": "jest-expo",
+    "testEnvironment": "jsdom",
     "coverageReporters": [
       "json",
       "lcov",
@@ -24,10 +25,7 @@
     ],
     "testMatch": [
       "**/__tests__/*.js"
-    ],
-    "moduleNameMapper": {
-    "form-data": "<rootDir>/__mocks__/FormData.js"
-  }
+    ]
   },
   "dependencies": {
     "@react-navigation/drawer": "^7.1.1",
@@ -47,6 +45,7 @@
     "@testing-library/react-native": "^11.2.0",
     "codecov": "^3.8.3",
     "form-data": "^4.0.1",
+    "formdata-polyfill": "^4.0.10",
     "jest-expo": "^52.0.3"
   },
   "private": true
