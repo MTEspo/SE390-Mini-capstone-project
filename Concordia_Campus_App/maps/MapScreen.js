@@ -75,7 +75,7 @@ const MapScreen = () => {
             textInput: styles.searchBar, 
           }}
           query={{
-            key: 'apiKey',
+            key: 'your-key',
             language: 'en',
           }}
           onPress={(data, details = null) => {
