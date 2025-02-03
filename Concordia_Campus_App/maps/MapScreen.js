@@ -6,6 +6,7 @@ import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; 
 import buildingsData from './buildingCoordinates.js';
 import BuildingPopup from './BuildingPopup'; 
+import { API_KEY } from '@env';
 
 const MapScreen = () => {
   const [campus, setCampus] = useState('SGW');
@@ -75,7 +76,7 @@ const MapScreen = () => {
             textInput: styles.searchBar, 
           }}
           query={{
-            key: 'your-key',
+            key: API_KEY,
             language: 'en',
           }}
           onPress={(data, details = null) => {

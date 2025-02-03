@@ -3,7 +3,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-const GOOGLE_MAPS_API_KEY = 'keyForMaps'; // Hardcoded API Key
 import MapScreen from './maps/MapScreen';
 import Calendar from './calendar/calendar';
 const Drawer = createDrawerNavigator();
