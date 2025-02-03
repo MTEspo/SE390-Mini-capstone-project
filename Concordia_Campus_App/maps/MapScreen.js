@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; // Import styles here
 import buildingsData from './buildingCoordinates.js';
 import ShuttleBusMarker from './ShuttleBusMarker';
+import { getLocation } from './locationUtils';
+import MapDirections from './MapDirections';
+
 
 const MapScreen = () => {
   const [campus, setCampus] = useState('SGW');
   const [zoomLevel, setZoomLevel] = useState(0.005); // Initial zoom level (medium zoom)
+
+  const [shuttleStop, setShuttleStop] = useState(null);
+  const [toggleMapDirections, setToggleMapDirections] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
+  
   
   const campusLocations = {
     SGW: {
@@ -25,6 +33,19 @@ const MapScreen = () => {
   };
 
   const location = campusLocations[campus];
+
+  useEffect(() => {
+      const fetchUserLocation = async () => {
+        const location = await getLocation();
+        if (location) {
+          setUserLocation(location);
+        }
+      };
+      if(toggleMapDirections && shuttleStop){
+        fetchUserLocation();
+      }
+    }, [toggleMapDirections,shuttleStop]);
+  
 
   const handleZoomIn = () => {
     // Zoom in by decreasing the delta more significantly
@@ -84,7 +105,13 @@ const MapScreen = () => {
           description={location.description}
         />
 
-        <ShuttleBusMarker/>
+        <ShuttleBusMarker setToggleMapDirections={setToggleMapDirections} setShuttleStop={setShuttleStop}/>
+
+        {toggleMapDirections && userLocation && shuttleStop && (
+          <MapDirections 
+            userLocation={userLocation} 
+            destinationLocation={shuttleStop}/>
+        )}
 
         {buildingsData.buildings.map((building, index) => (
           <Polygon

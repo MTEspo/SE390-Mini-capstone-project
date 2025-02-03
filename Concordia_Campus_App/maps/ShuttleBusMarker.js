@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import { Callout, Marker } from "react-native-maps";
 import shuttleStopCoordinates from './shuttleBusInfo.js';
 import BottomSheetComponent from '../shuttle_bus/bottom_sheet';
 
-const ShuttleBusMarker = () => {
+const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
     const [selectedStop, setSelectedStop] = useState(null);
     const [bottomSheetIndex, setBottomSheetIndex] = useState(-1);
+
+
+    const handleToggleMapDirections = ( state ) => {
+        setToggleMapDirections(state);
+    }
 
     const handleSheetChanges = (index) => {
         if(index === -1){
@@ -23,21 +28,19 @@ const ShuttleBusMarker = () => {
         }
         setBottomSheetIndex(-1);
         setSelectedStop(null);
+        setShuttleStop(null);
         
         setTimeout(() => {
             setSelectedStop(stop);
+            setShuttleStop(stop);
             setBottomSheetIndex(1);
         }, 100);
     };
     
     const closeBottomSheet = () => {
         setSelectedStop(null);
+        setShuttleStop(null);
         setBottomSheetIndex(-1);
-    };
-
-    const handleShowDirections = () => {
-        console.log('Showing Directions');
-        
     };
 
     return (
@@ -59,7 +62,7 @@ const ShuttleBusMarker = () => {
                 </Marker>
             ))}
 
-            <BottomSheetComponent selectedStop={selectedStop} bottomSheetIndex={bottomSheetIndex} onSheetChanges={handleSheetChanges} onShowDirections={handleShowDirections}/>
+            <BottomSheetComponent selectedStop={selectedStop} bottomSheetIndex={bottomSheetIndex} onSheetChanges={handleSheetChanges} toggleMapDirections={handleToggleMapDirections}/>
         </View>
     );
 };
