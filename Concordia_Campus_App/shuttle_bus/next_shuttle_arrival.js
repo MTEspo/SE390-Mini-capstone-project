@@ -20,8 +20,8 @@ const ArrivalDisplay = ({ stop }) => {
     },[nextBus]);
 
     const findNextBus = () => {
-        const currentDay = 4; //testing -> remove when done
-        //const currentDay = currentTime.getDay();
+        //const currentDay = 4; //testing -> remove when done
+        const currentDay = currentTime.getDay();
         if(currentDay >= 1 && currentDay <= 4){ // Mon to Thurs
             return getNextBus(stop.departureTimes.monday_to_thursday)
         }else if(currentDay == 5){ //Friday
@@ -35,7 +35,7 @@ const ArrivalDisplay = ({ stop }) => {
     const getNextBus = (departureTimes) =>{
         const currentHours = currentTime.getHours();
         const currentMinutes = currentTime.getMinutes();
-        //const currentHours = 4; //testing -> remove when done
+        //const currentHours = 17; //testing -> remove when done
         //const currentMinutes = 45; //testing -> remove when done
         const departureTimesInMinutes = departureTimes.map(time => {
             const [timeString, period] = time.split(" ");
@@ -98,6 +98,13 @@ const ArrivalDisplay = ({ stop }) => {
                         </View>
                     </>
                 )}
+
+                {nextBus === undefined && (
+                    <View>
+                        <Text style={{padding:10}}>No more buses today.</Text>
+                    </View>
+                )}
+
                 {!nextBus && !loading &&( 
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
                         <Icon name="frown-o" size={50} color="orange"/>

@@ -37,6 +37,7 @@ const ShuttleBusMarker = () => {
 
     const handleShowDirections = () => {
         console.log('Showing Directions');
+        
     };
 
     return (
