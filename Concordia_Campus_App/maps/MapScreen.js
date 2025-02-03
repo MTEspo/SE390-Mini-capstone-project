@@ -1,11 +1,19 @@
 // maps/MapScreen.js
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import { duration } from 'moment-timezone';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
+import MapView, { Marker, Polyline } from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
+
+const google_maps_api_key = 'AIzaSyCS3Tq6z9E4OpI87mHPprELatvXQ0AyZVI';
 
 const MapScreen = () => {
   // Coordinates for both campuses
   const [campus, setCampus] = useState('SGW'); // State to track the selected campus right now
+  const [showDirections, setShowDirections] = useState(false);
+  const [eta, setEta] = useState(null);
+  const [distance, setDistance] = useState(null);
+
   const campusLocations = {
     SGW: {
       latitude: 45.49532997441208, // Concordia University SGW campus
@@ -23,6 +31,28 @@ const MapScreen = () => {
 
   // Current campus location
   const location = campusLocations[campus];
+  const destinationLocation = campus === 'SGW' ? campusLocations.Loyola : campusLocations.SGW;
+  const directionsText = campus === 'SGW' ? '   Get directions to Loyola' : '   Get directions to SGW';
+
+  const handleDirections = (result) => {
+    setEta(result.duration);
+    setDistance(result.distance);
+  };
+
+  const handleCampusToggle = () => {
+    setShowDirections(false);
+    setEta(null);
+    setDistance(null);
+    setCampus(campus === 'SGW' ? 'Loyola' : 'SGW');
+  };
+
+  useEffect(() => {
+    return () => {
+      setShowDirections(false);
+      setEta(null);
+      setDistance(null);
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -39,7 +69,7 @@ const MapScreen = () => {
       <View style={styles.toggleButtonContainer}>
         <TouchableOpacity
           style={styles.toggleButton}
-          onPress={() => setCampus(campus === 'SGW' ? 'Loyola' : 'SGW')} // Switch between campus locations
+          onPress={handleCampusToggle} // Switch between campus locations
         >
           <Text style={styles.toggleButtonText}>
             <Text style={campus === 'SGW' ? styles.highlightedText : styles.normalText}>SGW</Text>
@@ -65,6 +95,8 @@ const MapScreen = () => {
           longitudeDelta: 0.0001,
         }}
       >
+        <Marker coordinate={location} title={location.title} description={location.description} />
+        <Marker coordinate={destinationLocation} title={destinationLocation.title} description={destinationLocation.description} />
         {/* Marker for Concordia University */}
         <Marker
           coordinate={{
@@ -74,7 +106,37 @@ const MapScreen = () => {
           title={location.title}
           description={location.description}
         />
+        {showDirections && (
+          <MapViewDirections
+            origin={location}
+            destination={destinationLocation}
+            apikey={google_maps_api_key}
+            strokeWidth={5}
+            strokeColor="blue"
+            onReady={handleDirections}
+          />
+        )}
       </MapView>
+      <TouchableOpacity
+         style={styles.directionsButton}
+         onPress={() => setShowDirections(true)}
+      >
+      <View style={styles.directionsButton}>
+      <Image 
+      source={require('../assets/arrow.png')}  
+      style={styles.buttonImage} 
+    />
+    
+    {/* Text for the directions button */}
+    <Text style={styles.directionsButtonText}>{directionsText}</Text>
+  </View>
+</TouchableOpacity>
+      {eta !== null && distance !== null && (
+        <View style={[styles.routeInfoContainer, { flexDirection: 'row'}]}>
+          <Text style={styles.routeInfoText}>Distance: {Math.round(distance)} km</Text>
+          <Text style={styles.routeInfoText}>      ETA: {Math.round(eta)} min</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -141,6 +203,34 @@ const styles = StyleSheet.create({
   normalText: {
     color: 'grey',
     
+  },
+  directionsButton: {
+    backgroundColor: '#800000',  
+    paddingVertical: 10,          
+    paddingHorizontal: 10,        
+    borderRadius: 50,            
+    alignItems: 'center', 
+    flexDirection: 'row',
+  },
+  directionsButtonText: {
+     color: 'white',
+     fontSize: 16,
+     fontWeight: 'bold'
+  },
+  routeInfoContainer: {
+    backgroundColor: '#800000',
+    padding: 10,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  routeInfoText: {
+    fontSize: 16,
+    fontWeight: 'medium',
+    color: 'white',
+  },
+  buttonImage: {
+    width: 20,
+    height: 20,
   },
 });
 
