@@ -46,8 +46,7 @@ jobs:
 
       - name: Install Maestro
         run: |
-          brew tap mobile-dev-inc/tap
-          brew install maestro
+          curl -fsSL https://install.maestro.io | sh
 
       - name: Run Maestro tests
         run: |
