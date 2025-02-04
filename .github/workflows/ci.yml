@@ -47,23 +47,31 @@ jobs:
           RUNTIME="com.apple.CoreSimulator.SimRuntime.iOS-18-2"  # Updated to match available runtime
           DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro"
 
-          # Check if device already exists
-          EXISTING_DEVICE=$(xcrun simctl list devices | grep "$DEVICE_NAME" | awk -F '[()]' '{print $2}')
+          # Check if the device already exists and extract the UDID
+          EXISTING_DEVICE=$(xcrun simctl list devices | grep "$DEVICE_NAME" | grep -o '([0-9A-F-]\{36\})' | tr -d '()')
+
           if [ -z "$EXISTING_DEVICE" ]; then
             echo "Creating new iPhone 16 Pro simulator..."
             DEVICE_UDID=$(xcrun simctl create "$DEVICE_NAME" "$DEVICE_TYPE" "$RUNTIME")
+            echo "Created new simulator with UDID: $DEVICE_UDID"
           else
             DEVICE_UDID=$EXISTING_DEVICE
+            echo "Using existing simulator with UDID: $DEVICE_UDID"
           fi
 
-          echo "Booting simulator..."
+          # Boot the simulator
+          echo "Booting simulator with UDID: $DEVICE_UDID"
           xcrun simctl boot "$DEVICE_UDID"
-          
+
           # Wait for the simulator to boot
           sleep 10
-          
+
           # Ensure the simulator is booted
-          xcrun simctl list devices | grep Booted || echo "Simulator did not boot correctly"
+          if xcrun simctl list devices | grep "$DEVICE_UDID" | grep -q "Booted"; then
+            echo "Simulator is booted successfully."
+          else
+            echo "Simulator did not boot correctly."
+          fi
 
       - name: Run Expo App in Simulator
         run: |
