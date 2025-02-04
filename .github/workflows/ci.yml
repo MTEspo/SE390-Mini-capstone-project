@@ -45,6 +45,8 @@ jobs:
           slug: JonathanDannessa/SE390-Mini-capstone-project
 
       - name: Start iOS simulator
+        env:
+          CI: 1
         run: |
           cd Concordia_Campus_App
-          npx expo start --ios --non-interactive
+          npx expo start --ios
