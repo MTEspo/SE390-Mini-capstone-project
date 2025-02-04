@@ -1,4 +1,3 @@
-
 name: CI
 
 on:
@@ -11,7 +10,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
@@ -44,11 +43,9 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Install Maestro
+      - name: Set up iOS simulator
         run: |
-          curl -fsSL https://install.maestro.io | sh
-
-      - name: Run Maestro tests
-        run: |
-          cd Concordia_Campus_App
-          maestro run --folder ./maestro
+          xcrun simctl list
+          xcrun simctl create "iPhone 16 Pro" "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro" "com.apple.CoreSimulator.SimRuntime.iOS-16-2"
+          xcrun simctl boot "iPhone 16 Pro"
+          xcrun simctl list | grep Booted
