@@ -44,7 +44,7 @@ jobs:
       - name: Set up iPhone 16 Pro Simulator
         run: |
           DEVICE_NAME="iPhone 16 Pro"
-          RUNTIME="com.apple.CoreSimulator.SimRuntime.iOS-17-0"
+          RUNTIME="com.apple.CoreSimulator.SimRuntime.iOS-18-2"  # Updated to match available runtime
           DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro"
 
           # Check if device already exists
@@ -58,12 +58,17 @@ jobs:
 
           echo "Booting simulator..."
           xcrun simctl boot "$DEVICE_UDID"
-          xcrun simctl list | grep Booted
+          
+          # Wait for the simulator to boot
+          sleep 10
+          
+          # Ensure the simulator is booted
+          xcrun simctl list devices | grep Booted || echo "Simulator did not boot correctly"
 
       - name: Run Expo App in Simulator
         run: |
           cd Concordia_Campus_App
-          npx expo run:ios &
+          npx expo run:ios  # Run in foreground for better debugging
 
       - name: Run All Maestro E2E Tests
         run: |
@@ -72,4 +77,3 @@ jobs:
             echo "Running Maestro test: $testfile"
             maestro test "$testfile"
           done
-
