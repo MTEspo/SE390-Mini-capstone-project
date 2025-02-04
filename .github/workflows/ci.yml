@@ -55,7 +55,7 @@ jobs:
       - name: Run Maestro E2E Tests (if needed)
         run: |
           cd Concordia_Campus_App
-          fastlane maestro_tests  # Assuming you have a lane for running your Maestro tests
+          fastlane ios maestro_tests  # Assuming you have a lane for running your Maestro tests
 
 
 
