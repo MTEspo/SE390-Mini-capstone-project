@@ -25,7 +25,8 @@
     ],
     "testMatch": [
       "**/__tests__/*.js"
-    ]
+    ],
+    "setupFiles": ["./jest.polyfills.js"]
   },
   "dependencies": {
     "@react-navigation/drawer": "^7.1.1",
