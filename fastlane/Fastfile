@@ -1,0 +1,15 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Run Expo app in simulator and run Maestro tests"
+  lane :run_e2e_tests do
+    # Run Expo app in the iOS simulator
+    sh "npx expo run:ios"
+
+    # Run all Maestro tests
+    Dir["./maestro/**/*.yml"].each do |testfile|
+      puts "Running Maestro test: #{testfile}"
+      sh "maestro test #{testfile}"
+    end
+  end
+end

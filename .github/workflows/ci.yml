@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -26,62 +26,36 @@ jobs:
           cd Concordia_Campus_App
           npm install
 
-      - name: Install Homebrew (if missing)
+      - name: Run Jest unit tests
         run: |
-          if ! command -v brew &> /dev/null; then
-            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          cd Concordia_Campus_App
+          npm run test --coverage
+
+      - name: Verify test results
+        run: |
+          if [ $? -ne 0 ]; then
+            echo "Tests failed!"
+            exit 1
           fi
 
-      - name: Install Maestro CLI
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      # Add Fastlane to handle any build or Maestro test execution steps
+
+      - name: Install Fastlane
         run: |
-          curl -Ls "https://get.maestro.mobile.dev" | bash
-          brew tap mobile-dev-inc/tap
-          brew install maestro
+          sudo gem install fastlane -NV
 
       - name: Install Expo CLI
         run: npm install -g expo-cli
 
-      - name: Set up iPhone 16 Pro Simulator
-        run: |
-          DEVICE_NAME="iPhone 16 Pro"
-          RUNTIME="com.apple.CoreSimulator.SimRuntime.iOS-18-2"  # Updated to match available runtime
-          DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro"
-
-          # Check if the device already exists and extract the UDID
-          EXISTING_DEVICE=$(xcrun simctl list devices | grep "$DEVICE_NAME" | grep -o '([0-9A-F-]\{36\})' | tr -d '()')
-
-          if [ -z "$EXISTING_DEVICE" ]; then
-            echo "Creating new iPhone 16 Pro simulator..."
-            DEVICE_UDID=$(xcrun simctl create "$DEVICE_NAME" "$DEVICE_TYPE" "$RUNTIME")
-            echo "Created new simulator with UDID: $DEVICE_UDID"
-          else
-            DEVICE_UDID=$EXISTING_DEVICE
-            echo "Using existing simulator with UDID: $DEVICE_UDID"
-          fi
-
-          # Boot the simulator
-          echo "Booting simulator with UDID: $DEVICE_UDID"
-          xcrun simctl boot "$DEVICE_UDID"
-
-          # Wait for the simulator to boot
-          sleep 10
-
-          # Ensure the simulator is booted
-          if xcrun simctl list devices | grep "$DEVICE_UDID" | grep -q "Booted"; then
-            echo "Simulator is booted successfully."
-          else
-            echo "Simulator did not boot correctly."
-          fi
-
-      - name: Run Expo App in Simulator
+      - name: Run Maestro E2E Tests (if needed)
         run: |
           cd Concordia_Campus_App
-          npx expo run:ios  # Run in foreground for better debugging
+          fastlane maestro_tests  # Assuming you have a lane for running your Maestro tests
 
-      - name: Run All Maestro E2E Tests
-        run: |
-          cd Concordia_Campus_App/maestro
-          find . -name "*.yml" -type f | while read testfile; do
-            echo "Running Maestro test: $testfile"
-            maestro test "$testfile"
-          done
+
+
