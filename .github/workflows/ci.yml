@@ -42,3 +42,13 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+  e2e-test:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Start iOS simulator
+        run: |
+          cd Concordia_Campus_App
+          npx expo start --ios --non-interactive
