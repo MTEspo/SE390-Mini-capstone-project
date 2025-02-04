@@ -26,7 +26,7 @@
     "testMatch": [
       "**/__tests__/*.js"
     ],
-   "setupFiles": ["./Concordia_Campus_App/jest.polyfills.js"]
+   "setupFiles": ["jest.polyfills.js"]
   },
   "dependencies": {
     "@react-navigation/drawer": "^7.1.1",
