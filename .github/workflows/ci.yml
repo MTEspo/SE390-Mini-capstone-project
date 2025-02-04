@@ -26,6 +26,12 @@ jobs:
           cd Concordia_Campus_App
           npm install
 
+      - name: Run postinstall script
+        run: |
+          cd Concordia_Campus_App
+          npm run postinstall
+
+
       - name: Run Jest unit tests
         run: |
           cd Concordia_Campus_App
