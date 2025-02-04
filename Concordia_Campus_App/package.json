@@ -10,7 +10,8 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "uploadCodeCove": "codecov",
-    "clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install"
+    "clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install",
+    "postinstall": "node jest.polyfills.js"
   },
   "jest": {
     "preset": "jest-expo",
