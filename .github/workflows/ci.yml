@@ -10,10 +10,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        runner: [ubuntu-latest, macos-latest]
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
@@ -48,7 +45,6 @@ jobs:
           slug: JonathanDannessa/SE390-Mini-capstone-project
 
       - name: Start iOS simulator
-        if: runner == 'macos-latest'
         run: |
           cd Concordia_Campus_App
           npx expo start --ios --non-interactive
