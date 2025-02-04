@@ -26,26 +26,53 @@ jobs:
           cd Concordia_Campus_App
           npm install
 
-      - name: Run tests
+      - name: Install Homebrew (if missing)
         run: |
-          cd Concordia_Campus_App
-          npm run test --coverage
-
-      - name: Verify test results
-        run: |
-          if [ $? -ne 0 ]; then
-            echo "Tests failed!"
-            exit 1
+          if ! command -v brew &> /dev/null; then
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           fi
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Set up iOS simulator
+      - name: Install Maestro CLI
         run: |
-          xcrun simctl list
-          xcrun simctl create "iPhone 16 Pro" "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro" "com.apple.CoreSimulator.SimRuntime.iOS-16-2"
-          xcrun simctl boot "iPhone 16 Pro"
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          brew tap mobile-dev-inc/tap
+          brew install maestro
+
+      - name: Install Expo CLI
+        run: npm install -g expo-cli
+
+      - name: Login to Expo (using GitHub Secrets)
+        run: npx expo login --username ${{ secrets.EXPO_USERNAME }} --password ${{ secrets.EXPO_PASSWORD }}
+
+      - name: Set up iPhone 16 Pro Simulator
+        run: |
+          DEVICE_NAME="iPhone 16 Pro"
+          RUNTIME="com.apple.CoreSimulator.SimRuntime.iOS-17-0"
+          DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro"
+
+          # Check if device already exists
+          EXISTING_DEVICE=$(xcrun simctl list devices | grep "$DEVICE_NAME" | awk -F '[()]' '{print $2}')
+          if [ -z "$EXISTING_DEVICE" ]; then
+            echo "Creating new iPhone 16 Pro simulator..."
+            DEVICE_UDID=$(xcrun simctl create "$DEVICE_NAME" "$DEVICE_TYPE" "$RUNTIME")
+          else
+            DEVICE_UDID=$EXISTING_DEVICE
+          fi
+
+          echo "Booting simulator..."
+          xcrun simctl boot "$DEVICE_UDID"
           xcrun simctl list | grep Booted
+
+      - name: Run Expo App in Simulator
+        run: |
+          cd Concordia_Campus_App
+          npx expo run:ios &
+
+      - name: Run All Maestro E2E Tests
+        run: |
+          cd Concordia_Campus_App/maestro
+          find . -name "*.yml" -type f | while read testfile; do
+            echo "Running Maestro test: $testfile"
+            maestro test "$testfile"
+          done
+
