@@ -2,7 +2,7 @@ import { duration } from 'moment-timezone';
 import React, { useEffect, useState, useRef } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import 'react-native-get-random-values';
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import MapView, { Polygon, Marker, Polyline } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; 
 import buildingsData from './buildingCoordinates.js';
@@ -202,30 +202,30 @@ const MapScreen = () => {
         </TouchableOpacity>
       </View>
       <TouchableOpacity
-         style={styles.directionsButton}
+         style={styles1.directionsButton}
          onPress={() => setShowDirections(true)}
       >
-      <View style={styles.directionsButton}>
+      <View style={styles1.directionsButton}>
       <Image 
       source={require('../assets/arrow.png')}  
-      style={styles.buttonImage} 
+      style={styles1.buttonImage} 
     />
     
     {/* Text for the directions button */}
-    <Text style={styles.directionsButtonText}>{directionsText}</Text>
+    <Text style={styles1.directionsButtonText}>{directionsText}</Text>
   </View>
 </TouchableOpacity>
       {eta !== null && distance !== null && (
-        <View style={[styles.routeInfoContainer, { flexDirection: 'row'}]}>
-          <Text style={styles.routeInfoText}>Distance: {Math.round(distance)} km</Text>
-          <Text style={styles.routeInfoText}>      ETA: {Math.round(eta)} min</Text>
+        <View style={[styles1.routeInfoContainer, { flexDirection: 'row'}]}>
+          <Text style={styles1.routeInfoText}>Distance: {Math.round(distance)} km</Text>
+          <Text style={styles1.routeInfoText}>      ETA: {Math.round(eta)} min</Text>
         </View>
       )}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const styles1 = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
