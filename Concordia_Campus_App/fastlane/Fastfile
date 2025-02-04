@@ -1,6 +1,9 @@
 platform :ios do
   desc "Run Expo app in simulator and run Maestro tests"
   lane :maestro_tests do
+    # Run postinstall script
+    sh "npm run postinstall"
+
     # Run Expo app in the iOS simulator
     sh "npx expo run:ios"
 
