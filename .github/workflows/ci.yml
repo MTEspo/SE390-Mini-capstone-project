@@ -26,6 +26,15 @@ jobs:
           cd Concordia_Campus_App
           npm install
 
+      - name: Install Fastlane (via RubyGems)
+        run: |
+          sudo gem install fastlane
+
+      - name: Build and run on iOS simulator using Fastlane
+        run: |
+          cd Concordia_Campus_App/ios
+          fastlane ios simulator
+
       - name: Run tests
         run: |
           cd Concordia_Campus_App
@@ -43,10 +52,3 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: JonathanDannessa/SE390-Mini-capstone-project
-
-      - name: Start iOS simulator
-        env:
-          CI: 1
-        run: |
-          cd Concordia_Campus_App
-          npx expo start --ios

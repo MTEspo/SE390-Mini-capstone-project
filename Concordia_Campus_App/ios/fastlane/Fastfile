@@ -1,0 +1,13 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Build and run the iOS app on a simulator"
+  lane :simulator do
+    # Build the app with the correct scheme
+    build_app(scheme: "ConcordiaCampusApp")
+
+    # Run the app on the iPhone 16 Pro simulator
+    run_simulator(device: "iPhone 16 Pro")
+  end
+end
+
