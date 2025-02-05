@@ -10,10 +10,9 @@ on:
 
 jobs:
   test:
-    runs-on: macos-latest  # Using macOS runner to run iOS simulator
+    runs-on: macos-latest 
 
     steps:
-      # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -21,38 +20,53 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Use Node.js 16 (adjust if necessary)
+          node-version: '18'  
 
-      # Step 3: Install npm dependencies
       - name: Install dependencies (npm)
         run: |
           cd Concordia_Campus_App
           npm install
 
-      # Step 4: Install CocoaPods dependencies for iOS
-      - name: Install CocoaPods dependencies
+      - name: Run unit tests
         run: |
-          cd Concordia_Campus_App/ios
-          gem install cocoapods  # Install CocoaPods gem
-          pod install  # Install iOS dependencies via CocoaPods
+          cd Concordia_Campus_App
+          npm run test --coverage
 
-      # Step 5: Install Maestro CLI for E2E testing
+      - name: Verify test results
+        run: |
+          if [ $? -ne 0 ]; then
+            echo "Tests failed!"
+            exit 1
+          fi
+
       - name: Install Maestro CLI
         run: |
           curl -Ls "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH  # Add Maestro to PATH
 
-      # Step 6: Run iOS E2E tests with Maestro
-            # Step 6: Run iOS E2E tests with Maestro
       - name: Run iOS E2E tests with Maestro
         run: |
-          # Install and run the app on the simulator
+          # Start the app on the simulator in the background
           cd Concordia_Campus_App
-          npx expo run:ios
+          nohup npx expo run:ios &  
 
-          # Navigate to the Maestro folder
-          cd maestro
+          # Wait for the app to launch (checking the app's launch status)
+          echo "Waiting for the app to launch..."
+          while ! xcrun simctl list apps | grep -q "com.your.bundle.identifier"; do
+            echo "Waiting for the app to launch..."
+            sleep 10  # Check every 10 seconds
+          done
 
-          # Run the Maestro tests on the started simulator
+          echo "App is running, proceeding with Maestro tests."
+
+          # Navigate to the Maestro folder and run the tests
+          cd ../maestro
           maestro test App.yml
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: JonathanDannessa/SE390-Mini-capstone-project
+
 
