@@ -58,7 +58,12 @@ jobs:
             sleep 1
           done
 
-          cd Concordia_Campus_App/maestro
+          # Install the React Native app on the simulator
+          cd Concordia_Campus_App
+          npx react-native run-ios --simulator="iPhone 15 Pro" --bundle-identifier "com.concordia.campusapp"
+
+          # Navigate to the Maestro folder
+          cd maestro
 
           # Run the Maestro tests on the started simulator
           maestro test App.yml
