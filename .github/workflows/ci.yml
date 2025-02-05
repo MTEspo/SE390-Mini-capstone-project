@@ -52,16 +52,17 @@ jobs:
 
           # Wait for the app to launch (checking the app's launch status)
           echo "Waiting for the app to launch..."
-          while ! xcrun simctl list apps | grep -q "com.your.bundle.identifier"; do
+          while ! xcrun simctl list apps | grep -q "com.concordia.campusapp"; do
             echo "Waiting for the app to launch..."
-            sleep 10  # Check every 10 seconds
+            sleep 30  # Check every 30 seconds
           done
 
           echo "App is running, proceeding with Maestro tests."
 
           # Navigate to the Maestro folder and run the tests
-          cd ../maestro
+          cd maestro
           maestro test App.yml
+
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
