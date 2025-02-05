@@ -50,14 +50,11 @@ jobs:
           cd Concordia_Campus_App
           nohup npx expo run:ios &  
 
-          # Wait for the app to launch (checking the app's launch status)
+          # Wait for 25 minutes to allow the app to launch
           echo "Waiting for the app to launch..."
-          while ! xcrun simctl list apps | grep -q "com.concordia.campusapp"; do
-            echo "Waiting for the app to launch..."
-            sleep 30  # Check every 30 seconds
-          done
+          sleep 1500
 
-          echo "App is running, proceeding with Maestro tests."
+          echo "Proceeding with Maestro tests."
 
           # Navigate to the Maestro folder and run the tests
           cd maestro
