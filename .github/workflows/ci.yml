@@ -52,7 +52,7 @@ jobs:
 
           # Wait for 12 minutes to allow the app to launch
           echo "Waiting for the app to launch..."
-          sleep 720
+          sleep 1000
 
           echo "Proceeding with Maestro tests."
 
