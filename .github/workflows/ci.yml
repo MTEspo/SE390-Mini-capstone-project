@@ -38,7 +38,7 @@ jobs:
 
       - name: Select Xcode version
         run: |
-          xcode-select -s /Applications/Xcode_15.4.app
+          sudo xcode-select -s /Applications/Xcode_15.4.app
 
       - name: Build and run on iOS simulator using Fastlane
         run: |
