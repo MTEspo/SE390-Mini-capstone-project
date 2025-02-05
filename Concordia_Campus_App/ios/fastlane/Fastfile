@@ -6,8 +6,14 @@ platform :ios do
     # Build the app with the correct scheme
     build_app(scheme: "ConcordiaCampusApp")
 
-    # Run the app on the iPhone 16 Pro simulator
-    run_simulator(device: "iPhone 16 Pro")
+    # Run the app on the iPhone 16 Pro simulator and execute tests
+    scan(
+      scheme: "ConcordiaCampusApp",
+      device: "iPhone 16 Pro",
+      clean: true,            # Clean the build before testing
+      code_coverage: true     # Enable code coverage if required
+    )
   end
 end
+
 
