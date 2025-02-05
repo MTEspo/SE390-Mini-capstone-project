@@ -49,6 +49,15 @@ jobs:
           # List available simulators (optional, useful for debugging or choosing a specific device)
           xcrun simctl list devices
 
-          # Run the Maestro tests on a specified simulator device (e.g., iPhone 13)
+          # Create and start a simulator (e.g., iPhone 15 Pro)
+          xcrun simctl create "iPhone 15 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro
+          xcrun simctl boot "iPhone 15 Pro"
+
+          # Wait for the simulator to boot up
+          while ! xcrun simctl list devices | grep "iPhone 15 Pro" | grep Booted; do
+            sleep 1
+          done
+
+          # Run the Maestro tests on the started simulator
           maestro test Concordia_Campus_App/maestro/App.yml
 
