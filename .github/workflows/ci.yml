@@ -21,10 +21,16 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Install dependencies
+      - name: Install dependencies (npm)
         run: |
           cd Concordia_Campus_App
           npm install
+
+      - name: Install CocoaPods dependencies
+        run: |
+          cd Concordia_Campus_App/ios
+          sudo gem install cocoapods
+          pod install
 
       - name: Install Fastlane (via RubyGems)
         run: |
@@ -52,3 +58,4 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: JonathanDannessa/SE390-Mini-capstone-project
+
