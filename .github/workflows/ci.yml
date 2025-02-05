@@ -43,11 +43,12 @@ jobs:
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH  # Add Maestro to PATH
 
       # Step 6: Run iOS E2E tests with Maestro
+            # Step 6: Run iOS E2E tests with Maestro
       - name: Run iOS E2E tests with Maestro
         run: |
           # List available simulators (optional, useful for debugging or choosing a specific device)
           xcrun simctl list devices
 
           # Run the Maestro tests on a specified simulator device (e.g., iPhone 13)
-          maestro test Concordia_Campus_App/maestro/App.yml --device "iPhone 13" --platform "ios"
+          maestro test Concordia_Campus_App/maestro/App.yml
 
