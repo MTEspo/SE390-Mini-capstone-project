@@ -1,6 +1,9 @@
 platform :ios do
     desc "Build and run the iOS app on a simulator"
     lane :simulator do
+      # Specify the Xcode version
+      xcversion(version: "15.4")
+  
       # Build the app with the correct scheme and export method
       build_app(
         scheme: "ConcordiaCampusApp",
@@ -20,6 +23,5 @@ platform :ios do
       )
     end
   end
-  
 
 
