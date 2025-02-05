@@ -1,24 +1,25 @@
-default_platform(:ios)
-
 platform :ios do
-  desc "Build and run the iOS app on a simulator"
-  lane :simulator do
-    # Build the app with the correct scheme and export method
-    build_app(
-      scheme: "ConcordiaCampusApp",
-      export_method: "development",
-      codesigning_identity: "-",
-      skip_codesigning: true
-    )
-
-    # Run the app on the iPhone 16 Pro simulator and execute tests
-    scan(
-      scheme: "ConcordiaCampusApp",
-      device: "iPhone 16 Pro",
-      clean: true,            # Clean the build before testing
-      code_coverage: true     # Enable code coverage if required
-    )
+    desc "Build and run the iOS app on a simulator"
+    lane :simulator do
+      # Build the app with the correct scheme and export method
+      build_app(
+        scheme: "ConcordiaCampusApp",
+        export_method: "development",
+        codesigning_identity: "-",
+        skip_codesigning: true,
+        verbose: true  # Added verbose logging
+      )
+  
+      # Run the app on the iPhone 16 Pro simulator and execute tests
+      scan(
+        scheme: "ConcordiaCampusApp",
+        device: "iPhone 16 Pro",
+        clean: true,            # Clean the build before testing
+        code_coverage: true,    # Enable code coverage if required
+        verbose: true           # Added verbose logging
+      )
+    end
   end
-end
+  
 
 
