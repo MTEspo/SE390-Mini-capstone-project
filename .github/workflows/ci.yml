@@ -48,7 +48,7 @@ jobs:
         run: |
           # Install and run the app on the simulator
           cd Concordia_Campus_App
-          npx expo run:ios --bundle-identifier "com.concordia.campusapp"
+          npx expo run:ios
 
           # Navigate to the Maestro folder
           cd maestro
