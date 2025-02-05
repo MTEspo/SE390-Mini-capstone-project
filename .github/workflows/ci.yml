@@ -46,6 +46,7 @@ jobs:
 
       - name: Run iOS E2E tests with Maestro
         run: |
+          export MAESTRO_DRIVER_STARTUP_TIMEOUT=600
           # Start the app on the simulator in the background
           cd Concordia_Campus_App
           nohup npx expo run:ios &  
