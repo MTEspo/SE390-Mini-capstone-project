@@ -50,9 +50,9 @@ jobs:
           cd Concordia_Campus_App
           nohup npx expo run:ios &  
 
-          # Wait for 25 minutes to allow the app to launch
+          # Wait for 12 minutes to allow the app to launch
           echo "Waiting for the app to launch..."
-          sleep 1500
+          sleep 720
 
           echo "Proceeding with Maestro tests."
 
