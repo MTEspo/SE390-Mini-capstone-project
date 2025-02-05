@@ -58,6 +58,8 @@ jobs:
             sleep 1
           done
 
+          cd Concordia_Campus_App/maestro
+
           # Run the Maestro tests on the started simulator
-          maestro test Concordia_Campus_App/maestro/App.yml
+          maestro test App.yml
 
