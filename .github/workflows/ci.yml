@@ -46,19 +46,12 @@ jobs:
             # Step 6: Run iOS E2E tests with Maestro
       - name: Run iOS E2E tests with Maestro
         run: |
-          # List available simulators (optional, useful for debugging or choosing a specific device)
-          xcrun simctl list devices
+          # Install and run the app on the simulator
+          cd Concordia_Campus_App
+          npx expo run:ios --bundle-identifier "com.concordia.campusapp"
 
-          # Create and start a simulator (e.g., iPhone 15 Pro)
-          xcrun simctl create "iPhone 15 Pro" com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro
-          xcrun simctl boot "iPhone 15 Pro"
-
-          # Wait for the simulator to boot up
-          while ! xcrun simctl list devices | grep "iPhone 15 Pro" | grep Booted; do
-            sleep 1
-          done
-
-          cd Concordia_Campus_App/maestro
+          # Navigate to the Maestro folder
+          cd maestro
 
           # Run the Maestro tests on the started simulator
           maestro test App.yml
