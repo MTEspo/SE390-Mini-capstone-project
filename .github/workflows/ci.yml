@@ -39,9 +39,8 @@ jobs:
       # Step 5: Install Maestro CLI for E2E testing
       - name: Install Maestro CLI
         run: |
-          curl -sSL https://github.com/maestro-dev/maestro/releases/download/v0.12.0/maestro-cli-darwin.zip -o maestro-cli.zip
-          unzip maestro-cli.zip
-          mv maestro /usr/local/bin  # Move Maestro to the path for easy access
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH  # Add Maestro to PATH
 
       # Step 6: Run iOS E2E tests with Maestro
       - name: Run iOS E2E tests with Maestro
