@@ -7,7 +7,8 @@ platform :ios do
     build_app(
       scheme: "ConcordiaCampusApp",
       export_method: "development",
-      codesigning_identity: "-"
+      codesigning_identity: "-",
+      skip_code_signing: true
     )
 
     # Run the app on the iPhone 16 Pro simulator and execute tests
