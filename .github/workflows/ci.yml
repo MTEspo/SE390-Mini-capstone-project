@@ -44,11 +44,22 @@ jobs:
           curl -Ls "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH  # Add Maestro to PATH
 
-      - name: Run iOS E2E tests without Maestro
+      # Step 7: Build and launch iOS app on simulator
+      - name: Build and launch Expo iOS app
         run: |
-            cd Concordia_Campus_App
-            echo "Starting Expo iOS build with verbose logging..."
-            npx expo run:ios --verbose
+          cd Concordia_Campus_App
+          echo "Starting Expo iOS build with verbose logging..."
+          npx expo run:ios --simulator --verbose &
+
+      # Step 8: Wait until simulator is ready
+      - name: Wait for simulator to be ready
+        run: |
+          # Wait until the iOS simulator is fully booted
+          echo "Waiting for iOS simulator to be ready..."
+          while ! xcrun simctl list | grep -q "Booted"; do
+            sleep 5  # Check every 5 seconds
+          done
+          echo "Simulator is ready!"
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
