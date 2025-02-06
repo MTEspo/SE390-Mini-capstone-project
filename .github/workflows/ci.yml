@@ -47,27 +47,19 @@ jobs:
       - name: Run iOS E2E tests without Maestro
         run: |
             cd Concordia_Campus_App
-            echo "Starting Expo iOS build..."
-            nohup npx expo run:ios > expo-ios-build.log 2>&1 &
-        
+            echo "Starting Expo iOS build with verbose logging..."
+            nohup npx expo run:ios --verbose > expo-ios-build.log 2>&1 &
+            
             echo "Waiting for the simulator to boot..."
             while ! xcrun simctl list | grep -q "Booted"; do
               echo "Simulator is still booting..."
               sleep 5
             done
-        
+            
             echo "Simulator is booted."
-        
+            
             echo "Waiting for the app to fully launch..."
-            tail -f expo-ios-build.log &
-        
-            while ! grep -q "Running application on" expo-ios-build.log; do
-              echo "App is still building..."
-              sleep 5
-            done
-        
-            echo "App has fully launched. Stopping build logs."
-            pkill -f "tail -f expo-ios-build.log"
+            tail -f expo-ios-build.log
         
 
 
