@@ -50,6 +50,14 @@ jobs:
             echo "Starting Expo iOS build..."
             nohup npx expo run:ios > expo-ios-build.log 2>&1 &
         
+            echo "Waiting for the simulator to boot..."
+            while ! xcrun simctl list | grep -q "Booted"; do
+              echo "Simulator is still booting..."
+              sleep 5
+            done
+        
+            echo "Simulator is booted."
+        
             echo "Waiting for the app to fully launch..."
             tail -f expo-ios-build.log &
         
@@ -60,6 +68,8 @@ jobs:
         
             echo "App has fully launched. Stopping build logs."
             pkill -f "tail -f expo-ios-build.log"
+        
+
 
 
       - name: Upload coverage reports to Codecov
