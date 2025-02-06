@@ -5,5 +5,5 @@ build:
     - eas/maestro_test:
         inputs:
           flow_path: |
-            maestro/App.yml
+            maestro/*.yml
             

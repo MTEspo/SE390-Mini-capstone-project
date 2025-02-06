@@ -51,10 +51,15 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
+      
       - name: Build with EAS
         run: |
           cd Concordia_Campus_App
           npm install eas-cli
           npx eas build --platform ios --non-interactive --profile build-and-maestro-test
+          if [ $? -ne 0 ]; then
+            echo "EAS build failed!"
+            exit 1
+          fi
 
 
