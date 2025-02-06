@@ -49,7 +49,7 @@ jobs:
         run: |
           cd Concordia_Campus_App
           echo "Starting Expo iOS build with verbose logging..."
-          npx expo run:ios --simulator --verbose
+          npx expo run:ios
 
 
 
