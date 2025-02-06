@@ -48,8 +48,7 @@ jobs:
         run: |
             cd Concordia_Campus_App
             echo "Starting Expo iOS build with verbose logging..."
-            nohup npx expo run:ios --verbose --non-interactive --simulator-boot-timeout 300 > expo-ios-build.log 2>&1
-
+            npx expo run:ios --verbose
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
