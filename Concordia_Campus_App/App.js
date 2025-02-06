@@ -5,6 +5,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StatusBar } from 'expo-status-bar';
 
 import Calendar from './calendar/calendar';
+import { PaperProvider } from 'react-native-paper';
 
 const Drawer = createDrawerNavigator();
 
@@ -21,12 +22,14 @@ function HomeScreen() {
 // Add more navigation menus
 export default function App() {
   return (
+    <PaperProvider> 
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={HomeScreen} />
         <Drawer.Screen name="Calendar" component={Calendar}/>
       </Drawer.Navigator>
     </NavigationContainer>
+    </PaperProvider>
   );
 }
 
