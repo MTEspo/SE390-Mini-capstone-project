@@ -55,6 +55,6 @@ jobs:
         run: |
           cd Concordia_Campus_App
           npm install eas-cli
-          npx eas build --profile build-and-maestro-test
+          npx eas build --platform ios --non-interactive --profile build-and-maestro-test
 
 
