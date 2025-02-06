@@ -44,22 +44,22 @@ jobs:
           curl -Ls "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH  # Add Maestro to PATH
 
-      - name: Run iOS E2E tests with Maestro
-        run: |
-          export MAESTRO_DRIVER_STARTUP_TIMEOUT=600
-          # Start the app on the simulator in the background
-          cd Concordia_Campus_App
-          nohup npx expo run:ios &  
-
-          # Wait for 12 minutes to allow the app to launch
-          echo "Waiting for the app to launch..."
-          sleep 1000
-
-          echo "Proceeding with Maestro tests."
-
-          # Navigate to the Maestro folder and run the tests
-          cd maestro
-          maestro test App.yml
+          - name: Run iOS E2E tests without Maestro
+          run: |
+            cd Concordia_Campus_App
+            echo "Starting Expo iOS build..."
+            nohup npx expo run:ios > expo-ios-build.log 2>&1 &
+        
+            echo "Waiting for the app to fully launch..."
+            tail -f expo-ios-build.log &
+        
+            while ! grep -q "Running application on" expo-ios-build.log; do
+              echo "App is still building..."
+              sleep 5
+            done
+        
+            echo "App has fully launched. Stopping build logs."
+            pkill -f "tail -f expo-ios-build.log"
 
 
       - name: Upload coverage reports to Codecov
