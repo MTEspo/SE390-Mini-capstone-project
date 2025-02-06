@@ -51,9 +51,10 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Run EAS build
+      - name: Build with EAS
         run: |
           cd Concordia_Campus_App
+          npm install eas-cli
           npx eas build --profile build-and-maestro-test
 
 
