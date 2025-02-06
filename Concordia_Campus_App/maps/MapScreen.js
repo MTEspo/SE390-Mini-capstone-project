@@ -124,17 +124,17 @@ const MapScreen = () => {
             
             {/* For walking mode (dashed blue line) */}
             {mode === 'WALKING' && (
-              <MapViewDirections
-                origin={location}
-                destination={destinationLocation}
-                apikey={google_maps_api_key}
-                strokeWidth={5}
-                strokeColor="blue"
-                mode={mode}
-                onReady={handleDirections}
-                lineDashPattern={[1, 5]}  // Apply dashed style directly here
-              />
-            )}
+            <MapViewDirections
+              origin={location}
+              destination={destinationLocation}
+              apikey={google_maps_api_key}
+              strokeWidth={5}
+              strokeColor="blue"
+              mode={mode}
+              onReady={handleDirections}
+              lineDashPattern={[2, 10]}  // Small dots (short lines with large gaps)
+            />
+          )}
             {/* Transit Mode */}
             {mode === 'TRANSIT' && (
               <MapViewDirections
