@@ -45,7 +45,8 @@
     "react-native-reanimated": "^3.16.7",
     "react-native-safe-area-context": "^5.1.0",
     "react-native-screens": "^4.5.0",
-    "react-test-renderer": "^18.3.1"
+    "react-test-renderer": "^18.3.1",
+    "expo-notifications": "^0.17.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
