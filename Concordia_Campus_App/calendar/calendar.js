@@ -177,6 +177,8 @@ export default function Calendar() {
     const unsubscribe = navigation.addListener("focus", () => {
       if (providerToken) {
         getGoogleCalendars(providerToken);
+      }else{
+        googleSignOut();
       }
     });
     return unsubscribe;
