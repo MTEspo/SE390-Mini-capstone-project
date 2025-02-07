@@ -2,14 +2,10 @@ import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
 import MapScreen from './maps/MapScreen';
 import Calendar from './calendar/calendar';
 const Drawer = createDrawerNavigator();
 
-
-
-// Add more navigation menus
 export default function App() {
   return (
     <NavigationContainer>
