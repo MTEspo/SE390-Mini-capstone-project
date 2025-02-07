@@ -3,14 +3,10 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import MapScreen from './maps/MapScreen';
-
 import { StatusBar } from 'expo-status-bar';
-
-
 import Calendar from './calendar/calendar';
 import FullShuttleSchedule from './shuttle_bus/full_schedule'
 const Drawer = createDrawerNavigator();
-
 
 export function HomeScreen() {
   return (
@@ -21,7 +17,6 @@ export function HomeScreen() {
   );
 }
 
-// Add more navigation menus
 export default function App() {
   return (
     <NavigationContainer>
