@@ -18,6 +18,7 @@ const MapDirections = ({userLocation, destinationLocation}) => {
                 }}/>
             
             <MapViewDirections
+                key={userLocation.latitude + userLocation.longitude}
                 origin={{
                     latitude: userLocation.latitude,
                     longitude: userLocation.longitude,

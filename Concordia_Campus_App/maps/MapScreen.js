@@ -35,15 +35,20 @@ const MapScreen = () => {
   const location = campusLocations[campus];
 
   useEffect(() => {
+    let interval;
       const fetchUserLocation = async () => {
         const location = await getLocation();
-        if (location) {
+        if(location){
           setUserLocation(location);
         }
       };
       if(toggleMapDirections && shuttleStop){
         fetchUserLocation();
+        interval = setInterval(fetchUserLocation, 5000);
       }
+      return () => {
+        if(interval) clearInterval(interval);
+      };
     }, [toggleMapDirections,shuttleStop]);
   
 
