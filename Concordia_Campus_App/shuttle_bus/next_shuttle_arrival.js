@@ -100,8 +100,9 @@ const ArrivalDisplay = ({ stop }) => {
                 )}
 
                 {nextBus === undefined && (
-                    <View>
-                        <Text style={{padding:10}}>No more buses today.</Text>
+                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                        <Icon name="frown-o" size={50} color="orange"/>
+                        <Text style={{padding:10}}>No more buses available today.</Text>
                     </View>
                 )}
 
