@@ -170,8 +170,6 @@ const MapScreen = () => {
             }}
           />
         )}
-        
-        )}
 
         {buildingsData.buildings.map((building, index) => (
           <Polygon
