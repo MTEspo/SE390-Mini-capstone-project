@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react'; 
 import { View, Text, TextInput, TouchableOpacity, FlatList, ScrollView, Alert } from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; 
 import buildingsData from './buildingCoordinates.js';
 import BuildingPopup from './BuildingPopup'; 
+import { getLocation } from './locationUtil';
 
 const MapScreen = () => {
   const [selectedStart, setSelectedStart] = useState(null);
@@ -75,6 +76,66 @@ const MapScreen = () => {
     );
   };
 
+
+  const isPointInPolygon = (point, polygon) => {
+    let x = point.longitude, y = point.latitude;
+    let inside = false;
+    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+      let xi = polygon[i].longitude, yi = polygon[i].latitude;
+      let xj = polygon[j].longitude, yj = polygon[j].latitude;
+      let intersect = ((yi > y) !== (yj > y)) && 
+                      (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+      if (intersect) inside = !inside;
+    }
+    return inside;
+  };
+
+
+  const handleUseCurrentLocation = async () => {
+    try {
+      const location = await getLocation();
+      const userPoint = { latitude: location.latitude, longitude: location.longitude };
+      
+      const currentBuilding = buildingsData.buildings.find((building) =>
+        isPointInPolygon(userPoint, building.coordinates)
+      );
+      
+      if (currentBuilding) {
+        setSelectedStart(currentBuilding);
+        setStartQuery(currentBuilding.name);
+        moveToLocation(userPoint.latitude, userPoint.longitude);
+      } else {
+   
+        Alert.alert(
+          "No building found",
+          "You are not within a known building. Would you like to use your current location as the start point?",
+          [
+            {
+              text: "Yes",
+              onPress: () => {
+                
+                const pseudoBuilding = {
+                  name: "My Current Location",
+             
+                  coordinates: [{ latitude: userPoint.latitude, longitude: userPoint.longitude }],
+                  markerCoord: userPoint,
+                  fillColor: 'orange', 
+                  strokeColor: 'orange',
+                };
+                setSelectedStart(pseudoBuilding);
+                setStartQuery("My Current Location");
+                moveToLocation(userPoint.latitude, userPoint.longitude);
+              },
+            },
+            { text: "No", style: "cancel" },
+          ]
+        );
+      }
+    } catch (error) {
+      Alert.alert("Error", "Could not retrieve current location.");
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
       <View style={styles.searchContainer}>
@@ -103,6 +164,10 @@ const MapScreen = () => {
               )}
             />
           )}
+          {/* New button for using current location */}
+          <TouchableOpacity style={styles.useLocationButton} onPress={handleUseCurrentLocation}>
+            <Text style={styles.useLocationButtonText}>Use My Current Location</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.searchBarWrapper}>
