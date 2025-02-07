@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView, Pressable, Platform, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
@@ -7,6 +7,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Card, Text, Button, Menu, Provider } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+
 
 WebBrowser.maybeCompleteAuthSession();
 const SUPABASE_URL = "https://mmzllysbkfjeypyuodqr.supabase.co";
@@ -29,7 +30,14 @@ export default function Calendar() {
   const [calendars, setCalendars] = useState([]);
   const [selectedCalendar, setSelectedCalendar] = useState(null);
   const [menuVisibleState, setMenuVisibleState] = useState(false);
+  const [expandCards, setExpandCards] = useState({});
+  const toggleExpandCard = (eventID) => {
+    setExpandCards((otherStates) => ({
+      [eventID]: !otherStates[eventID]
+    }));
+  };
   const navigation = useNavigation();
+
 
   const googleSignIn = async () => {
     const redirectUri = Linking.createURL("/");
@@ -123,14 +131,31 @@ export default function Calendar() {
       return;
     }
     try {
+      const currentTime = new Date();
+      const sunday = new Date(currentTime);
+      sunday.setDate(currentTime.getDate() - currentTime.getDay());
+      sunday.setHours(0, 0, 0, 0);
+
+      const saturday = new Date(sunday);
+      saturday.setDate(sunday.getDate() + 6);
+      saturday.setHours(23, 59, 59, 999);
+
+      const minTime = sunday.toISOString();
+      const maxTime = saturday.toISOString();
       const response = await axios.get(
         `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`,
         {
           headers: { Authorization: `Bearer ${token}` },
+          params: {
+            timeMin: minTime,
+            timeMax: maxTime,
+            orderBy: 'startTime',
+            singleEvents: true,}
         }
       );
       console.log("Fetched events:", response.data.items);
       setEvents(response.data.items);
+      
     } catch (error) {
       console.error("Error fetching Google Calendar events:", error);
       if (error.response && error.response.status === 401) {
@@ -156,6 +181,11 @@ export default function Calendar() {
     });
     return unsubscribe;
   }, [navigation, providerToken]);
+
+  
+
+ 
+
 
   return (
     <Provider>
@@ -197,17 +227,49 @@ export default function Calendar() {
             </View>
             <ScrollView style={styles.eventList}>
               {events.length > 0 ? (
-                events.map((event, index) => (
-                  <Card key={index} style={styles.card} onPress={() => console.log("Card pressed")}>
-                    <Card.Content>
-                      <Text variant="titleMedium">{event.summary}</Text>
-                      <Text variant="bodySmall">
-                        Start: {convertDateTime(event.start.dateTime || event.start.date)}
-                      </Text>
-                      <Text variant="bodySmall">
-                        End: {convertDateTime(event.end.dateTime || event.end.date)}
-                      </Text>
-                    </Card.Content>
+                events.map((event) => (
+                  <Card key={event.id} style={styles.card}>
+                    <Pressable  onPress={() => toggleExpandCard(event.id)}>
+                      <Card.Content>
+                        <Text variant="titleMedium">{event.summary}</Text>
+                        <View style={styles.eventDetails}>
+                          <Text variant="bodySmall">
+                            Start: {convertDateTime(event.start.dateTime || event.start.date)}
+                          </Text>
+                          <Text variant="bodySmall">
+                            End: {convertDateTime(event.end.dateTime || event.end.date)}
+                          </Text>
+                        </View>
+                      </Card.Content>
+                    </Pressable>
+
+                    {expandCards[event.id] && (
+                      <View>
+            
+                          <Text variant= "bodySmall" style={{paddingLeft: 16}} >Location: {event.description}</Text>
+
+                        <View style ={styles.cardButtons}>
+                          <Button mode = "contained"
+                          onPress={() => {
+                            const location = encodeURIComponent(event.location);
+                            const url = `https://www.google.com/maps?q=${location}`;
+                            Linking.openURL(url).catch((err) => console.error("Cannot open Google Maps", err));
+                          }
+                        }>Location</Button>
+                          
+                          <Button style={{marginTop: 10}} mode = "contained"
+                            onPress={() => {
+                              const destination = encodeURIComponent(event.location);
+                              const url = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
+                              Linking.openURL(url).catch((err) => console.error("Cannot open Google Maps", err));
+                            }}>Directions
+                          </Button>
+                        </View>
+                        
+                      </View>
+                    )}
+
+
                   </Card>
                 ))
               ) : (
@@ -250,6 +312,13 @@ const styles = StyleSheet.create({
   signOutButton: {
     marginTop: 20,
   },
+  cardButtons:{
+    flexDirection: "column",
+    paddingHorizontal: 50,
+    paddingVertical: 10,
+    
+  }
+
 });
 
 function extractTokens(url) {
