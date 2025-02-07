@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: macos-latest 
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  
+
+      - name: Install dependencies (npm)
+        run: |
+          cd Concordia_Campus_App
+          npm install
+
+      - name: Run unit tests
+        run: |
+          cd Concordia_Campus_App
+          npm run test --coverage
+
+      - name: Verify test results
+        run: |
+          if [ $? -ne 0 ]; then
+            echo "Tests failed!"
+            exit 1
+          fi
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: JonathanDannessa/SE390-Mini-capstone-project
+
+      # - name: Setup EAS
+      #   uses: expo/expo-github-action@v8
+      #   with:
+      #     eas-version: latest
+      #     token: ${{ secrets.EXPO_TOKEN }}
+
+      # - name: Create .env file
+      #   run: |
+      #     echo "API_KEY=${{ secrets.API_KEY }}" > Concordia_Campus_App/.env
+
+      
+      # - name: Build with EAS
+      #   run: |
+      #     cd Concordia_Campus_App
+      #     npm install eas-cli
+      #     npx eas build --platform ios --non-interactive --profile build-and-maestro-test
+      #     if [ $? -ne 0 ]; then
+      #       echo "EAS build failed!"
+      #       exit 1
+      #     fi
+
+

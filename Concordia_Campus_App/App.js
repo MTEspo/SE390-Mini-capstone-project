@@ -2,14 +2,24 @@ import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
-const GOOGLE_MAPS_API_KEY = 'keyForMaps'; // Hardcoded API Key
 import MapScreen from './maps/MapScreen';
+
+import { StatusBar } from 'expo-status-bar';
+
+
 import Calendar from './calendar/calendar';
 import FullShuttleSchedule from './shuttle_bus/full_schedule'
 const Drawer = createDrawerNavigator();
 
 
+export function HomeScreen() {
+  return (
+    <View style={styles.container}>
+      <Text>Open up App.js to start working on your app!</Text>
+      <StatusBar style="auto" />
+    </View>
+  );
+}
 
 // Add more navigation menus
 export default function App() {
