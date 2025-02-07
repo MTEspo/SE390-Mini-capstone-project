@@ -51,6 +51,10 @@ jobs:
       #     eas-version: latest
       #     token: ${{ secrets.EXPO_TOKEN }}
 
+      # - name: Create .env file
+      #   run: |
+      #     echo "API_KEY=${{ secrets.API_KEY }}" > Concordia_Campus_App/.env
+
       
       # - name: Build with EAS
       #   run: |
