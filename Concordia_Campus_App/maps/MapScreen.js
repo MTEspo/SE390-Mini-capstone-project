@@ -86,7 +86,6 @@ const MapScreen = () => {
 
   const handleClosePopup = () => {
     setSelectedBuilding(null); // Close the popup by clearing the selected building
-    setShowBuildingDirections(false);
   };
   const destinationLocation = campus === 'SGW' ? campusLocations.Loyola : campusLocations.SGW;
   const directionsText = campus === 'SGW' ? '   Get directions to Loyola' : '   Get directions to SGW';
