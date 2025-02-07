@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import 'react-native-get-random-values';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
@@ -7,6 +7,9 @@ import styles from './styles/mapScreenStyles';
 import buildingsData from './buildingCoordinates.js';
 import BuildingPopup from './BuildingPopup'; 
 import { API_KEY } from '@env';
+import ShuttleBusMarker from './ShuttleBusMarker';
+import { getLocation } from './locationUtils';
+import MapDirections from './MapDirections';
 
 const MapScreen = () => {
   const [campus, setCampus] = useState('SGW');
@@ -14,6 +17,10 @@ const MapScreen = () => {
   const [selectedBuilding, setSelectedBuilding] = useState(null); 
   const mapRef = useRef(null);
   const [selectedMarker, setSelectedMarker] = useState(null);
+  const [shuttleStop, setShuttleStop] = useState(null);
+  const [toggleMapDirections, setToggleMapDirections] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
+
 
   const campusLocations = {
     SGW: {
@@ -31,6 +38,25 @@ const MapScreen = () => {
   };
 
   const location = campusLocations[campus];
+
+
+  useEffect(() => {
+    let interval;
+      const fetchUserLocation = async () => {
+        const location = await getLocation();
+        if(location){
+          setUserLocation(location);
+        }
+      };
+      if(toggleMapDirections && shuttleStop){
+        fetchUserLocation();
+        interval = setInterval(fetchUserLocation, 5000);
+      }
+      return () => {
+        if(interval) clearInterval(interval);
+      };
+    }, [toggleMapDirections,shuttleStop]);
+  
 
   async function moveToLocation(latitude, longitude) {
     mapRef.current.animateToRegion(
@@ -53,6 +79,7 @@ const MapScreen = () => {
     // Zoom out by increasing the delta more significantly
     setZoomLevel((prevZoom) => Math.min(prevZoom / 0.7, 0.05)); // Zoom out more per click
   };
+
 
   const handlePolygonPress = (building) => {
     setSelectedBuilding(building); // Update the selected building info
@@ -89,7 +116,6 @@ const MapScreen = () => {
               console.log('Selected Marker:', selectedMarker); // Debug marker state
           }}
           onFail={(error) => console.log('Error:', error)}
-      
         />
       </View>
 
@@ -122,6 +148,15 @@ const MapScreen = () => {
           longitudeDelta: zoomLevel,
         }}
       >
+              
+        <ShuttleBusMarker setToggleMapDirections={setToggleMapDirections} setShuttleStop={setShuttleStop}/>
+          
+        {toggleMapDirections && userLocation && shuttleStop && (
+          <MapDirections 
+            userLocation={userLocation} 
+            destinationLocation={shuttleStop}/>
+        )}
+         
         {selectedMarker && (
           <Marker
             coordinate={{
@@ -147,7 +182,6 @@ const MapScreen = () => {
           />
         ))}
       </MapView>
-
       {/* Render the BuildingPopup component with the close handler */}
       <BuildingPopup building={selectedBuilding} onClose={handleClosePopup} />
 
@@ -165,5 +199,4 @@ const MapScreen = () => {
 };
 
 export default MapScreen;
-
 

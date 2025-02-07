@@ -28,12 +28,15 @@
     ]
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^5.0.6",
     "@react-navigation/drawer": "^7.1.1",
     "@react-navigation/native": "^7.0.14",
     "expo": "~52.0.27",
+    "expo-location": "~18.0.5",
     "expo-status-bar": "~2.0.1",
     "react": "18.3.1",
     "react-native": "0.76.6",
+    "react-native-maps-directions": "^1.9.0",
     "react-native-gesture-handler": "^2.22.1",
     "react-native-get-random-values": "^1.11.0",
     "react-native-google-places-autocomplete": "^2.5.7",
@@ -41,6 +44,7 @@
     "react-native-reanimated": "^3.16.7",
     "react-native-safe-area-context": "^5.1.0",
     "react-native-screens": "^4.5.0",
+    "react-native-vector-icons": "^10.2.0",
     "react-test-renderer": "^18.3.1"
   },
   "devDependencies": {
@@ -48,9 +52,9 @@
     "@testing-library/react-native": "^11.2.0",
     "codecov": "^3.8.3",
     "jest-expo": "^52.0.3",
-    "react-native-dotenv": "^3.4.11"
+    "react-native-dotenv": "^3.4.11",
     "form-data": "^4.0.1",
-    "formdata-polyfill": "^4.0.10",
+    "formdata-polyfill": "^4.0.10"
   },
   "private": true
 }
