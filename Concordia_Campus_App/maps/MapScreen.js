@@ -17,10 +17,13 @@ const MapScreen = () => {
   const [selectedBuilding, setSelectedBuilding] = useState(null); 
   const mapRef = useRef(null);
   const [selectedMarker, setSelectedMarker] = useState(null);
-
   const [showDirections, setShowDirections] = useState(false);
+  const [showBuildingDirections, setShowBuildingDirections] = useState(false);
   const [eta, setEta] = useState(null);
   const [distance, setDistance] = useState(null);
+  const [selectedStart, setSelectedStart] = useState(null);
+  const [selectedEnd, setSelectedEnd] = useState(null); 
+  
 
   const campusLocations = {
     SGW: {
@@ -62,15 +65,28 @@ const MapScreen = () => {
   };
 
   const handlePolygonPress = (building) => {
+    if(!selectedStart){
+      setSelectedStart(building.markerCoord);
+      setShowBuildingDirections(false);
+    } else if (!selectedEnd) {
+      setSelectedEnd(building.markerCoord);
+      setShowBuildingDirections(false);
+    } else {
+      setSelectedStart(building.markerCoord);
+      setSelectedEnd(null);
+      setShowBuildingDirections(false);
+    }
     setSelectedBuilding(building); // Update the selected building info
     setSelectedMarker({
       latitude: building.markerCoord.latitude,
       longitude: building.markerCoord.longitude
     });
+    setShowBuildingDirections(false);
   };
 
   const handleClosePopup = () => {
     setSelectedBuilding(null); // Close the popup by clearing the selected building
+    setShowBuildingDirections(false);
   };
   const destinationLocation = campus === 'SGW' ? campusLocations.Loyola : campusLocations.SGW;
   const directionsText = campus === 'SGW' ? '   Get directions to Loyola' : '   Get directions to SGW';
@@ -85,11 +101,36 @@ const MapScreen = () => {
     setEta(null);
     setDistance(null);
     setCampus(campus === 'SGW' ? 'Loyola' : 'SGW');
+    setShowBuildingDirections(false);
+    setSelectedStart(null);
+    setSelectedEnd(null);
+    setSelectedBuilding(null);
+    setSelectedMarker(null);
   };
+
+  const handleCampusDirections = () =>{
+    setShowDirections(true);
+    setSelectedStart(null);
+    setSelectedEnd(null);
+    setShowBuildingDirections(false);
+  }
+
+  const handleBuildingDirections = () => {
+    setShowBuildingDirections(true);
+    setShowDirections(false);
+  }
 
   useEffect(() => {
     return () => {
       setShowDirections(false);
+      setEta(null);
+      setDistance(null);
+    };
+  }, []);
+  
+  useEffect(() => {
+    return () => {
+      setShowBuildingDirections(false);
       setEta(null);
       setDistance(null);
     };
@@ -118,10 +159,27 @@ const MapScreen = () => {
               console.log('Selected Marker:', selectedMarker); // Debug marker state
           }}
           onFail={(error) => console.log('Error:', error)}
-      
         />
+        {selectedStart && selectedEnd &&(
+          <TouchableOpacity
+          style = {styles1.directionsBuildingButton}
+          onPress={handleBuildingDirections}
+          >
+          <Image source={require('../assets/location.png')} style={styles1.buttonImage} />
+          <Text style={styles1.directionsBuildingButtonText}>Start</Text>
+          </TouchableOpacity>
+        )}
       </View>
-
+             {selectedStart && selectedEnd && showBuildingDirections && (
+             <MapViewDirections
+             origin={selectedStart}
+             destination={selectedEnd}
+             apikey={google_maps_api_key}
+             strokeWidth={5}
+             strokeColor="blue"
+             onReady={handleDirections}
+             />
+        )}
       <View style={styles.toggleButtonContainer}>
         <TouchableOpacity
           style={styles.toggleButton}
@@ -187,6 +245,16 @@ const MapScreen = () => {
             onReady={handleDirections}
           />
         )}
+        {selectedStart && selectedEnd && showBuildingDirections &&(
+             <MapViewDirections
+             origin={selectedStart}
+             destination={selectedEnd}
+             apikey={google_maps_api_key}
+             strokeWidth={5}
+             strokeColor="blue"
+             onReady={handleDirections}
+             />
+        )}
       </MapView>
 
       {/* Render the BuildingPopup component with the close handler */}
@@ -203,7 +271,8 @@ const MapScreen = () => {
       </View>
       <TouchableOpacity
          style={styles1.directionsButton}
-         onPress={() => setShowDirections(true)}
+         onPress={handleCampusDirections}
+ 
       >
       <View style={styles1.directionsButton}>
       <Image 
@@ -211,10 +280,10 @@ const MapScreen = () => {
       style={styles1.buttonImage} 
     />
     
-    {/* Text for the directions button */}
     <Text style={styles1.directionsButtonText}>{directionsText}</Text>
   </View>
 </TouchableOpacity>
+
       {eta !== null && distance !== null && (
         <View style={[styles1.routeInfoContainer, { flexDirection: 'row'}]}>
           <Text style={styles1.routeInfoText}>Distance: {Math.round(distance)} km</Text>
@@ -245,6 +314,7 @@ const styles1 = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 5,
+    flexDirection: 'row',
   },
   searchBar: {
     height: 40,
@@ -300,6 +370,19 @@ const styles1 = StyleSheet.create({
      color: 'white',
      fontSize: 16,
      fontWeight: 'bold'
+  },
+  directionsBuildingButton: {
+    backgroundColor: '#800000',  
+    paddingVertical: 10,          
+    paddingHorizontal: 10,        
+    borderRadius: 50,            
+    alignItems: 'center', 
+    flexDirection: 'row',
+  },
+  directionsBuildingButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold'
   },
   routeInfoContainer: {
     backgroundColor: '#800000',
