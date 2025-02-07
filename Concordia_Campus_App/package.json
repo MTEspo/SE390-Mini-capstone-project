@@ -52,9 +52,9 @@
     "@testing-library/react-native": "^11.2.0",
     "codecov": "^3.8.3",
     "jest-expo": "^52.0.3",
-    "react-native-dotenv": "^3.4.11"
+    "react-native-dotenv": "^3.4.11",
     "form-data": "^4.0.1",
-    "formdata-polyfill": "^4.0.10",
+    "formdata-polyfill": "^4.0.10"
   },
   "private": true
 }
