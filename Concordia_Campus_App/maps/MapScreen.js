@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import 'react-native-get-random-values';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
