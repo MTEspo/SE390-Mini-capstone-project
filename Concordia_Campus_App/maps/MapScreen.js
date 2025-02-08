@@ -4,7 +4,7 @@ import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; 
 import buildingsData from './buildingCoordinates.js';
 import BuildingPopup from './BuildingPopup'; 
-import { getLocation } from './locationUtil';
+import { getLocation } from './locationUtils';
 
 const MapScreen = () => {
   const [selectedStart, setSelectedStart] = useState(null);
