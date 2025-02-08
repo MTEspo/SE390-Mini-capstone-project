@@ -11,7 +11,7 @@ import ShuttleBusMarker from './ShuttleBusMarker';
 import { getLocation } from './locationUtils';
 import MapDirections from './MapDirections';
 
-const MapScreen = () => {
+const MapScreen = ({route}) => {
   const [campus, setCampus] = useState('SGW');
   const [zoomLevel, setZoomLevel] = useState(0.005); 
   const [selectedBuilding, setSelectedBuilding] = useState(null); 
@@ -20,6 +20,7 @@ const MapScreen = () => {
   const [shuttleStop, setShuttleStop] = useState(null);
   const [toggleMapDirections, setToggleMapDirections] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
+  const {destinationCoords} = route.params || {};
 
 
   const campusLocations = {
@@ -93,6 +94,15 @@ const MapScreen = () => {
     setSelectedBuilding(null); // Close the popup by clearing the selected building
   };
 
+  useEffect(() => {
+    if (destinationCoords) {
+        console.log('Destination Coords:', destinationCoords);
+        const selectedBuilding = buildingsData.buildings.find(building => building.name === route.params?.destinationCoords);
+        handlePolygonPress(selectedBuilding);
+        //moveToLocation(selectedBuilding.markerCoord.latitude, selectedBuilding.markerCoord.longitude);
+        
+    }
+}, [destinationCoords]);
   return (
     <View style={styles.container}>
       <View style={styles.searchBarContainer}>
@@ -181,6 +191,16 @@ const MapScreen = () => {
             onPress={() => handlePolygonPress(building)} // Handle the polygon press
           />
         ))}
+
+
+        <Text>Address: {destinationCoords}</Text>
+
+        {destinationCoords && userLocation && (
+          <MapDirections 
+            userLocation={userLocation} 
+            destinationLocation={destinationCoords}/>
+        )}
+
       </MapView>
       {/* Render the BuildingPopup component with the close handler */}
       <BuildingPopup building={selectedBuilding} onClose={handleClosePopup} />
@@ -199,4 +219,3 @@ const MapScreen = () => {
 };
 
 export default MapScreen;
-
