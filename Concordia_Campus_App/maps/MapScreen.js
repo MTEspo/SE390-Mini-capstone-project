@@ -178,60 +178,7 @@ const MapScreen = () => {
           longitudeDelta: 0.0001,
         }}
       >
-
-        <Marker coordinate={location} title={location.title} description={location.description} />
-        <Marker coordinate={destinationLocation} title={destinationLocation.title} description={destinationLocation.description} />
-        {/* Marker for Concordia University */}
-        <Marker
-          coordinate={{
-            latitude: location.latitude,
-            longitude: location.longitude,
-          }}
-          title={location.title}
-          description={location.description}
-        />
-        {showDirections && (
-          <>
-            {/* For driving mode (always blue) */}
-            {mode === 'DRIVING' && (
-              <MapViewDirections
-                origin={location}
-                destination={destinationLocation}
-                apikey={google_maps_api_key}
-                strokeWidth={5}
-                strokeColor="blue"  // Driving mode is always blue
-                mode={mode}
-                onReady={handleDirections}
-              />
-            )}
-            
-            {/* For walking mode (dashed blue line) */}
-            {mode === 'WALKING' && (
-            <MapViewDirections
-              origin={location}
-              destination={destinationLocation}
-              apikey={google_maps_api_key}
-              strokeWidth={5}
-              strokeColor="blue"
-              mode={mode}
-              onReady={handleDirections}
-              lineDashPattern={[2, 10]}  // Small dots (short lines with large gaps)
-            />
-          )}
-            {/* Transit Mode */}
-            {mode === 'TRANSIT' && (
-              <MapViewDirections
-                origin={location}
-                destination={destinationLocation}
-                apikey={google_maps_api_key}
-                strokeWidth={5}
-                strokeColor="green"  // Change color for transit mode
-                mode="TRANSIT"
-                onReady={handleDirections}
-              />
-            )}
-          </>
-
+        
               
         <ShuttleBusMarker setToggleMapDirections={setToggleMapDirections} setShuttleStop={setShuttleStop}/>
           
@@ -255,7 +202,71 @@ const MapScreen = () => {
           />
 
         )}
+        {buildingsData.buildings.map((building, index) => (
+          <Polygon
+            key={index}
+            coordinates={building.coordinates}
+            fillColor={building.fillColor}
+            strokeColor={building.strokeColor}
+            strokeWidth={2}
+            onPress={() => handlePolygonPress(building)} // Handle the polygon press
+          />
+        ))}
       </MapView>
+
+        <Marker coordinate={location} title={location.title} description={location.description} />
+        <Marker coordinate={destinationLocation} title={destinationLocation.title} description={destinationLocation.description} />
+        {/* Marker for Concordia University */}
+        <Marker
+          coordinate={{
+            latitude: location.latitude,
+            longitude: location.longitude,
+          }}
+          title={location.title}
+          description={location.description}
+        />
+        {showDirections && (
+          <>
+            {/* For driving mode (always blue) */}
+            {mode === 'DRIVING' && (
+              <MapViewDirections
+                origin={location}
+                destination={destinationLocation}
+                apikey={API_KEY}
+                strokeWidth={5}
+                strokeColor="blue"  // Driving mode is always blue
+                mode={mode}
+                onReady={handleDirections}
+              />
+            )}
+            
+            {/* For walking mode (dashed blue line) */}
+            {mode === 'WALKING' && (
+            <MapViewDirections
+              origin={location}
+              destination={destinationLocation}
+              apikey={API_KEY}
+              strokeWidth={5}
+              strokeColor="blue"
+              mode={mode}
+              onReady={handleDirections}
+              lineDashPattern={[2, 10]}  // Small dots (short lines with large gaps)
+            />
+          )}
+            {/* Transit Mode */}
+            {mode === 'TRANSIT' && (
+              <MapViewDirections
+                origin={location}
+                destination={destinationLocation}
+                apikey={API_KEY}
+                strokeWidth={5}
+                strokeColor="green"  // Change color for transit mode
+                mode="TRANSIT"
+                onReady={handleDirections}
+              />
+            )}
+        </>
+      )};
 
       <TouchableOpacity
          style={styles.directionsButton}
@@ -290,124 +301,6 @@ const MapScreen = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  searchBarContainer: {
-    position: 'absolute',
-    top: 20,
-    width: '70%',
-    left: 20,
-    zIndex: 1,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  searchBar: {
-    height: 40,
-    borderWidth: 0.5,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-  },
-  map: {
-    width: '100%',
-    height: '80%', // Adjust map height to fit below search bar
-  },
-  toggleButtonContainer: {
-    position: 'absolute',
-    top: 80, // Place it directly below the search bar
-    left: 20, // Align the button to the left of the screen
-    zIndex: 1, // Ensures it appears above the map
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  toggleButton: {
-    backgroundColor: '#800000', // Concordia's color
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    width: 'auto', // Set width to auto for a smaller button
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  toggleButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  highlightedText: {
-    color: 'white', // Highlight the active campus in yellow (or any color you prefer)
-    fontWeight: 'bold',
-    textDecorationLine: 'underline'
-  },
-  normalText: {
-    color: 'grey',
-    
-  },
-  directionsButton: {
-    backgroundColor: '#800000',  
-    paddingVertical: 10,          
-    paddingHorizontal: 10,        
-    borderRadius: 50,            
-    alignItems: 'center', 
-    flexDirection: 'row',
-  },
-  directionsButtonText: {
-     color: 'white',
-     fontSize: 16,
-     fontWeight: 'bold'
-  },
-  routeInfoContainer: {
-    position: 'absolute', 
-    bottom: 20, 
-    width: '90%',
-    flexDirection: 'row', 
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#800000',
-    padding: 10,
-    borderRadius: 10,
-  },
-  routeInfoText: {
-    fontSize: 16,
-    fontWeight: 'medium',
-    color: 'white',
-  },
-  buttonImage: {
-    width: 20,
-    height: 20,
-  },
-  modeContainer: { 
-    flexDirection: 'row', 
-    justifyContent: 'space-evenly', 
-    marginVertical: 10 },
-
-
-  modeButton: { 
-    marginHorizontal: 15,
-    backgroundColor: '#800000',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modeText: { 
-    fontSize: 16,
-    fontWeight: 'medium',
-    color: 'white',
-  },
-});
 
 export default MapScreen;
 

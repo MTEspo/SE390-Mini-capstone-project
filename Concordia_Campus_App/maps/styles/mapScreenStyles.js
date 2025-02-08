@@ -87,6 +87,58 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#800000', 
   },
+  directionsButton: {
+    backgroundColor: '#800000',  
+    paddingVertical: 10,          
+    paddingHorizontal: 10,        
+    borderRadius: 50,            
+    alignItems: 'center', 
+    flexDirection: 'row',
+  },
+  directionsButtonText: {
+     color: 'white',
+     fontSize: 16,
+     fontWeight: 'bold'
+  },
+  routeInfoContainer: {
+    position: 'absolute', 
+    bottom: 20, 
+    width: '90%',
+    flexDirection: 'row', 
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#800000',
+    padding: 10,
+    borderRadius: 10,
+  },
+  routeInfoText: {
+    fontSize: 16,
+    fontWeight: 'medium',
+    color: 'white',
+  },
+  buttonImage: {
+    width: 20,
+    height: 20,
+  },
+  modeContainer: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-evenly', 
+    marginVertical: 10 
+  },
+  modeButton: { 
+    marginHorizontal: 15,
+    backgroundColor: '#800000',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modeText: { 
+    fontSize: 16,
+    fontWeight: 'medium',
+    color: 'white',
+  },
 });
 
 export default styles;
