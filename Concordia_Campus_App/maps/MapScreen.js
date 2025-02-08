@@ -1,32 +1,19 @@
-
+// maps/MapScreen.js
 import { duration } from 'moment-timezone';
-import React, { useState, useRef, useEffect } from 'react';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import 'react-native-get-random-values';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
-import MapView, { Polygon, Marker, Polyline } from 'react-native-maps';
-import styles from './styles/mapScreenStyles'; 
-import buildingsData from './buildingCoordinates.js';
-import BuildingPopup from './BuildingPopup'; 
-import { API_KEY } from '@env';
-import ShuttleBusMarker from './ShuttleBusMarker';
-import { getLocation } from './locationUtils';
-import MapDirections from './MapDirections';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 
+const google_maps_api_key = 'AIzaSyCS3Tq6z9E4OpI87mHPprELatvXQ0AyZVI';
+
 const MapScreen = () => {
-  const [campus, setCampus] = useState('SGW');
-  const [zoomLevel, setZoomLevel] = useState(0.005); 
-  const [selectedBuilding, setSelectedBuilding] = useState(null); 
+  // Coordinates for both campuses
+  const [campus, setCampus] = useState('SGW'); // State to track the selected campus right now
   const [showDirections, setShowDirections] = useState(false);
-  const mapRef = useRef(null);
-  const [selectedMarker, setSelectedMarker] = useState(null);
   const [eta, setEta] = useState(null);
-  const [shuttleStop, setShuttleStop] = useState(null);
   const [distance, setDistance] = useState(null);
   const [mode, setMode] = useState('DRIVING');
-  const [toggleMapDirections, setToggleMapDirections] = useState(false);
-  const [userLocation, setUserLocation] = useState(null);
 
   const campusLocations = {
     SGW: {
@@ -48,47 +35,9 @@ const MapScreen = () => {
   const destinationLocation = campus === 'SGW' ? campusLocations.Loyola : campusLocations.SGW;
   const directionsText = campus === 'SGW' ? '   Get directions to Loyola' : '   Get directions to SGW';
 
-
   const handleDirections = (result) => {
     setEta(result.duration);
     setDistance(result.distance);
-  };
-
-
-  useEffect(() => {
-    let interval;
-      const fetchUserLocation = async () => {
-        const location = await getLocation();
-        if(location){
-          setUserLocation(location);
-        }
-      };
-      if(toggleMapDirections && shuttleStop){
-        fetchUserLocation();
-        interval = setInterval(fetchUserLocation, 5000);
-      }
-      return () => {
-        if(interval) clearInterval(interval);
-      };
-    }, [toggleMapDirections,shuttleStop]);
-  
-
-  async function moveToLocation(latitude, longitude) {
-    mapRef.current.animateToRegion(
-      {
-        latitude,
-        longitude,
-        latitudeDelta: 0.015,
-        longitudeDelta: 0.0121,
-      },
-      2000 //amount of time it takes to animate
-    )
-  }
-
-  const handleZoomIn = () => {
-    // Zoom in by decreasing the delta more significantly
-    setZoomLevel((prevZoom) => Math.max(prevZoom * 0.7, 0.0005)); // Zoom in more per click
-
   };
 
   const handleCampusToggle = () => {
@@ -98,7 +47,6 @@ const MapScreen = () => {
     setCampus(campus === 'SGW' ? 'Loyola' : 'SGW');
   };
 
-
   useEffect(() => {
     return () => {
       setShowDirections(false);
@@ -107,44 +55,14 @@ const MapScreen = () => {
     };
   }, []);
 
-
-  const handlePolygonPress = (building) => {
-    setSelectedBuilding(building); // Update the selected building info
-    setSelectedMarker({
-      latitude: building.markerCoord.latitude,
-      longitude: building.markerCoord.longitude
-    });
-  };
-
-  const handleClosePopup = () => {
-    setSelectedBuilding(null); // Close the popup by clearing the selected building
-  };
-
-
   return (
     <View style={styles.container}>
       {/* SEARCH BAR */}
       <View style={styles.searchBarContainer}>
         <TextInput
           placeholder="Search Building or Class..."
-
-          styles={{
-            textInput: styles.searchBar, 
-          }}
-          query={{
-            key: API_KEY,
-            language: 'en',
-          }}
-          onPress={(data, details = null) => {
-            console.log(JSON.stringify(details?.geometry?.location));
-            moveToLocation(details?.geometry?.location.lat, details?.geometry?.location.lng);
-            setSelectedMarker({
-              latitude: details?.geometry?.location.lat,
-              longitude: details?.geometry?.location.lng,
-            });
-              console.log('Selected Marker:', selectedMarker); // Debug marker state
-          }}
-          onFail={(error) => console.log('Error:', error)}
+          style={styles.searchBar}
+          onChangeText={(text) => console.log(`Searching for: ${text}`)} // Handle the searching input
         />
       </View>
 
@@ -178,7 +96,6 @@ const MapScreen = () => {
           longitudeDelta: 0.0001,
         }}
       >
-
         <Marker coordinate={location} title={location.title} description={location.description} />
         <Marker coordinate={destinationLocation} title={destinationLocation.title} description={destinationLocation.description} />
         {/* Marker for Concordia University */}
@@ -204,10 +121,9 @@ const MapScreen = () => {
                 onReady={handleDirections}
               />
             )}
-            
+
             {/* For walking mode (dashed blue line) */}
-            {mode === 'WALKING' && (
-            <MapViewDirections
+            {mode === 'WALKING' && (           <MapViewDirections
               origin={location}
               destination={destinationLocation}
               apikey={google_maps_api_key}
@@ -231,32 +147,8 @@ const MapScreen = () => {
               />
             )}
           </>
-
-              
-        <ShuttleBusMarker setToggleMapDirections={setToggleMapDirections} setShuttleStop={setShuttleStop}/>
-          
-        {toggleMapDirections && userLocation && shuttleStop && (
-          <MapDirections 
-            userLocation={userLocation} 
-            destinationLocation={shuttleStop}/>
-        )}
-         
-        {selectedMarker && (
-          <Marker
-            coordinate={{
-              latitude: selectedMarker.latitude,
-              longitude: selectedMarker.longitude,
-            }}
-            pinColor="blue"
-            title="Selected Location"
-            style={{
-              zIndex: 1000,
-            }}
-          />
-
         )}
       </MapView>
-
       <TouchableOpacity
          style={styles.directionsButton}
          onPress={() => setShowDirections(true)}
@@ -276,10 +168,6 @@ const MapScreen = () => {
     <TouchableOpacity onPress={() => setMode('WALKING')} style={styles.modeButton}><Text style={styles.modeText}>Walking</Text></TouchableOpacity>
     <TouchableOpacity onPress={() => setMode('TRANSIT')} style={styles.modeButton}><Text style={styles.modeText}>Transit</Text></TouchableOpacity>
   </View>
-
-      {/* Render the BuildingPopup component with the close handler */}
-      <BuildingPopup building={selectedBuilding} onClose={handleClosePopup} />
-
 
       {eta !== null && distance !== null && (
         <View style={[styles.routeInfoContainer, { flexDirection: 'row'}]}>
@@ -352,7 +240,7 @@ const styles = StyleSheet.create({
   },
   normalText: {
     color: 'grey',
-    
+
   },
   directionsButton: {
     backgroundColor: '#800000',  
@@ -392,7 +280,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly', 
     marginVertical: 10 },
 
-
   modeButton: { 
     marginHorizontal: 15,
     backgroundColor: '#800000',
@@ -410,4 +297,3 @@ const styles = StyleSheet.create({
 });
 
 export default MapScreen;
-
