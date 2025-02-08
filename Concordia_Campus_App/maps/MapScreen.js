@@ -198,7 +198,7 @@ const MapScreen = () => {
              <MapViewDirections
              origin={selectedStart}
              destination={selectedEnd}
-             apikey={google_maps_api_key}
+             apikey={API_KEY}
              strokeWidth={5}
              strokeColor="blue"
              onReady={handleDirections}
