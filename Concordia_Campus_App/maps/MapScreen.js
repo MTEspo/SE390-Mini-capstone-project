@@ -1,5 +1,6 @@
+
 import { duration } from 'moment-timezone';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import 'react-native-get-random-values';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
@@ -8,8 +9,10 @@ import styles from './styles/mapScreenStyles';
 import buildingsData from './buildingCoordinates.js';
 import BuildingPopup from './BuildingPopup'; 
 import MapViewDirections from 'react-native-maps-directions';
-
-const google_maps_api_key = 'AIzaSyCS3Tq6z9E4OpI87mHPprELatvXQ0AyZVI';
+import { API_KEY } from '@env';
+import ShuttleBusMarker from './ShuttleBusMarker';
+import { getLocation } from './locationUtils';
+import MapDirections from './MapDirections';
 
 const MapScreen = () => {
   const [campus, setCampus] = useState('SGW');
@@ -23,8 +26,10 @@ const MapScreen = () => {
   const [distance, setDistance] = useState(null);
   const [selectedStart, setSelectedStart] = useState(null);
   const [selectedEnd, setSelectedEnd] = useState(null); 
+  const [shuttleStop, setShuttleStop] = useState(null);
+  const [toggleMapDirections, setToggleMapDirections] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
   
-
   const campusLocations = {
     SGW: {
       latitude: 45.49532997441208,
@@ -41,6 +46,25 @@ const MapScreen = () => {
   };
 
   const location = campusLocations[campus];
+
+
+  useEffect(() => {
+    let interval;
+      const fetchUserLocation = async () => {
+        const location = await getLocation();
+        if(location){
+          setUserLocation(location);
+        }
+      };
+      if(toggleMapDirections && shuttleStop){
+        fetchUserLocation();
+        interval = setInterval(fetchUserLocation, 5000);
+      }
+      return () => {
+        if(interval) clearInterval(interval);
+      };
+    }, [toggleMapDirections,shuttleStop]);
+
 
   async function moveToLocation(latitude, longitude) {
     mapRef.current.animateToRegion(
@@ -63,6 +87,7 @@ const MapScreen = () => {
     // Zoom out by increasing the delta more significantly
     setZoomLevel((prevZoom) => Math.min(prevZoom / 0.7, 0.05)); // Zoom out more per click
   };
+
 
   const handlePolygonPress = (building) => {
     if(!selectedStart){
@@ -145,7 +170,7 @@ const MapScreen = () => {
             textInput: styles.searchBar, 
           }}
           query={{
-            key: 'your-key',
+            key: API_KEY,
             language: 'en',
           }}
           onPress={(data, details = null) => {
@@ -210,6 +235,16 @@ const MapScreen = () => {
       >
         <Marker coordinate={location} title={location.title} description={location.description} />
         <Marker coordinate={destinationLocation} title={destinationLocation.title} description={destinationLocation.description} />
+
+
+        <ShuttleBusMarker setToggleMapDirections={setToggleMapDirections} setShuttleStop={setShuttleStop}/>
+
+        {toggleMapDirections && userLocation && shuttleStop && (
+          <MapDirections 
+            userLocation={userLocation} 
+            destinationLocation={shuttleStop}/>
+        )}
+
         {selectedMarker && (
           <Marker
             coordinate={{
@@ -238,7 +273,7 @@ const MapScreen = () => {
           <MapViewDirections
             origin={location}
             destination={destinationLocation}
-            apikey={google_maps_api_key}
+            apikey={API_KEY}
             strokeWidth={5}
             strokeColor="blue"
             onReady={handleDirections}
@@ -248,14 +283,13 @@ const MapScreen = () => {
              <MapViewDirections
              origin={selectedStart}
              destination={selectedEnd}
-             apikey={google_maps_api_key}
+             apikey={API_KEY}
              strokeWidth={5}
              strokeColor="blue"
              onReady={handleDirections}
              />
         )}
       </MapView>
-
       {/* Render the BuildingPopup component with the close handler */}
       <BuildingPopup building={selectedBuilding} onClose={handleClosePopup} />
 
@@ -399,7 +433,5 @@ const styles1 = StyleSheet.create({
     height: 20,
   },
 });
-
 export default MapScreen;
-
 
