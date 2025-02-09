@@ -5,6 +5,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import MapScreen from './maps/MapScreen';
 import Calendar from './calendar/calendar';
+import BuildingDirectionsMapScreen from './maps/BuildingDirectionsMapScreen';
 const Drawer = createDrawerNavigator();
 
 
@@ -16,6 +17,7 @@ export default function App() {
       <Drawer.Navigator initialRouteName="Map">
         <Drawer.Screen name="Map" component={MapScreen} />
         <Drawer.Screen name="Calendar" component={Calendar}/>
+        <Drawer.Screen name="Building Map Directions" component={BuildingDirectionsMapScreen}/>
       </Drawer.Navigator>
     </NavigationContainer>
   );
