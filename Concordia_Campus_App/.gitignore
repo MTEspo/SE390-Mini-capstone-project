@@ -37,3 +37,6 @@ yarn-error.*
 
 # .gitignore
 .env
+
+package-lock.json
+package.json

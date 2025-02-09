@@ -1,4 +1,3 @@
-
 import { duration } from 'moment-timezone';
 import React, { useState, useRef, useEffect } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -434,4 +433,3 @@ const styles1 = StyleSheet.create({
   },
 });
 export default MapScreen;
-
