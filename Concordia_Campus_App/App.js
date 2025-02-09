@@ -5,9 +5,10 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import MapScreen from './maps/MapScreen';
 import { StatusBar } from 'expo-status-bar';
 import Calendar from './calendar/calendar';
-import BuildingDirectionsMapScreen from './maps/BuildingDirectionsMapScreen';
 import { PaperProvider } from 'react-native-paper';
 import FullShuttleSchedule from './shuttle_bus/full_schedule'
+import BuildingDirectionsMapScreen from './maps/BuildingDirectionsMapScreen';
+
 
 
 const Drawer = createDrawerNavigator();
@@ -18,10 +19,10 @@ export default function App() {
     <PaperProvider> 
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Map">
-        <Drawer.Screen name="Map" component={MapScreen} />
-        <Drawer.Screen name="Calendar" component={Calendar}/>
-        <Drawer.Screen name="Building Map Directions" component={BuildingDirectionsMapScreen}/>
-        <Drawer.Screen name="Shuttle Bus Schedule" component={FullShuttleSchedule}/>
+        <Drawer.Screen name="Map" component={MapScreen} initialParams={{ setCurrentScreen: 'Map' }} />
+        <Drawer.Screen name="Calendar" component={Calendar} />
+        <Drawer.Screen name="Building Map Directions" component={MapScreen} initialParams={{ setCurrentScreen: 'Building Map Directions' }} />
+        <Drawer.Screen name="Shuttle Bus Schedule" component={FullShuttleSchedule} />
       </Drawer.Navigator>
     </NavigationContainer>
     </PaperProvider>
