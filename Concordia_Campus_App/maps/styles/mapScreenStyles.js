@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 5,
+    flexDirection: 'row',
   },
   searchBar: {
     height: 40,
@@ -30,17 +31,20 @@ const styles = StyleSheet.create({
   },
   map: {
     width: '100%',
-    height: '75%', // Slightly reduce map height to accommodate popup
+    height: '100%', // Slightly reduce map height to accommodate popup
   },
   toggleButtonContainer: {
     position: 'absolute',
     top: 80,
     left: 20,
     zIndex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    flexDirection: 'row',
+    width: 250,
+    flexWrap: 'wrap'
   },
-  toggleButton: {
+  sgwButton: {
     backgroundColor: '#800000', 
     borderRadius: 10,
     paddingVertical: 8,
@@ -48,44 +52,169 @@ const styles = StyleSheet.create({
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 5
   },
-  toggleButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'white',
+  sgwButtonActive: {
+    backgroundColor: 'white', 
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    width: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'black',
+    marginRight: 5
   },
-  highlightedText: {
-    color: 'white',
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
+  loyolaButton: {
+    backgroundColor: '#800000', 
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    width: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 5
+  },
+  loyolaButtonActive: {
+    backgroundColor: 'white', 
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    width: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'black',
+    marginRight: 5
+  },
+  userLocationButton: {
+    backgroundColor: '#800000', 
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    width: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 5
+  },
+  userLocationButtonActive: {
+    backgroundColor: 'white', 
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    width: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'black',
+    marginRight: 5
   },
   normalText: {
-    color: 'grey',
+    fontSize: 16,
+    color: 'white',
+     fontWeight: 'bold'
   },
-  zoomButtonContainer: {
-    position: 'absolute',
-    bottom: 200,
-    right: 10,
-    zIndex: 1,
+  highlightedText: {
+    fontSize: 16,
+    color: 'blue',
+     fontWeight: 'bold'
+  },
+
+  directionsButton: {
+    backgroundColor: '#800000',  
+    paddingVertical: 10,          
+    paddingHorizontal: 10,        
+    borderRadius: 50,            
+    alignItems: 'center', 
+    flexDirection: 'row',
+  },
+  directionsButtonText: {
+     color: 'white',
+     fontSize: 16,
+     fontWeight: 'bold'
+  },
+  routeInfoContainer: {
+    position: 'absolute', 
+    bottom: 20, 
+    width: '90%',
+    flexDirection: 'row', 
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
+    backgroundColor: '#800000',
+    padding: 10,
+    borderRadius: 10,
   },
-  zoomButton: {
-    backgroundColor: 'white', 
-    borderRadius: 5,
-    width: 42,  
-    height: 42, 
+  routeInfoText: {
+    fontSize: 16,
+    fontWeight: 'medium',
+    color: 'white',
+  },
+  buttonImage: {
+    width: 20,
+    height: 20,
+  },
+  modeContainer: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-evenly', 
+    marginVertical: 10 
+  },
+  modeButton: { 
+    marginHorizontal: 15,
+    backgroundColor: '#800000',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 0, 
-    borderWidth: 1, 
-    borderColor: 'black', 
   },
-  zoomButtonText: {
-    fontSize: 24, 
-    fontWeight: 'bold',
-    color: '#800000', 
+  modeText: { 
+    fontSize: 16,
+    fontWeight: 'medium',
+    color: 'white',
+  },
+  directionsButton: {
+    backgroundColor: '#800000',
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    marginTop: 5,
+    alignItems: 'center', 
+    flexDirection: 'row',
+    width: 'auto',
+  },
+  directionsButtonText: {
+     color: 'white',
+     fontSize: 16,
+     fontWeight: 'bold'
+  },
+  directionsBuildingButton: {
+    backgroundColor: '#800000',  
+    paddingVertical: 10,          
+    paddingHorizontal: 10,        
+    borderRadius: 50,            
+    alignItems: 'center', 
+    flexDirection: 'row',
+  },
+  directionsBuildingButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+  routeInfoContainer: {
+    backgroundColor: '#800000',
+    padding: 10,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  routeInfoText: {
+    fontSize: 16,
+    fontWeight: 'medium',
+    color: 'white',
+  },
+  buttonImage: {
+    width: 20,
+    height: 20,
   },
 });
 
