@@ -4,9 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
+import { API_KEY } from '@env';
 
 
-const MapScreen = () => {
+const TransitScreen = () => {
   // Coordinates for both campuses
   const [campus, setCampus] = useState('SGW'); // State to track the selected campus right now
   const [showDirections, setShowDirections] = useState(false);
@@ -113,7 +114,7 @@ const MapScreen = () => {
               <MapViewDirections
                 origin={location}
                 destination={destinationLocation}
-                apikey={google_maps_api_key}
+                apikey={API_KEY}
                 strokeWidth={5}
                 strokeColor="blue"  // Driving mode is always blue
                 mode={mode}
@@ -125,7 +126,7 @@ const MapScreen = () => {
             {mode === 'WALKING' && (           <MapViewDirections
               origin={location}
               destination={destinationLocation}
-              apikey={google_maps_api_key}
+              apikey={API_KEY}
               strokeWidth={5}
               strokeColor="blue"
               mode={mode}
@@ -138,7 +139,7 @@ const MapScreen = () => {
               <MapViewDirections
                 origin={location}
                 destination={destinationLocation}
-                apikey={google_maps_api_key}
+                apikey={API_KEY}
                 strokeWidth={5}
                 strokeColor="green"  // Change color for transit mode
                 mode="TRANSIT"
@@ -295,4 +296,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MapScreen;
+export default TransitScreen;
