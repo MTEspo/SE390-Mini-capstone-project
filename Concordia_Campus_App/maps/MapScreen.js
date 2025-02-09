@@ -1,3 +1,4 @@
+
 import { duration } from 'moment-timezone';
 import React, { useState, useRef, useEffect } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -13,6 +14,7 @@ import ShuttleBusMarker from './ShuttleBusMarker';
 import { getLocation } from './locationUtils';
 import MapDirections from './MapDirections';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 const MapScreen = () => {
   const [campus, setCampus] = useState('SGW');
@@ -50,7 +52,6 @@ const MapScreen = () => {
   };
 
   const location = campusLocations[campus];
-
 
   useEffect(() => {
     let interval;
@@ -361,9 +362,6 @@ const handleUserLocation = () => {
       {/* Render the BuildingPopup component with the close handler */}
       <BuildingPopup building={selectedBuilding} onClose={handleClosePopup} />
 
-     
-      
-
       {eta !== null && distance !== null && (
         <View style={[styles.routeInfoContainer, { flexDirection: 'row'}]}>
           <Text style={styles.routeInfoText}>Distance: {Math.round(distance)} km</Text>
@@ -374,5 +372,5 @@ const handleUserLocation = () => {
   );
 };
 
-
 export default MapScreen;
+
