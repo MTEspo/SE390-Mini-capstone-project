@@ -253,25 +253,29 @@ const handleUserLocation = () => {
         <TouchableOpacity
           style={activeButton === 'SGW' ? styles.sgwButtonActive : styles.sgwButton}
           onPress={handleSelectSGW}
+          testID="sgwButton"
         >
           <Text style={activeButton === 'SGW' ? styles.highlightedText : styles.normalText}>SGW</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={activeButton === 'Loyola' ? styles.loyolaButtonActive : styles.loyolaButton}
           onPress={handleSelectLoyola}
+          testID="loyolaButton"
         >
           <Text style={activeButton === 'Loyola' ? styles.highlightedText : styles.normalText}>LOY</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={activeButton === 'user' ? styles.userLocationButtonActive : styles.userLocationButton}
           onPress={handleUserLocation}
+          testID="userLocationButton"
         >
           <Icon name="user" size={20} color={activeButton === 'user' ? 'blue' : 'white'} />
         </TouchableOpacity>
         {activeButton !== 'user' && (
-          <TouchableOpacity style={styles.directionsButton} onPress={handleCampusDirections}>
+          <TouchableOpacity style={styles.directionsButton} onPress={handleCampusDirections} testID="directions-button">
             <Text style={styles.directionsButtonText}>{directionsText}</Text>
           </TouchableOpacity>
+    
         )}
       </View>
 
@@ -335,7 +339,8 @@ const handleUserLocation = () => {
             fillColor={building.fillColor}
             strokeColor={building.strokeColor}
             strokeWidth={2}
-            onPress={() => handlePolygonPress(building)} // Handle the polygon press
+            onPress={() => handlePolygonPress(building)} 
+            testID={`polygon-${index}`}
           />
         ))}
         {showDirections && (
@@ -359,8 +364,11 @@ const handleUserLocation = () => {
              />
         )}
       </MapView>
-      {/* Render the BuildingPopup component with the close handler */}
-      <BuildingPopup building={selectedBuilding} onClose={handleClosePopup} />
+      <BuildingPopup
+        building={selectedBuilding}
+        onClose={handleClosePopup}
+        testID="building-popup" 
+      />
 
       {eta !== null && distance !== null && (
         <View style={[styles.routeInfoContainer, { flexDirection: 'row'}]}>

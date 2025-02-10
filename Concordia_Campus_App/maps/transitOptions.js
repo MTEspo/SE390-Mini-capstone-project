@@ -1,4 +1,3 @@
-// maps/MapScreen.js
 import { duration } from 'moment-timezone';
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
@@ -33,7 +32,7 @@ const TransitScreen = () => {
   // Current campus location
   const location = campusLocations[campus];
   const destinationLocation = campus === 'SGW' ? campusLocations.Loyola : campusLocations.SGW;
-  const directionsText = campus === 'SGW' ? '   Get directions to Loyola' : '   Get directions to SGW';
+  const directionsText = campus === 'SGW' ? '   Directions to LOY' : '   Directions to SGW';
 
   const handleDirections = (result) => {
     setEta(result.duration);
@@ -57,15 +56,6 @@ const TransitScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* SEARCH BAR */}
-      <View style={styles.searchBarContainer}>
-        <TextInput
-          placeholder="Search Building or Class..."
-          style={styles.searchBar}
-          onChangeText={(text) => console.log(`Searching for: ${text}`)} // Handle the searching input
-        />
-      </View>
-
       {/* TOGGLE BUTTON FOR CAMPUSES */}
       <View style={styles.toggleButtonContainer}>
         <TouchableOpacity
@@ -84,16 +74,16 @@ const TransitScreen = () => {
       <MapView
         style={styles.map}
         initialRegion={{
-          latitude: location.latitude, // Center map at Concordia University
-          longitude: location.longitude, // Center map at Concordia University
-          latitudeDelta: 0.0001, // Zoom level for a closer view
-          longitudeDelta: 0.0001, // Zoom level for a closer view
+          latitude: location.latitude, 
+          longitude: location.longitude, 
+          latitudeDelta: 0.005, 
+          longitudeDelta: 0.005,
         }}
         region={{
           latitude: location.latitude,
           longitude: location.longitude,
-          latitudeDelta: 0.0001,
-          longitudeDelta: 0.0001,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
         }}
       >
         <Marker coordinate={location} title={location.title} description={location.description} />
@@ -153,21 +143,38 @@ const TransitScreen = () => {
          style={styles.directionsButton}
          onPress={() => setShowDirections(true)}
       >
-      <View style={styles.directionsButton}>
-      <Image 
-      source={require('../assets/arrow.png')}  
-      style={styles.buttonImage} 
-    />
-    {/* Text for the directions button */}
-    <Text style={styles.directionsButtonText}>{directionsText}</Text>
-  </View>
-</TouchableOpacity>
+        <Text style={styles.directionsButtonText}numberOfLines={1}>{directionsText}</Text>
+      </TouchableOpacity>
 
-  <View style={styles.modeContainer}>
+  {/* <View style={styles.modeContainer}>
     <TouchableOpacity onPress={() => setMode('DRIVING')} style={styles.modeButton}><Text style={styles.modeText}>Driving</Text></TouchableOpacity>
     <TouchableOpacity onPress={() => setMode('WALKING')} style={styles.modeButton}><Text style={styles.modeText}>Walking</Text></TouchableOpacity>
     <TouchableOpacity onPress={() => setMode('TRANSIT')} style={styles.modeButton}><Text style={styles.modeText}>Transit</Text></TouchableOpacity>
+  </View> */}
+  {showDirections && (
+  <View style={styles.modeContainer}>
+<TouchableOpacity 
+  testID="driving-button"
+  onPress={() => setMode('DRIVING')} 
+  style={[styles.modeButton, mode === 'DRIVING' && { backgroundColor: 'blue' }]}>
+  <Text style={styles.modeText}>Driving</Text>
+</TouchableOpacity>
+
+<TouchableOpacity
+  testID="walking-button"
+  onPress={() => setMode('WALKING')} 
+  style={[styles.modeButton, mode === 'WALKING' && { backgroundColor: 'blue' }]}>
+  <Text style={styles.modeText}>Walking</Text>
+</TouchableOpacity>
+
+<TouchableOpacity 
+  testID="transit-button"
+  onPress={() => setMode('TRANSIT')} 
+  style={[styles.modeButton, mode === 'TRANSIT' && { backgroundColor: 'green' }]}>
+  <Text style={styles.modeText}>Transit</Text>
+</TouchableOpacity>
   </View>
+)}
 
       {eta !== null && distance !== null && (
         <View style={[styles.routeInfoContainer, { flexDirection: 'row'}]}>
@@ -185,37 +192,21 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  searchBarContainer: {
-    position: 'absolute',
-    top: 20,
-    width: '70%',
-    left: 20,
-    zIndex: 1,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  searchBar: {
-    height: 40,
-    borderWidth: 0.5,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-  },
+
   map: {
     width: '100%',
-    height: '80%', // Adjust map height to fit below search bar
+    height: '100%', // Make it full screen
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   toggleButtonContainer: {
     position: 'absolute',
-    top: 80, // Place it directly below the search bar
-    left: 20, // Align the button to the left of the screen
-    zIndex: 1, // Ensures it appears above the map
+    top: 20, 
+    left: 20,
+    zIndex: 1, 
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -243,17 +234,27 @@ const styles = StyleSheet.create({
 
   },
   directionsButton: {
-    backgroundColor: '#800000',  
-    paddingVertical: 10,          
-    paddingHorizontal: 10,        
-    borderRadius: 50,            
-    alignItems: 'center', 
+    position: 'absolute',
+    bottom: 20, // Places it above the bottom edge
+    backgroundColor: '#800000',
+    paddingVertical: 10,
+    paddingHorizontal: 0,
+    borderRadius: 20,
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 'auto',
+    marginBottom: 60,
+    maxWidth: '80%',
+    minWidth: 200, // Ensures enough space for the text
+    alignSelf: 'center', // Centers the button
   },
   directionsButtonText: {
      color: 'white',
      fontSize: 16,
-     fontWeight: 'bold'
+     fontWeight: 'bold',
+     flexShrink: 1, 
+     textAlign: 'center',
   },
   routeInfoContainer: {
     position: 'absolute', 
@@ -275,11 +276,21 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
   },
-  modeContainer: { 
-    flexDirection: 'row', 
-    justifyContent: 'space-evenly', 
-    marginVertical: 10 },
-
+  modeContainer: {
+    position: 'absolute',
+    bottom: 80, // Places it right above the directions button
+    left: '50%',
+    transform: [{ translateX: -110 }], // Centers the container
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent background
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    width: 220, // Adjust the width of the container
+    marginBottom: 60
+  },
   modeButton: { 
     marginHorizontal: 15,
     backgroundColor: '#800000',
