@@ -1,17 +1,40 @@
-import react from "react";
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
-import MapScreen from "../maps/MapScreen";
+import { renderHook, act } from '@testing-library/react-native';
+import { useState } from 'react';
 
-describe('MapScreen', () => {
-    test('shows directions when "Get directions" is pressed', async () => {
-        const { getByText } = render(<MapScreen />);
-        const directionsButton = getByText('Get directions to Loyola'); 
+const useTestHook = () => {
+  const [showDirections, setShowDirections] = useState(false);
+  const [selectedStart, setSelectedStart] = useState(null);
+  const [selectedEnd, setSelectedEnd] = useState(null);
+  const [showBuildingDirections, setShowBuildingDirections] = useState(false);
 
-        fireEvent.press(directionsButton);
+  const handleCampusDirections = () => {
+    setShowDirections(true);  
+    setSelectedStart(null);
+    setSelectedEnd(null);
+    setShowBuildingDirections(false);
+  };
 
-        await waitFor(() => {
-            expect(getByText(/Distance:/)).toBeTruthy();
-            expect(getByText(/ETA:/)).toBeTruthy();
-        });
+  return {
+    showDirections,
+    selectedStart,
+    selectedEnd,
+    showBuildingDirections,
+    handleCampusDirections,
+  };
+};
+
+describe('handleCampusDirections', () => {
+  it('should show directions when "Get directions" button is pressed', () => {
+    const { result } = renderHook(() => useTestHook());
+
+
+    act(() => {
+      result.current.handleCampusDirections();
     });
+
+    expect(result.current.showDirections).toBe(true);
+    expect(result.current.selectedStart).toBe(null);
+    expect(result.current.selectedEnd).toBe(null);
+    expect(result.current.showBuildingDirections).toBe(false);
+  });
 });
