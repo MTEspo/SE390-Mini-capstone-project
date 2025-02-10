@@ -47,7 +47,7 @@ export default function Calendar() {
         redirectTo: redirectUri,
       },
     });
-
+    
     if (data?.url) {
       const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUri);
 
