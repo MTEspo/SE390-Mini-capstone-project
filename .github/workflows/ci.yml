@@ -42,7 +42,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: JonathanDannessa/SE390-Mini-capstone-project
+          slug: MTEspo/SE390-Mini-capstone-project
 
       # - name: Setup EAS
       #   uses: expo/expo-github-action@v8
