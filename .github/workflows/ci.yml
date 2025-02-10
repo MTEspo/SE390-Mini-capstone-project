@@ -16,7 +16,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -43,7 +42,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: JonathanDannessa/SE390-Mini-capstone-project
+          slug: MTEspo/SE390-Mini-capstone-project
 
       # - name: Setup EAS
       #   uses: expo/expo-github-action@v8
@@ -65,5 +64,4 @@ jobs:
       #       echo "EAS build failed!"
       #       exit 1
       #     fi
-
 
