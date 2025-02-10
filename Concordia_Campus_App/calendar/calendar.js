@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { StyleSheet, View, ScrollView, Pressable, Platform, Alert } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import { createClient } from "@supabase/supabase-js";
@@ -16,7 +15,6 @@ const SUPABASE_ANON_KEY =
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
-    storage: AsyncStorage,
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,
@@ -49,7 +47,7 @@ export default function Calendar() {
         redirectTo: redirectUri,
       },
     });
-
+    
     if (data?.url) {
       const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUri);
 
