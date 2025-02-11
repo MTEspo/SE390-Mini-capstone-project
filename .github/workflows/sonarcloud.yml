@@ -18,9 +18,16 @@ jobs:
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
+
+        - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+
         with:
           args: >
             -Dsonar.organization="SOEN_390_mini_capstone_project"    
             -Dsonar.projectKey="george-ezzat_SE390-Mini-capstone-project"
+            -Dsonar.branch.name="main"
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
