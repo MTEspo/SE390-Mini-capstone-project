@@ -1,0 +1,24 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+    branches:
+      - main  # Change to your default branch if it's not 'main'
+  pull_request:
+
+jobs:
+  sonarcloud:
+    runs-on: ubuntu-latest  # You can change this to other environments like macOS or Windows if needed
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  # Action to check out your repository
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          args: >
+            -Dsonar.organization=my-org  # Replace 'my-org' with your SonarCloud organization
+            -Dsonar.projectKey=my-project  # Replace 'my-project' with your SonarCloud project key
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Ensure this secret is created in your GitHub repository
