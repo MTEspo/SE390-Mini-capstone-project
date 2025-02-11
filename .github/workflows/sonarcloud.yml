@@ -20,7 +20,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2
         with:
           args: >
-            -Dsonar.organization="SE390-Mini-capstone-project"    # Replace 'my-org' with your SonarCloud organization
-            -Dsonar.projectKey="se390"         # Replace 'my-project' with your SonarCloud project key
+            -Dsonar.organization="SE390-Mini-capstone-project"    
+            -Dsonar.projectKey="se390"
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
