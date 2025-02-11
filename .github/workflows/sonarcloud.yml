@@ -19,7 +19,7 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
 
-        - name: Set up JDK
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           java-version: '17'
