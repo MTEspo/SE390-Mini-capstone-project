@@ -12,20 +12,21 @@ const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
 
     const [shuttleData, setShuttleData] = useState(null);
 
-  useEffect(() => {
-    const loadShuttleData = async () => {
-      const data = await fetchConcordiaBusData();
-        if (data && data.d && data.d.Points) {
-            setShuttleData(data);
-        }
-    };
 
-    loadShuttleData();
-    
-    const interval = setInterval(loadShuttleData, 5000);
-    
-    return () => clearInterval(interval);
-  }, []);
+    useEffect(() => {
+        const loadShuttleData = async () => {
+        const data = await fetchConcordiaBusData();
+            if (data && data.d && data.d.Points) {
+                setShuttleData(data);
+            }
+        };
+
+            loadShuttleData();
+        
+        const interval = setInterval(loadShuttleData, 5000);
+        
+        return () => clearInterval(interval);
+    }, []);
 
 
     const handleToggleMapDirections = ( state ) => {
