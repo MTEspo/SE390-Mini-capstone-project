@@ -24,7 +24,9 @@ jobs:
           java-version: '17'
 
       - name: Install dependencies
-        run: npm install 
+        run: |
+          cd Concordia_Campus_App  
+          npm install  
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
