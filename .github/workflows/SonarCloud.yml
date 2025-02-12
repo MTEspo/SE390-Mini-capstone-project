@@ -34,4 +34,5 @@ jobs:
           args: >
             -Dsonar.organization="SOEN-390-mini-capstone-project"  
             -Dsonar.projectKey="george-ezzat_SE390-Mini-capstone-project"  
-          token: ${{ secrets.SONAR_TOKEN }} 
+          env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
