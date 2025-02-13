@@ -115,37 +115,67 @@ const MapScreen = () => {
   };
 
 
-
-const handleSelectSGW = () => {
-  setShowDirections(false);
-  setEta(null);
-  setDistance(null);
-  setCampus('SGW');
-  setShowBuildingDirections(false);
-  setSelectedStart(null);
-  setSelectedEnd(null);
-  setSelectedBuilding(null);
-  setSelectedMarker(null);
-  setCenterOnUserLocation(false);
-  setActiveButton('SGW');
-};
-
-const handleSelectLoyola = () => {
-  setShowDirections(false);
-  setEta(null);
-  setDistance(null);
-  setCampus('Loyola');
-  setShowBuildingDirections(false);
-  setSelectedStart(null);
-  setSelectedEnd(null);
-  setSelectedBuilding(null);
-  setSelectedMarker(null);
-  setCenterOnUserLocation(false);
-  setActiveButton('Loyola');
-};
+  const handleSelectSGW = () => {
+    if (activeButton === 'SGW') {
+      // If already on SGW view, reset the map to SGW center
+      mapRef.current.animateToRegion({
+        latitude: campusLocations['SGW'].latitude,
+        longitude: campusLocations['SGW'].longitude,
+        latitudeDelta: zoomLevel,
+        longitudeDelta: zoomLevel,
+      }, 1000);
+    } else {
+      // If not on SGW view, switch to SGW view
+      setShowDirections(false);
+      setEta(null);
+      setDistance(null);
+      setCampus('SGW');
+      setShowBuildingDirections(false);
+      setSelectedStart(null);
+      setSelectedEnd(null);
+      setSelectedBuilding(null);
+      setSelectedMarker(null);
+      setCenterOnUserLocation(false);
+      setActiveButton('SGW');
+    }
+  };
+  
+  const handleSelectLoyola = () => {
+    if (activeButton === 'Loyola') {
+      // If already on LOY view, reset the map to LOY center
+      mapRef.current.animateToRegion({
+        latitude: campusLocations['Loyola'].latitude,
+        longitude: campusLocations['Loyola'].longitude,
+        latitudeDelta: zoomLevel,
+        longitudeDelta: zoomLevel,
+      }, 1000);
+    } else {
+      // If not on LOY view, switch to LOY view
+      setShowDirections(false);
+      setEta(null);
+      setDistance(null);
+      setCampus('Loyola');
+      setShowBuildingDirections(false);
+      setSelectedStart(null);
+      setSelectedEnd(null);
+      setSelectedBuilding(null);
+      setSelectedMarker(null);
+      setCenterOnUserLocation(false);
+      setActiveButton('Loyola');
+    }
+  };
 
 const handleUserLocation = () => {
-  setCenterOnUserLocation(true);
+  if (centerOnUserLocation) {
+    mapRef.current.animateToRegion({
+      latitude: userLocation.latitude,
+      longitude: userLocation.longitude,
+      latitudeDelta: zoomLevel,
+      longitudeDelta: zoomLevel,
+    }, 1000);
+  } else {
+    setCenterOnUserLocation(true);
+  }
   setShowDirections(false);
   setShowBuildingDirections(false);
   setSelectedStart(null);
@@ -205,6 +235,35 @@ const handleUserLocation = () => {
     }, 1000);
   }, [campus, zoomLevel]);
 
+  useEffect(() => {
+    const addInitialMarkers = async () => {
+      if (mapRef.current) {
+        mapRef.current.animateToRegion({
+          latitude: campusLocations['SGW'].latitude,
+          longitude: campusLocations['SGW'].longitude,
+          latitudeDelta: zoomLevel,
+          longitudeDelta: zoomLevel,
+        }, 0);
+        mapRef.current.animateToRegion({
+          latitude: campusLocations['Loyola'].latitude,
+          longitude: campusLocations['Loyola'].longitude,
+          latitudeDelta: zoomLevel,
+          longitudeDelta: zoomLevel,
+        }, 0);
+        const userLocation = await getLocation();
+        if (userLocation) {
+          mapRef.current.animateToRegion({
+            latitude: userLocation.latitude,
+            longitude: userLocation.longitude,
+            latitudeDelta: zoomLevel,
+            longitudeDelta: zoomLevel,
+          }, 0);
+        }
+      }
+    };
+    addInitialMarkers();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.searchBarContainer}>
@@ -249,6 +308,7 @@ const handleUserLocation = () => {
              onReady={handleDirections}
              />
         )}
+        
       <View style={styles.toggleButtonContainer}>
         <TouchableOpacity
           style={activeButton === 'SGW' ? styles.sgwButtonActive : styles.sgwButton}
@@ -295,7 +355,9 @@ const handleUserLocation = () => {
           longitudeDelta: zoomLevel,
         }}
       >
-        {/* ... other markers and polygons ... */}
+        <Marker coordinate={campusLocations['SGW']} title={campusLocations['SGW'].title} description={campusLocations['SGW'].description} />
+        <Marker coordinate={campusLocations['Loyola']} title={campusLocations['Loyola'].title} description={campusLocations['Loyola'].description} />
+    
         {isUserLocationFetched && (
           <Marker
             coordinate={{
