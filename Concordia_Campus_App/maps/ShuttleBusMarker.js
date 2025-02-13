@@ -3,8 +3,9 @@ import { View, Text } from "react-native";
 import { Callout, Marker } from "react-native-maps";
 import shuttleStopCoordinates from './shuttleBusInfo.js';
 import BottomSheetComponent from '../shuttle_bus/bottom_sheet';
-import { fetchConcordiaBusData } from "../shuttle_bus/shuttle_tracker.js";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
 
 const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
     const [selectedStop, setSelectedStop] = useState(null);
@@ -12,22 +13,24 @@ const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
 
     const [shuttleData, setShuttleData] = useState(null);
 
-
-    useEffect(() => {
-        const loadShuttleData = async () => {
-        const data = await fetchConcordiaBusData();
-            if (data && data.d && data.d.Points) {
-                setShuttleData(data);
-            }
+    useEffect(() =>{
+        const fetchAndStoreData = async () => {
+            try {
+                const getResponse = await fetch(
+                  "https://shuttle.concordia.ca/concordiabusmap/Map.aspx",
+                  { 
+                    method: "GET" 
+                  }
+                );
+                const cookie = getResponse.headers.get('set-cookie');
+        
+                await AsyncStorage.setItem("cookie", cookie);
+              } catch (e) {
+                console.log("Error saving to storage:", e);
+              } 
         };
-
-            loadShuttleData();
-        
-        const interval = setInterval(loadShuttleData, 5000);
-        
-        return () => clearInterval(interval);
-    }, []);
-
+        fetchAndStoreData();
+    },[]);
 
     const handleToggleMapDirections = ( state ) => {
         setToggleMapDirections(state);
@@ -42,13 +45,41 @@ const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
         }
     };
 
-    const openBottomSheet = (stop) => {
+    const getData = async () => {
+        try {
+          const cookie = await AsyncStorage.getItem("cookie");
+          console.log(cookie)
+          const API_URL = "https://shuttle.concordia.ca/concordiabusmap/WebService/GService.asmx/GetGoogleObject";
+          const response = await axios.post(
+            API_URL,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "Cookie": cookie,
+              },
+              withCredentials: true,
+            }
+          );
+      
+          return response.data;
+        } catch (error) {
+          console.log("Error retrieving cookie:", error);
+          return null;
+        }
+      };
+
+    const openBottomSheet = async (stop) => {
         if(selectedStop?.keyID === stop.keyID){
             return;
         }
         setBottomSheetIndex(-1);
         setSelectedStop(null);
         setShuttleStop(null);
+        
+        const data = await getData();
+        if(data && data.d && data.d.Points){
+            setShuttleData(data);
+        }
         
         setTimeout(() => {
             setSelectedStop(stop);
@@ -61,6 +92,7 @@ const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
         setSelectedStop(null);
         setShuttleStop(null);
         setBottomSheetIndex(-1);
+        setShuttleData(null);
     };
 
     return (
@@ -81,7 +113,7 @@ const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
                     </Callout>
                 </Marker>
             ))}
-            
+
             {shuttleData?.d?.Points
                 ?.filter((point) => point.ID.startsWith('BUS'))
                 .map((point) => (
@@ -91,7 +123,7 @@ const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
                         pinColor="#1D9E9A">
                         <Icon name="bus" size={30} color="orange"/>
                     </Marker>
-                ))}
+            ))}
 
 
             <BottomSheetComponent selectedStop={selectedStop} bottomSheetIndex={bottomSheetIndex} onSheetChanges={handleSheetChanges} toggleMapDirections={handleToggleMapDirections}/>
