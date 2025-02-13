@@ -42,16 +42,20 @@ jest.mock("@supabase/supabase-js", () => ({
 }));
 
 test("renders sign-in button when no session exists", async () => {
-  const { findByText } = render(<Calendar />);
-  const signInButton = await findByText("Sign in with Google");
+  const tree = render(<Calendar />);
+  
+  const signInButton = await tree.findByText("Sign in with Google");
+
   expect(signInButton).toBeTruthy();
 });
 
 test("calls googleSignIn on button press", async () => {
     const { findByText } = render(<Calendar />);
 
-    const signInButton = await findByText("Sign in with Google");
-    fireEvent.press(signInButton);
+    await act(async () => {
+      const signInButton = await findByText("Sign in with Google");
+      fireEvent.press(signInButton);
+    })
 
     expect(createURL).toHaveBeenCalled();
 });
@@ -61,22 +65,26 @@ test("should sign out the user and reset the state", async () => {
     const mockSignOutPress = jest.fn();
 
     const { findByText } = render(<Calendar />);
-    fireEvent.press(await findByText("Sign in with Google"));
+
+    await act(async () => {
+      fireEvent.press(await findByText("Sign in with Google"));
     
-    const signOutButton = await findByText("Sign Out");
-    fireEvent.press(signOutButton);
-    mockSignOutPress()
+      const signOutButton = await findByText("Sign Out");
+      fireEvent.press(signOutButton);
+      mockSignOutPress()
+    })
 
     expect(mockSignOutPress).toHaveBeenCalled();
 });
 
-
 test("opens menu and selects calendar", async () => {
     const { findByText } = render(<Calendar />);
-    fireEvent.press(await findByText("Sign in with Google"));
+    await act(async () => {
+      fireEvent.press(await findByText("Sign in with Google"));
     
-    const calendarButton = await findByText("Select Calendar");
-    fireEvent.press(calendarButton);
-  
+      const calendarButton = await findByText("Select Calendar");
+      fireEvent.press(calendarButton);
+    })
+
     expect(findByText("Select Calendar")).toBeTruthy();
 });
