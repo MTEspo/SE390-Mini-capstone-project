@@ -48,10 +48,8 @@ const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
     const getData = async () => {
         try {
           const cookie = await AsyncStorage.getItem("cookie");
-          console.log(cookie)
-          const API_URL = "https://shuttle.concordia.ca/concordiabusmap/WebService/GService.asmx/GetGoogleObject";
           const response = await axios.post(
-            API_URL,
+            "https://shuttle.concordia.ca/concordiabusmap/WebService/GService.asmx/GetGoogleObject",
             {
               headers: {
                 "Content-Type": "application/json",
@@ -60,13 +58,29 @@ const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
               withCredentials: true,
             }
           );
-      
           return response.data;
         } catch (error) {
           console.log("Error retrieving cookie:", error);
           return null;
         }
       };
+
+    useEffect(() => {
+        let interval;
+        if(selectedStop){
+            interval = setInterval(async () => {
+                const data = await getData();
+                if(data && data.d && data.d.Points){
+                    setShuttleData(data);
+                }
+            },5000);
+        }
+        return () => {
+            if(interval){
+                clearInterval(interval);
+            }
+        };
+    },[selectedStop]);
 
     const openBottomSheet = async (stop) => {
         if(selectedStop?.keyID === stop.keyID){
@@ -77,10 +91,10 @@ const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
         setShuttleStop(null);
         
         const data = await getData();
-        if(data && data.d && data.d.Points){
+        if (data && data.d && data.d.Points) {
             setShuttleData(data);
         }
-        
+
         setTimeout(() => {
             setSelectedStop(stop);
             setShuttleStop(stop);
