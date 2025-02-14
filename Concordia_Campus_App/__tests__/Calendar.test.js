@@ -1,11 +1,11 @@
 import React from "react";
 import { render, fireEvent, act } from "@testing-library/react-native";
 import Calendar from "../calendar/calendar";
-import { createURL } from "expo-linking";
+import { extractTokens } from "../calendar/calendarUtils";
+import * as axios from "axios";
 import { createClient } from "@supabase/supabase-js";
-//import * as axios from "axios";
 
-//jest.mock("axios");
+jest.mock("axios");
 
 jest.mock("@react-navigation/native", () => ({
     useNavigation: () => ({
@@ -29,9 +29,10 @@ jest.mock("expo-web-browser", () => ({
     maybeCompleteAuthSession: jest.fn(),
 }));
 
-/*jest.mock("../calendar/calendarUtils", () => ({
+jest.mock("../calendar/calendarUtils", () => ({
+  ...jest.requireActual("../calendar/calendarUtils"),
   extractTokens: jest.fn(() => {return {access_token: "mock-access", refresh_token: "mock-refresh", provider_token: "mock-provider"}})
-}));*/
+}));
 
 jest.mock("@supabase/supabase-js", () => ({
   createClient: jest.fn(() => ({
@@ -49,7 +50,7 @@ jest.mock("@supabase/supabase-js", () => ({
 }));
 
 
-describe("Calendar Tests", () => {
+describe("Calendar Tests That Should Pass", () => {
   test("renders sign-in button when no session exists", async () => {
     const tree = render(<Calendar />);
     
@@ -61,16 +62,41 @@ describe("Calendar Tests", () => {
   test("calls googleSignIn on button press", async () => {
       const { findByText } = render(<Calendar />);
 
+      axios.get
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "Test Calendar"}], 
+                       nextPageToken: null}}
+    ))
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "mock-event", 
+                       start: {dateTime: "mock-date"}, 
+                       end: {dateTime: "mock-date"} }]}}
+    ));
       await act(async () => {
         const signInButton = await findByText("Sign in with Google");
         fireEvent.press(signInButton);
       })
 
-      expect(createURL).toHaveBeenCalled();
+      expect(extractTokens).toHaveBeenCalled();
   });
 
   test("renders sign-out button after sign-in", async () => {
     const { findByText } = render(<Calendar />);
+
+    axios.get
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "Test Calendar"}], 
+                       nextPageToken: null}}
+    ))
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "mock-event", 
+                       start: {dateTime: "mock-date"}, 
+                       end: {dateTime: "mock-date"} }]}}
+    ));
 
     await act(async () => {
       const signInButton = await findByText("Sign in with Google");
@@ -85,6 +111,18 @@ describe("Calendar Tests", () => {
       const mockSignOutPress = jest.fn();
 
       const { findByText } = render(<Calendar />);
+      axios.get
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "Test Calendar"}], 
+                       nextPageToken: null}}
+    ))
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "mock-event", 
+                       start: {dateTime: "mock-date"}, 
+                       end: {dateTime: "mock-date"} }]}}
+    ));
 
       await act(async () => {
         fireEvent.press(await findByText("Sign in with Google"));
@@ -98,29 +136,61 @@ describe("Calendar Tests", () => {
   });
 
   test("renders calendars after sign-in", async () => {
-      const { findByText } = render(<Calendar />);
+    const { findByText } = render(<Calendar />);
+
+    axios.get
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "Test Calendar"}], 
+                       nextPageToken: null}}
+    ))
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "mock-event", 
+                       start: {dateTime: "mock-date"}, 
+                       end: {dateTime: "mock-date"} }]}}
+    ));
+
       await act(async () => {
         fireEvent.press(await findByText("Sign in with Google"));
       })
 
-      expect(findByText("Select Calendar")).toBeTruthy();
+      expect(findByText("Test Calendar")).toBeTruthy();
   });
-/*
-  test("get calendars", async () => {
+
+  test("get calendars and events", async () => {
     const { findByText } = render(<Calendar />);
 
-    await axios.get.mockImplementation(() => Promise.resolve({data: {items: [{id: "mock-id", summary: "Schedule 1"}], nextPageToken: null}}));
+    axios.get
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{
+                       id: "mock-id1", 
+                       summary: "Schedule 1"
+                      },
+                      {
+                        id: "mock-id2",
+                        summary: "schedule 2"
+                      }
+                     ], 
+                       nextPageToken: null}}
+    ))
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "Event 1", 
+                       start: {dateTime: "2025-02-14T05:45:00.00Z"}, 
+                       end: {dateTime: "2025-02-14T06:45:00.00Z"} }]}}
+    ));
 
     await act(async () => {
       fireEvent.press(await findByText("Sign in with Google"));
-      const calendarButton = await findByText("Select Calendar");
+      const calendarButton = await findByText("Schedule 1");
+      expect(findByText("Schedule 1")).toBeTruthy();
       fireEvent.press(calendarButton);
+      expect(findByText("Schedule 2")).toBeTruthy();
     })
 
-    expect(findByText("Schedule 1")).toBeTruthy();
-
-
-  })
-*/
-
+    expect(findByText("Event 1")).toBeTruthy();
+    expect(findByText("2025-02-14, 12:45:00 a.m.")).toBeTruthy();
+    expect(findByText("2025-02-14, 1:45:00 a.m.")).toBeTruthy();
+  });
 });
