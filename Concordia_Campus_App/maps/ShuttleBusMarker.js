@@ -121,7 +121,7 @@ const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
                         key={`${point.ID}`}
                         coordinate={{ latitude: point.Latitude, longitude: point.Longitude }}
                         pinColor="#1D9E9A">
-                        <Icon name="bus" size={30} color="orange"/>
+                        <Icon name="bus" size={30} color="black"/>
                     </Marker>
             ))}
 
