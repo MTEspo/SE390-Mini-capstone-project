@@ -3,6 +3,9 @@ import { render, fireEvent, act } from "@testing-library/react-native";
 import Calendar from "../calendar/calendar";
 import { createURL } from "expo-linking";
 import { createClient } from "@supabase/supabase-js";
+import * as axios from "axios";
+
+jest.mock("axios");
 
 jest.mock("@react-navigation/native", () => ({
     useNavigation: () => ({
@@ -26,6 +29,10 @@ jest.mock("expo-web-browser", () => ({
     maybeCompleteAuthSession: jest.fn(),
 }));
 
+jest.mock("../calendar/calendarUtils", () => ({
+  extractTokens: jest.fn(() => {return {access_token: "mock-access", refresh_token: "mock-refresh", provider_token: "mock-provider"}})
+}));
+
 jest.mock("@supabase/supabase-js", () => ({
   createClient: jest.fn(() => ({
     auth: {
@@ -41,50 +48,79 @@ jest.mock("@supabase/supabase-js", () => ({
   })),
 }));
 
-test("renders sign-in button when no session exists", async () => {
-  const tree = render(<Calendar />);
-  
-  const signInButton = await tree.findByText("Sign in with Google");
 
-  expect(signInButton).toBeTruthy();
-});
+describe("Calendar Tests", () => {
+  test("renders sign-in button when no session exists", async () => {
+    const tree = render(<Calendar />);
+    
+    const signInButton = await tree.findByText("Sign in with Google");
 
-test("calls googleSignIn on button press", async () => {
+    expect(signInButton).toBeTruthy();
+  });
+
+  test("calls googleSignIn on button press", async () => {
+      const { findByText } = render(<Calendar />);
+
+      await act(async () => {
+        const signInButton = await findByText("Sign in with Google");
+        fireEvent.press(signInButton);
+      })
+
+      expect(createURL).toHaveBeenCalled();
+  });
+
+  test("renders sign-out button after sign-in", async () => {
     const { findByText } = render(<Calendar />);
 
     await act(async () => {
       const signInButton = await findByText("Sign in with Google");
       fireEvent.press(signInButton);
-    })
-
-    expect(createURL).toHaveBeenCalled();
-});
-
-
-test("should sign out the user and reset the state", async () => {
-    const mockSignOutPress = jest.fn();
-
-    const { findByText } = render(<Calendar />);
-
-    await act(async () => {
-      fireEvent.press(await findByText("Sign in with Google"));
-    
       const signOutButton = await findByText("Sign Out");
-      fireEvent.press(signOutButton);
-      mockSignOutPress()
+      expect(signOutButton).toBeTruthy();
     })
+  });
 
-    expect(mockSignOutPress).toHaveBeenCalled();
-});
 
-test("opens menu and selects calendar", async () => {
+  test("calls googleSignOut on button press", async () => {
+      const mockSignOutPress = jest.fn();
+
+      const { findByText } = render(<Calendar />);
+
+      await act(async () => {
+        fireEvent.press(await findByText("Sign in with Google"));
+      
+        const signOutButton = await findByText("Sign Out");
+        fireEvent.press(signOutButton);
+        mockSignOutPress()
+      })
+
+      expect(mockSignOutPress).toHaveBeenCalled();
+  });
+
+  test("renders calendars after sign-in", async () => {
+      const { findByText } = render(<Calendar />);
+      await act(async () => {
+        fireEvent.press(await findByText("Sign in with Google"));
+      })
+
+      expect(findByText("Select Calendar")).toBeTruthy();
+  });
+
+  test("get calendars", async () => {
     const { findByText } = render(<Calendar />);
+
+    axios.get.mockImplementation(() => Promise.resolve({data: {items: [{id: "mock-id", summary: "Schedule 1"}], nextPageToken: null}}));
+
     await act(async () => {
       fireEvent.press(await findByText("Sign in with Google"));
-    
       const calendarButton = await findByText("Select Calendar");
       fireEvent.press(calendarButton);
     })
 
-    expect(findByText("Select Calendar")).toBeTruthy();
+    expect(findByText("Schedule 1")).toBeTruthy();
+
+
+  })
+
+
 });
