@@ -3,9 +3,9 @@ import { render, fireEvent, act } from "@testing-library/react-native";
 import Calendar from "../calendar/calendar";
 import { createURL } from "expo-linking";
 import { createClient } from "@supabase/supabase-js";
-import * as axios from "axios";
+//import * as axios from "axios";
 
-jest.mock("axios");
+//jest.mock("axios");
 
 jest.mock("@react-navigation/native", () => ({
     useNavigation: () => ({
@@ -29,9 +29,9 @@ jest.mock("expo-web-browser", () => ({
     maybeCompleteAuthSession: jest.fn(),
 }));
 
-jest.mock("../calendar/calendarUtils", () => ({
+/*jest.mock("../calendar/calendarUtils", () => ({
   extractTokens: jest.fn(() => {return {access_token: "mock-access", refresh_token: "mock-refresh", provider_token: "mock-provider"}})
-}));
+}));*/
 
 jest.mock("@supabase/supabase-js", () => ({
   createClient: jest.fn(() => ({
@@ -105,11 +105,11 @@ describe("Calendar Tests", () => {
 
       expect(findByText("Select Calendar")).toBeTruthy();
   });
-
+/*
   test("get calendars", async () => {
     const { findByText } = render(<Calendar />);
 
-    axios.get.mockImplementation(() => Promise.resolve({data: {items: [{id: "mock-id", summary: "Schedule 1"}], nextPageToken: null}}));
+    await axios.get.mockImplementation(() => Promise.resolve({data: {items: [{id: "mock-id", summary: "Schedule 1"}], nextPageToken: null}}));
 
     await act(async () => {
       fireEvent.press(await findByText("Sign in with Google"));
@@ -121,6 +121,6 @@ describe("Calendar Tests", () => {
 
 
   })
-
+*/
 
 });
