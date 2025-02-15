@@ -20,6 +20,7 @@ const MapScreen = ({route}) => {
   const [shuttleStop, setShuttleStop] = useState(null);
   const [toggleMapDirections, setToggleMapDirections] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
+  const {destinationLoc} = route.params || {};
   const {destinationCoords} = route.params || {};
 
 
@@ -95,14 +96,50 @@ const MapScreen = ({route}) => {
   };
 
   useEffect(() => {
-    if (destinationCoords) {
-        console.log('Destination Coords:', destinationCoords);
-        const selectedBuilding = buildingsData.buildings.find(building => building.name === route.params?.destinationCoords);
-        handlePolygonPress(selectedBuilding);
-        //moveToLocation(selectedBuilding.markerCoord.latitude, selectedBuilding.markerCoord.longitude);
-        
+    if (destinationLoc) {
+      console.log('Destination Location:', destinationLoc);
+      
+      const selectedBuilding = buildingsData.buildings.find(
+        (building) => building.name === destinationLoc
+      );
+  
+      if (selectedBuilding) {
+        handlePolygonPress(selectedBuilding); // Highlight the building
+        moveToLocation(selectedBuilding.markerCoord.latitude, selectedBuilding.markerCoord.longitude);
+      }
     }
-}, [destinationCoords]);
+  }, [destinationLoc]);
+  
+  useEffect(() => {
+    if (destinationCoords) {
+      console.log('Processing directions for:', destinationCoords);
+  
+      // Check if it's a known building
+      const selectedBuilding = buildingsData.buildings.find(
+        (building) => building.name === destinationCoords
+      );
+  
+      if (selectedBuilding) {
+        setShuttleStop({
+          latitude: selectedBuilding.markerCoord.latitude,
+          longitude: selectedBuilding.markerCoord.longitude,
+        });
+        setToggleMapDirections(true);
+        moveToLocation(selectedBuilding.markerCoord.latitude, selectedBuilding.markerCoord.longitude);
+      } 
+      else if (destinationCoords.latitude && destinationCoords.longitude) {
+        // Handle raw latitude/longitude destinations
+        setShuttleStop(destinationCoords);
+        setToggleMapDirections(true);
+      } 
+      else {
+        console.error("Invalid destinationCoords format:", destinationCoords);
+      }
+    }
+  }, [destinationCoords]);
+  
+  
+
   return (
     <View style={styles.container}>
       <View style={styles.searchBarContainer}>
@@ -191,15 +228,6 @@ const MapScreen = ({route}) => {
             onPress={() => handlePolygonPress(building)} // Handle the polygon press
           />
         ))}
-
-
-        <Text>Address: {destinationCoords}</Text>
-
-        {destinationCoords && userLocation && (
-          <MapDirections 
-            userLocation={userLocation} 
-            destinationLocation={destinationCoords}/>
-        )}
 
       </MapView>
       {/* Render the BuildingPopup component with the close handler */}
