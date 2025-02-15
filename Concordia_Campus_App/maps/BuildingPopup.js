@@ -8,7 +8,7 @@ const BuildingPopup = ({ building, onClose }) => {
   if (!building) return null;
 
   return (
-    <View style={styles.popupContainer}>
+    <View style={styles.popupContainer} testID="building-popup">
       <TouchableOpacity onPress={onClose} style={styles.closeButton}>
         <Text style={styles.closeButtonText}>X</Text>
       </TouchableOpacity>
@@ -16,8 +16,6 @@ const BuildingPopup = ({ building, onClose }) => {
       <Text style={styles.popupText}>{building.popUp.address}</Text>
       <Text style={styles.popupText}>{building.popUp.codes}</Text>
     </View>
-    //add a new key for class codes, put info in building coordinates
-    //marker coordinates for every building
   );
 };
 
