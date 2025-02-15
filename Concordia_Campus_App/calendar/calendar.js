@@ -6,8 +6,8 @@ import { createClient } from "@supabase/supabase-js";
 import { Card, Text, Button, Menu, Provider } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import { extractTokens, convertDateTime} from "./calendarUtils";
 import mapData from "./mapData";
-
 
 WebBrowser.maybeCompleteAuthSession();
 const SUPABASE_URL = "https://mmzllysbkfjeypyuodqr.supabase.co";
@@ -48,10 +48,10 @@ export default function Calendar() {
         redirectTo: redirectUri,
       },
     });
-    
+
     if (data?.url) {
       const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUri);
-
+      
       if (result.type === "success" && result.url) {
         const { access_token, refresh_token, provider_token } = extractTokens(result.url);
         console.log("Extracted tokens:", { access_token, refresh_token, provider_token });
@@ -345,20 +345,4 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     
   }
-
 });
-
-function extractTokens(url) {
-  const params = new URLSearchParams(url.split("#")[1]);
-  return {
-    access_token: params.get("access_token"),
-    refresh_token: params.get("refresh_token"),
-    provider_token: params.get("provider_token"),
-  };
-}
-
-function convertDateTime(input) {
-  if (!input) return "N/A";
-  const dateTime = new Date(input);
-  return dateTime.toLocaleString();
-}
