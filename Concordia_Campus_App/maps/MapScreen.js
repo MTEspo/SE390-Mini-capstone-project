@@ -277,6 +277,7 @@ const handleUserLocation = () => {
       if (selectedBuilding) {
         handlePolygonPress(selectedBuilding); // Highlight the building
         moveToLocation(selectedBuilding.markerCoord.latitude, selectedBuilding.markerCoord.longitude);
+        setToggleMapDirections(false);
       }
     }
   }, [destinationLoc]);
@@ -441,17 +442,25 @@ const handleUserLocation = () => {
           />
         )}
 
-        {buildingsData.buildings.map((building, index) => (
-          <Polygon
-            key={index}
-            coordinates={building.coordinates}
-            fillColor={building.fillColor}
-            strokeColor={building.strokeColor}
-            strokeWidth={2}
-            onPress={() => handlePolygonPress(building)} 
-            testID={`polygon-${index}`}
-          />
-        ))}
+        {buildingsData.buildings.map((building, index) => {
+          const isDestinationLoc = building.name === destinationLoc;
+          const isDestinationCoords = building.name === destinationCoords;
+          const polygonFillColor = (isDestinationCoords || isDestinationLoc) ? 'orange' : building.fillColor; // Set to red if it's the destination building
+
+
+          return (
+            <Polygon
+              key={index}
+              coordinates={building.coordinates}
+              fillColor={polygonFillColor}
+              strokeColor={building.strokeColor}
+              strokeWidth={2}
+              onPress={() => handlePolygonPress(building)} 
+              testID={`polygon-${index}`}
+            />
+          );
+        })}
+
 
         {showDirections && (
           <MapViewDirections
