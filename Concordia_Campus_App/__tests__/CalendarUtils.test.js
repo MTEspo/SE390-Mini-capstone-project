@@ -2,7 +2,7 @@ import { extractTokens, convertDateTime } from "../calendar/calendarUtils";
 
 describe("Calender Utils tests", () => {
     test("gets tokens from url", () => {
-        const testURL = "access_token=access&refresh_token=refresh&provider_token=provider#";
+        const testURL = "#access_token=access&refresh_token=refresh&provider_token=provider";
         const expectedOutput = {
             access_token: "access",
             refresh_token: "refresh",
