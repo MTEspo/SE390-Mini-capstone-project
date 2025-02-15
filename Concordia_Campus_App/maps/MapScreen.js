@@ -36,6 +36,7 @@ const MapScreen = ({route}) => {
   const [centerOnUserLocation, setCenterOnUserLocation] = useState(true);
   const [isUserLocationFetched, setIsUserLocationFetched] = useState(false);
   const [activeButton, setActiveButton] = useState('user');
+  const [destinationActive, setDestinationActive] = useState(false);
 
   
   const campusLocations = {
@@ -139,6 +140,8 @@ const MapScreen = ({route}) => {
       setSelectedMarker(null);
       setCenterOnUserLocation(false);
       setActiveButton('SGW');
+      setDestinationActive(false);
+      setToggleMapDirections(false);
     }
   };
   
@@ -164,6 +167,8 @@ const MapScreen = ({route}) => {
       setSelectedMarker(null);
       setCenterOnUserLocation(false);
       setActiveButton('Loyola');
+      setDestinationActive(false);
+      setToggleMapDirections(false);
     }
   };
 
@@ -265,6 +270,14 @@ const handleUserLocation = () => {
     };
     addInitialMarkers();
   }, []);
+
+  useEffect(() => {
+    if (destinationLoc || destinationCoords) {
+      setDestinationActive(true);
+    } else {
+      setDestinationActive(false);
+    }
+  }, [destinationLoc, destinationCoords]);
 
   useEffect(() => {
     if (destinationLoc) {
@@ -445,7 +458,7 @@ const handleUserLocation = () => {
         {buildingsData.buildings.map((building, index) => {
           const isDestinationLoc = building.name === destinationLoc;
           const isDestinationCoords = building.name === destinationCoords;
-          const polygonFillColor = (isDestinationCoords || isDestinationLoc) ? 'orange' : building.fillColor; // Set to red if it's the destination building
+          const polygonFillColor = (isDestinationCoords || isDestinationLoc) && destinationActive ? 'orange' : building.fillColor; // Set to red if it's the destination building
 
 
           return (
