@@ -21,8 +21,7 @@ describe('ArrivalDisplay Component', () => {
     },
   };
 
-  const mockDate = new Date('2024-02-09T17:30:00');
-  const originalDate = global.Date;
+  const mockDate = new Date('2025-02-07T17:30:00');
 
   beforeEach(() => {
     global.Date = class extends Date {
@@ -42,7 +41,6 @@ describe('ArrivalDisplay Component', () => {
   });
 
   afterEach(() => {
-    global.Date = originalDate;
     jest.clearAllMocks();
   });
 
@@ -51,15 +49,13 @@ describe('ArrivalDisplay Component', () => {
     await waitFor(() => getByText(`${mockStop.from} → ${mockStop.to}`));
     expect(getByText(`${mockStop.from} → ${mockStop.to}`)).toBeTruthy();
     expect(getByText(/Scheduled at/)).toBeTruthy();
-    expect(getByText(/Arriving In/)).toBeTruthy();
+    expect(getByText(/Leaving In/)).toBeTruthy();
   });
 
   test('shows no more buses message when all buses have passed', () => {
     const lateMockDate = new Date('2025-02-09T22:00:00');
     jest.spyOn(global, 'Date').mockImplementation(() => lateMockDate);
-
     const { getByText } = render(<ArrivalDisplay stop={mockStop} />);
-    
     expect(getByText('No more buses available today.')).toBeTruthy();
   });
 

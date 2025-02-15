@@ -112,7 +112,9 @@ const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
     return (
         <View style={{ flex: 1}}>
             {shuttleStopCoordinates.map((stop) => (
-                <Marker onPress={() => openBottomSheet(stop)}
+                <Marker 
+                    testID={`shuttle-stop-${stop.keyID}`}
+                    onPress={() => openBottomSheet(stop)}
                     style={{ zIndex: 2 }}
                     key={stop.keyID}
                     coordinate={{ latitude: stop.latitude, longitude: stop.longitude }}
@@ -132,6 +134,7 @@ const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
                 ?.filter((point) => point.ID.startsWith('BUS'))
                 .map((point) => (
                     <Marker
+                        testID={`bus-marker-${point.ID}`}
                         key={`${point.ID}`}
                         coordinate={{ latitude: point.Latitude, longitude: point.Longitude }}
                         pinColor="#1D9E9A">
@@ -140,7 +143,7 @@ const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
             ))}
 
 
-            <BottomSheetComponent selectedStop={selectedStop} bottomSheetIndex={bottomSheetIndex} onSheetChanges={handleSheetChanges} toggleMapDirections={handleToggleMapDirections}/>
+            <BottomSheetComponent testID={`bottom-sheet-component`} selectedStop={selectedStop} bottomSheetIndex={bottomSheetIndex} onSheetChanges={handleSheetChanges} toggleMapDirections={handleToggleMapDirections}/>
         </View>
     );
 };
