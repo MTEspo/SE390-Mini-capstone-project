@@ -1,503 +1,364 @@
-
-import { duration } from 'moment-timezone';
-import React, { useState, useRef, useEffect } from 'react';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import 'react-native-get-random-values';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import MapView, { Polygon, Marker, Polyline } from 'react-native-maps';
-import styles from './styles/mapScreenStyles'; 
-import buildingsData from './buildingCoordinates.js';
-import BuildingPopup from './BuildingPopup'; 
-import MapViewDirections from 'react-native-maps-directions';
-import { API_KEY } from '@env';
-import ShuttleBusMarker from './ShuttleBusMarker';
-import { getLocation } from './locationUtils';
-import MapDirections from './MapDirections';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { useState, useEffect } from "react";
+import { StyleSheet, View, ScrollView, Pressable, Platform, Alert } from "react-native";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
+import { createClient } from "@supabase/supabase-js";
+import { Card, Text, Button, Menu, Provider } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import mapData from "./mapData";
 
 
-const MapScreen = ({route}) => {
-  const [campus, setCampus] = useState('SGW');
-  const [zoomLevel, setZoomLevel] = useState(0.005); 
-  const [selectedBuilding, setSelectedBuilding] = useState(null); 
-  const mapRef = useRef(null);
-  const [selectedMarker, setSelectedMarker] = useState(null);
-  const [showDirections, setShowDirections] = useState(false);
-  const [showBuildingDirections, setShowBuildingDirections] = useState(false);
-  const [eta, setEta] = useState(null);
-  const [distance, setDistance] = useState(null);
-  const [selectedStart, setSelectedStart] = useState(null);
-  const [selectedEnd, setSelectedEnd] = useState(null); 
-  const [shuttleStop, setShuttleStop] = useState(null);
-  const [toggleMapDirections, setToggleMapDirections] = useState(false);
-  const [userLocation, setUserLocation] = useState(null);
-  const {destinationLoc} = route.params || {};
-  const {destinationCoords} = route.params || {};
-  const [centerOnUserLocation, setCenterOnUserLocation] = useState(true);
-  const [isUserLocationFetched, setIsUserLocationFetched] = useState(false);
-  const [activeButton, setActiveButton] = useState('user');
+WebBrowser.maybeCompleteAuthSession();
+const SUPABASE_URL = "https://mmzllysbkfjeypyuodqr.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1temxseXNia2ZqZXlweXVvZHFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgxOTg3MDAsImV4cCI6MjA1Mzc3NDcwMH0.bMYbKNUeMiToPKbEnN7ypk1lG2IWN7tEOrnGw57RuX0";
 
-  
-  const campusLocations = {
-    SGW: {
-      latitude: 45.49532997441208,
-      longitude: -73.57859533082366,
-      title: 'SGW Campus',
-      description: 'A well-known university located in Montreal, Canada',
-    },
-    Loyola: {
-      latitude: 45.458161998720556,
-      longitude: -73.63905090035233,
-      title: 'Loyola Campus',
-      description: 'Loyola Campus of Concordia University',
-    },
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false,
+  },
+});
+
+export default function Calendar() {
+  const [session, setSession] = useState(null);
+  const [providerToken, setProviderToken] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [calendars, setCalendars] = useState([]);
+  const [selectedCalendar, setSelectedCalendar] = useState(null);
+  const [menuVisibleState, setMenuVisibleState] = useState(false);
+  const [expandCards, setExpandCards] = useState({});
+  const toggleExpandCard = (eventID) => {
+    setExpandCards((otherStates) => ({
+      [eventID]: !otherStates[eventID]
+    }));
   };
-
-  const location = campusLocations[campus];
-
-  useEffect(() => {
-    let interval;
-      const fetchUserLocation = async () => {
-        const location = await getLocation();
-        if(location){
-          setUserLocation(location);
-        }
-      };
-      if(toggleMapDirections && shuttleStop){
-        fetchUserLocation();
-        interval = setInterval(fetchUserLocation, 5000);
-      }
-      return () => {
-        if(interval) clearInterval(interval);
-      };
-    }, [toggleMapDirections,shuttleStop]);
+  const navigation = useNavigation();
 
 
-  async function moveToLocation(latitude, longitude) {
-    mapRef.current.animateToRegion(
-      {
-        latitude,
-        longitude,
-        latitudeDelta: 0.015,
-        longitudeDelta: 0.0121,
+  const googleSignIn = async () => {
+    const redirectUri = Linking.createURL("/");
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        scopes: "https://www.googleapis.com/auth/calendar",
+        redirectTo: redirectUri,
       },
-      2000 //amount of time it takes to animate
-    )
-  }
-
-  const handlePolygonPress = (building) => {
-    if(!selectedStart){
-      setSelectedStart(building.markerCoord);
-      setShowBuildingDirections(false);
-    } else if (!selectedEnd) {
-      setSelectedEnd(building.markerCoord);
-      setShowBuildingDirections(false);
-    } else {
-      setSelectedStart(building.markerCoord);
-      setSelectedEnd(null);
-      setShowBuildingDirections(false);
-    }
-    setSelectedBuilding(building); // Update the selected building info
-    setSelectedMarker({
-      latitude: building.markerCoord.latitude,
-      longitude: building.markerCoord.longitude
     });
-    setShowBuildingDirections(false);
-  };
+    
+    if (data?.url) {
+      const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUri);
 
-  const handleClosePopup = () => {
-    setSelectedBuilding(null); // Close the popup by clearing the selected building
-  };
-  const destinationLocation = campus === 'SGW' ? campusLocations.Loyola : campusLocations.SGW;
-  const directionsText = campus === 'SGW' ? 'Directions To LOY' : 'Directions To SGW';
-
-  const handleDirections = (result) => {
-    setEta(result.duration);
-    setDistance(result.distance);
-  };
-
-
-  const handleSelectSGW = () => {
-    if (activeButton === 'SGW') {
-      // If already on SGW view, reset the map to SGW center
-      mapRef.current.animateToRegion({
-        latitude: campusLocations['SGW'].latitude,
-        longitude: campusLocations['SGW'].longitude,
-        latitudeDelta: zoomLevel,
-        longitudeDelta: zoomLevel,
-      }, 1000);
-    } else {
-      // If not on SGW view, switch to SGW view
-      setShowDirections(false);
-      setEta(null);
-      setDistance(null);
-      setCampus('SGW');
-      setShowBuildingDirections(false);
-      setSelectedStart(null);
-      setSelectedEnd(null);
-      setSelectedBuilding(null);
-      setSelectedMarker(null);
-      setCenterOnUserLocation(false);
-      setActiveButton('SGW');
-    }
-  };
-  
-  const handleSelectLoyola = () => {
-    if (activeButton === 'Loyola') {
-      // If already on LOY view, reset the map to LOY center
-      mapRef.current.animateToRegion({
-        latitude: campusLocations['Loyola'].latitude,
-        longitude: campusLocations['Loyola'].longitude,
-        latitudeDelta: zoomLevel,
-        longitudeDelta: zoomLevel,
-      }, 1000);
-    } else {
-      // If not on LOY view, switch to LOY view
-      setShowDirections(false);
-      setEta(null);
-      setDistance(null);
-      setCampus('Loyola');
-      setShowBuildingDirections(false);
-      setSelectedStart(null);
-      setSelectedEnd(null);
-      setSelectedBuilding(null);
-      setSelectedMarker(null);
-      setCenterOnUserLocation(false);
-      setActiveButton('Loyola');
-    }
-  };
-
-const handleUserLocation = () => {
-  if (centerOnUserLocation) {
-    mapRef.current.animateToRegion({
-      latitude: userLocation.latitude,
-      longitude: userLocation.longitude,
-      latitudeDelta: zoomLevel,
-      longitudeDelta: zoomLevel,
-    }, 1000);
-  } else {
-    setCenterOnUserLocation(true);
-  }
-  setShowDirections(false);
-  setShowBuildingDirections(false);
-  setSelectedStart(null);
-  setSelectedEnd(null);
-  setSelectedBuilding(null);
-  setSelectedMarker(null);
-  setActiveButton('user');
-};
-
-  const handleCampusDirections = () =>{
-    if (activeButton === 'user') return;
-    setShowDirections(true);
-    setSelectedStart(null);
-    setSelectedEnd(null);
-    setShowBuildingDirections(false);
-  }
-
-  const handleBuildingDirections = () => {
-    setShowBuildingDirections(true);
-    setShowDirections(false);
-  }
-
-  useEffect(() => {
-    return () => {
-      setShowDirections(false);
-      setEta(null);
-      setDistance(null);
-    };
-  }, []);
-  
-  useEffect(() => {
-    return () => {
-      setShowBuildingDirections(false);
-      setEta(null);
-      setDistance(null);
-    };
-  }, []);
-
-  useEffect(() => {
-    const fetchUserLocation = async () => {
-      const location = await getLocation();
-      if(location){
-        setUserLocation(location);
-        setCenterOnUserLocation(true);
-        setIsUserLocationFetched(true);
-      }
-    };
-    fetchUserLocation();
-  }, []);
-
-  useEffect(() => {
-    mapRef.current.animateToRegion({
-      latitude: campusLocations[campus].latitude,
-      longitude: campusLocations[campus].longitude,
-      latitudeDelta: zoomLevel,
-      longitudeDelta: zoomLevel,
-    }, 1000);
-  }, [campus, zoomLevel]);
-
-  useEffect(() => {
-    const addInitialMarkers = async () => {
-      if (mapRef.current) {
-        mapRef.current.animateToRegion({
-          latitude: campusLocations['SGW'].latitude,
-          longitude: campusLocations['SGW'].longitude,
-          latitudeDelta: zoomLevel,
-          longitudeDelta: zoomLevel,
-        }, 0);
-        mapRef.current.animateToRegion({
-          latitude: campusLocations['Loyola'].latitude,
-          longitude: campusLocations['Loyola'].longitude,
-          latitudeDelta: zoomLevel,
-          longitudeDelta: zoomLevel,
-        }, 0);
-        const userLocation = await getLocation();
-        if (userLocation) {
-          mapRef.current.animateToRegion({
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
-            latitudeDelta: zoomLevel,
-            longitudeDelta: zoomLevel,
-          }, 0);
-        }
-      }
-    };
-    addInitialMarkers();
-  }, []);
-
-  useEffect(() => {
-    if (destinationLoc) {
-      console.log('Destination Location:', destinationLoc);
-      
-      const selectedBuilding = buildingsData.buildings.find(
-        (building) => building.name === destinationLoc
-      );
-  
-      if (selectedBuilding) {
-        handlePolygonPress(selectedBuilding); // Highlight the building
-        moveToLocation(selectedBuilding.markerCoord.latitude, selectedBuilding.markerCoord.longitude);
-        setToggleMapDirections(false);
-      }
-    }
-  }, [destinationLoc]);
-  
-  useEffect(() => {
-    if (destinationCoords) {
-      console.log('Processing directions for:', destinationCoords);
-  
-      // Check if it's a known building
-      const selectedBuilding = buildingsData.buildings.find(
-        (building) => building.name === destinationCoords
-      );
-  
-      if (selectedBuilding) {
-        setShuttleStop({
-          latitude: selectedBuilding.markerCoord.latitude,
-          longitude: selectedBuilding.markerCoord.longitude,
+      if (result.type === "success" && result.url) {
+        const { access_token, refresh_token, provider_token } = extractTokens(result.url);
+        console.log("Extracted tokens:", { access_token, refresh_token, provider_token });
+        await supabase.auth.setSession({
+          access_token,
+          refresh_token,
         });
-        setToggleMapDirections(true);
-        moveToLocation(selectedBuilding.markerCoord.latitude, selectedBuilding.markerCoord.longitude);
-      } 
-      else if (destinationCoords.latitude && destinationCoords.longitude) {
-        // Handle raw latitude/longitude destinations
-        setShuttleStop(destinationCoords);
-        setToggleMapDirections(true);
-      } 
-      else {
-        console.error("Invalid destinationCoords format:", destinationCoords);
+        const {
+          data: { session: updatedSession },
+        } = await supabase.auth.getSession();
+        setSession(updatedSession);
+        setProviderToken(provider_token);
+        console.log("Provider token set:", provider_token);
+        // Immediately fetch calendars using the token.
+        getGoogleCalendars(provider_token);
+      }
+    } else {
+      console.error("Error starting OAuth:", error);
+    }
+  };
+
+  const googleSignOut = async () => {
+    await supabase.auth.signOut().then(() => {
+      setSession(null);
+      setProviderToken(null);
+      setCalendars([]);
+      setSelectedCalendar(null);
+      setEvents([]);
+    });
+  };
+
+  // Fetch all calendars using pagination.
+  const getGoogleCalendars = async (tokenParam) => {
+    const token = tokenParam || providerToken;
+    console.log("Fetching calendars with token:", token);
+    if (!token) {
+      console.error("No valid token found for calendars.");
+      return;
+    }
+    let fetchedCalendars = [];
+    let nextPageToken = null;
+    try {
+      do {
+        const response = await axios.get(
+          "https://www.googleapis.com/calendar/v3/users/me/calendarList",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            params: {
+              maxResults: 250, // Request up to 250 calendars per page
+              pageToken: nextPageToken,
+            },
+          }
+        );
+        console.log("Fetched calendars page:", response.data.items);
+        fetchedCalendars = fetchedCalendars.concat(response.data.items);
+        nextPageToken = response.data.nextPageToken;
+      } while (nextPageToken);
+      console.log("All fetched calendars:", fetchedCalendars);
+  
+      // Sorting calendars with "Schedule 1" first
+      fetchedCalendars.sort((a, b) => {
+        if (a.summary === "Schedule 1") return -1;  // "Schedule 1" first
+        if (b.summary === "Schedule 1") return 1;
+        return a.summary.localeCompare(b.summary);  // Alphabetical order for other calendars
+      });
+  
+      setCalendars(fetchedCalendars);
+  
+      if (fetchedCalendars.length > 0) {
+        setSelectedCalendar(fetchedCalendars[0]);
+        getGoogleCalendarEvents(fetchedCalendars[0].id, token);
+      }
+    } catch (error) {
+      console.error("Error fetching Google Calendars:", error);
+      if (error.response && error.response.status === 401) {
+        googleSignOut();
       }
     }
-  }, [destinationCoords]);
+  };
   
   
+  const getGoogleCalendarEvents = async (calendarId, token) => {
+    console.log(`Fetching events for calendar ${calendarId} with token:`, token);
+    if (!token) {
+      console.error("No valid token found for events.");
+      return;
+    }
+    try {
+      const currentTime = new Date();
+      const sunday = new Date(currentTime);
+      sunday.setDate(currentTime.getDate() - currentTime.getDay());
+      sunday.setHours(0, 0, 0, 0);
+
+      const saturday = new Date(sunday);
+      saturday.setDate(sunday.getDate() + 6);
+      saturday.setHours(23, 59, 59, 999);
+
+      const minTime = sunday.toISOString();
+      const maxTime = saturday.toISOString();
+      const response = await axios.get(
+        `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          params: {
+            timeMin: minTime,
+            timeMax: maxTime,
+            orderBy: 'startTime',
+            singleEvents: true,}
+        }
+      );
+      console.log("Fetched events:", response.data.items);
+      setEvents(response.data.items);
+      
+    } catch (error) {
+      console.error("Error fetching Google Calendar events:", error);
+      if (error.response && error.response.status === 401) {
+        googleSignOut();
+      }
+    }
+  };
+
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+    });
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      if (providerToken) {
+        getGoogleCalendars(providerToken);
+      }else{
+        googleSignOut();
+      }
+    });
+    return unsubscribe;
+  }, [navigation, providerToken]);
+
+  
+
+ 
+
 
   return (
-    <View style={styles.container}>
-      <View style={styles.searchBarContainer}>
-        <GooglePlacesAutocomplete
-          fetchDetails={true}
-          placeholder="Search Building or Class..."
-          styles={{
-            textInput: styles.searchBar, 
-          }}
-          query={{
-            key: API_KEY,
-            language: 'en',
-          }}
-          onPress={(data, details = null) => {
-            console.log(JSON.stringify(details?.geometry?.location));
-            moveToLocation(details?.geometry?.location.lat, details?.geometry?.location.lng);
-            setSelectedMarker({
-              latitude: details?.geometry?.location.lat,
-              longitude: details?.geometry?.location.lng,
-            });
-              console.log('Selected Marker:', selectedMarker); // Debug marker state
-          }}
-          onFail={(error) => console.log('Error:', error)}
-        />
-        {/* {selectedStart && selectedEnd &&(
-          <TouchableOpacity
-          style = {styles.directionsBuildingButton}
-          onPress={handleBuildingDirections}
-          >
-          <Image source={require('../assets/location.png')} style={styles.buttonImage} />
-          <Text style={styles.directionsBuildingButtonText}>Start</Text>
-          </TouchableOpacity>
-        )} */}
+    <Provider>
+      <View style={styles.container}>
+        {session ? (
+          <>
+            <View style={styles.header}>
+              <Menu
+                visible={menuVisibleState}
+                onDismiss={() => {
+                  console.log("Menu dismissed");
+                  setMenuVisibleState(false);
+                }}
+                anchor={
+                  <Button
+                    mode="outlined"
+                    onPress={() => {
+                      console.log("Menu button pressed");
+                      setMenuVisibleState(true);
+                    }}
+                  >
+                    {selectedCalendar ? selectedCalendar.summary : "Select Calendar"}
+                  </Button>
+                }
+              >
+                {calendars.map((calendar) => (
+                  <Menu.Item
+                    key={calendar.id}
+                    onPress={() => {
+                      console.log("Calendar selected:", calendar.summary);
+                      setSelectedCalendar(calendar);
+                      getGoogleCalendarEvents(calendar.id, providerToken);
+                      setMenuVisibleState(false);
+                    }}
+                    title={calendar.summary}
+                  />
+                ))}
+              </Menu>
+            </View>
+            <ScrollView style={styles.eventList}>
+              {events.length > 0 ? (
+                events.map((event) => (
+                  <Card key={event.id} style={styles.card}>
+                    <Pressable  onPress={() => toggleExpandCard(event.id)}>
+                      <Card.Content>
+                        <Text variant="titleMedium">{event.summary}</Text>
+                        <View style={styles.eventDetails}>
+                          <Text variant="bodySmall">
+                            Start: {convertDateTime(event.start.dateTime || event.start.date)}
+                          </Text>
+                          <Text variant="bodySmall">
+                            End: {convertDateTime(event.end.dateTime || event.end.date)}
+                          </Text>
+                        </View>
+                      </Card.Content>
+                    </Pressable>
+
+                    {expandCards[event.id] && (
+                      <View>
+            
+                          <Text variant= "bodySmall" style={{paddingLeft: 16}} >Location: {event.description}</Text>
+
+                        <View style ={styles.cardButtons}>
+                          <Button 
+                            mode = "contained"
+                            onPress={() => {
+                              const buildingCode = event.description;
+                              const code = buildingCode.match(/^[^\d\s]+/);
+
+                              
+                              const building = mapData.buildings.find((building) => building.code === code[0]);
+                      
+                              navigation.navigate("Map", {destinationLoc: building.name})
+                            }}
+                          >
+                            Location
+                          </Button>
+                          
+                          <Button 
+                            style={{ marginTop: 10 }} 
+                            mode="contained"
+                            onPress={() => {
+                              const buildingCode = event.description;
+                              const code = buildingCode.match(/^[^\d\s]+/);
+
+                              
+                              const building = mapData.buildings.find((building) => building.code === code[0]);
+                      
+                              navigation.navigate("Map", {destinationCoords: building.name})
+                            }}  
+                          >
+                            Directions
+                          </Button>
+
+                        </View>
+                        
+                      </View>
+                    )}
+
+
+                  </Card>
+                ))
+              ) : (
+                <Text style={styles.noEvents}>No events found.</Text>
+              )}
+            </ScrollView>
+            <Button mode="outlined" onPress={googleSignOut} style={styles.signOutButton}>
+              Sign Out
+            </Button>
+          </>
+        ) : (
+          <Button mode="contained" onPress={googleSignIn}>
+            Sign in with Google
+          </Button>
+        )}
       </View>
-             {selectedStart && selectedEnd && showBuildingDirections && (
-             <MapViewDirections
-             origin={selectedStart}
-             destination={selectedEnd}
-             apikey={API_KEY}
-             strokeWidth={5}
-             strokeColor="blue"
-             onReady={handleDirections}
-             />
-        )}
-        
-      <View style={styles.toggleButtonContainer}>
-        <TouchableOpacity
-          style={activeButton === 'SGW' ? styles.sgwButtonActive : styles.sgwButton}
-          onPress={handleSelectSGW}
-          testID="sgwButton"
-        >
-          <Text style={activeButton === 'SGW' ? styles.highlightedText : styles.normalText}>SGW</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={activeButton === 'Loyola' ? styles.loyolaButtonActive : styles.loyolaButton}
-          onPress={handleSelectLoyola}
-          testID="loyolaButton"
-        >
-          <Text style={activeButton === 'Loyola' ? styles.highlightedText : styles.normalText}>LOY</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={activeButton === 'user' ? styles.userLocationButtonActive : styles.userLocationButton}
-          onPress={handleUserLocation}
-          testID="userLocationButton"
-        >
-          <Icon name="user" size={20} color={activeButton === 'user' ? 'blue' : 'white'} />
-        </TouchableOpacity>
-        {activeButton !== 'user' && (
-          <TouchableOpacity style={styles.directionsButton} onPress={handleCampusDirections} testID="directions-button">
-            <Text style={styles.directionsButtonText}>{directionsText}</Text>
-          </TouchableOpacity>
-    
-        )}
-      </View>
-
-      <MapView
-        ref={mapRef}
-        style={styles.map}
-        initialRegion={{
-          latitude: isUserLocationFetched ? userLocation.latitude : location.latitude,
-          longitude: isUserLocationFetched ? userLocation.longitude : location.longitude,
-          latitudeDelta: zoomLevel,
-          longitudeDelta: zoomLevel,
-        }}
-        region={{
-          latitude: centerOnUserLocation ? (isUserLocationFetched ? userLocation.latitude : location.latitude) : location.latitude,
-          longitude: centerOnUserLocation ? (isUserLocationFetched ? userLocation.longitude : location.longitude) : location.longitude,
-          latitudeDelta: zoomLevel,
-          longitudeDelta: zoomLevel,
-        }}
-      >
-        <Marker coordinate={campusLocations['SGW']} title={campusLocations['SGW'].title} description={campusLocations['SGW'].description} />
-        <Marker coordinate={campusLocations['Loyola']} title={campusLocations['Loyola'].title} description={campusLocations['Loyola'].description} />
-    
-        {isUserLocationFetched && (
-          <Marker
-            coordinate={{
-              latitude: userLocation.latitude,
-              longitude: userLocation.longitude,
-            }}
-            pinColor="green"
-            title="Your Location"
-          />
-        )}
-        <Marker coordinate={location} title={location.title} description={location.description} />
-        <Marker coordinate={destinationLocation} title={destinationLocation.title} description={destinationLocation.description} />
-
-
-        <ShuttleBusMarker setToggleMapDirections={setToggleMapDirections} setShuttleStop={setShuttleStop}/>
-
-        {toggleMapDirections && userLocation && shuttleStop && (
-          <MapDirections 
-            userLocation={userLocation} 
-            destinationLocation={shuttleStop}/>
-        )}
-
-        {selectedMarker && (
-          <Marker
-            coordinate={{
-              latitude: selectedMarker.latitude,
-              longitude: selectedMarker.longitude,
-            }}
-            pinColor="blue"
-            title="Selected Location"
-            style={{
-              zIndex: 1000,
-            }}
-          />
-        )}
-
-        {buildingsData.buildings.map((building, index) => {
-          const isDestinationLoc = building.name === destinationLoc;
-          const isDestinationCoords = building.name === destinationCoords;
-          const polygonFillColor = (isDestinationCoords || isDestinationLoc) ? 'orange' : building.fillColor; // Set to red if it's the destination building
-
-
-          return (
-            <Polygon
-              key={index}
-              coordinates={building.coordinates}
-              fillColor={polygonFillColor}
-              strokeColor={building.strokeColor}
-              strokeWidth={2}
-              onPress={() => handlePolygonPress(building)} 
-              testID={`polygon-${index}`}
-            />
-          );
-        })}
-
-
-        {showDirections && (
-          <MapViewDirections
-            origin={location}
-            destination={destinationLocation}
-            apikey={API_KEY}
-            strokeWidth={5}
-            strokeColor="blue"
-            onReady={handleDirections}
-          />
-        )}
-        {selectedStart && selectedEnd && showBuildingDirections &&(
-             <MapViewDirections
-             origin={selectedStart}
-             destination={selectedEnd}
-             apikey={API_KEY}
-             strokeWidth={5}
-             strokeColor="blue"
-             onReady={handleDirections}
-             />
-        )}
-
-      </MapView>
-      <BuildingPopup
-        building={selectedBuilding}
-        onClose={handleClosePopup}
-        testID="building-popup" 
-      />
-
-      {eta !== null && distance !== null && (
-        <View style={[styles.routeInfoContainer, { flexDirection: 'row'}]}>
-          <Text style={styles.routeInfoText}>Distance: {Math.round(distance)} km</Text>
-          <Text style={styles.routeInfoText}>      ETA: {Math.round(eta)} min</Text>
-        </View>
-      )}
-    </View>
+    </Provider>
   );
-};
+}
 
-export default MapScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    padding: 20,
+  },
+  header: {
+    marginBottom: 20,
+  },
+  eventList: {
+    flex: 1,
+  },
+  card: {
+    marginBottom: 10,
+  },
+  noEvents: {
+    textAlign: "center",
+    marginTop: 20,
+  },
+  signOutButton: {
+    marginTop: 20,
+  },
+  cardButtons:{
+    flexDirection: "column",
+    paddingHorizontal: 50,
+    paddingVertical: 10,
+    
+  }
+
+});
+
+function extractTokens(url) {
+  const params = new URLSearchParams(url.split("#")[1]);
+  return {
+    access_token: params.get("access_token"),
+    refresh_token: params.get("refresh_token"),
+    provider_token: params.get("provider_token"),
+  };
+}
+
+function convertDateTime(input) {
+  if (!input) return "N/A";
+  const dateTime = new Date(input);
+  return dateTime.toLocaleString();
+}
