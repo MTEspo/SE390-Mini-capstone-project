@@ -7,6 +7,7 @@ import { Card, Text, Button, Menu, Provider } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { extractTokens, convertDateTime} from "./calendarUtils";
+import mapData from "./mapData";
 
 WebBrowser.maybeCompleteAuthSession();
 const SUPABASE_URL = "https://mmzllysbkfjeypyuodqr.supabase.co";
@@ -109,7 +110,16 @@ export default function Calendar() {
         nextPageToken = response.data.nextPageToken;
       } while (nextPageToken);
       console.log("All fetched calendars:", fetchedCalendars);
+  
+      // Sorting calendars with "Schedule 1" first
+      fetchedCalendars.sort((a, b) => {
+        if (a.summary === "Schedule 1") return -1;  // "Schedule 1" first
+        if (b.summary === "Schedule 1") return 1;
+        return a.summary.localeCompare(b.summary);  // Alphabetical order for other calendars
+      });
+  
       setCalendars(fetchedCalendars);
+  
       if (fetchedCalendars.length > 0) {
         setSelectedCalendar(fetchedCalendars[0]);
         getGoogleCalendarEvents(fetchedCalendars[0].id, token);
@@ -121,7 +131,8 @@ export default function Calendar() {
       }
     }
   };
-
+  
+  
   const getGoogleCalendarEvents = async (calendarId, token) => {
     console.log(`Fetching events for calendar ${calendarId} with token:`, token);
     if (!token) {
@@ -249,21 +260,37 @@ export default function Calendar() {
                           <Text variant= "bodySmall" style={{paddingLeft: 16}} >Location: {event.description}</Text>
 
                         <View style ={styles.cardButtons}>
-                          <Button mode = "contained"
-                          onPress={() => {
-                            const location = encodeURIComponent(event.location);
-                            const url = `https://www.google.com/maps?q=${location}`;
-                            Linking.openURL(url).catch((err) => console.error("Cannot open Google Maps", err));
-                          }
-                        }>Location</Button>
-                          
-                          <Button style={{marginTop: 10}} mode = "contained"
+                          <Button 
+                            mode = "contained"
                             onPress={() => {
-                              const destination = encodeURIComponent(event.location);
-                              const url = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
-                              Linking.openURL(url).catch((err) => console.error("Cannot open Google Maps", err));
-                            }}>Directions
+                              const buildingCode = event.description;
+                              const code = buildingCode.match(/^[^\d\s]+/);
+
+                              
+                              const building = mapData.buildings.find((building) => building.code === code[0]);
+                      
+                              navigation.navigate("Map", {destinationLoc: building.name})
+                            }}
+                          >
+                            Location
                           </Button>
+                          
+                          <Button 
+                            style={{ marginTop: 10 }} 
+                            mode="contained"
+                            onPress={() => {
+                              const buildingCode = event.description;
+                              const code = buildingCode.match(/^[^\d\s]+/);
+
+                              
+                              const building = mapData.buildings.find((building) => building.code === code[0]);
+                      
+                              navigation.navigate("Map", {destinationCoords: building.name})
+                            }}  
+                          >
+                            Directions
+                          </Button>
+
                         </View>
                         
                       </View>
@@ -318,5 +345,4 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     
   }
-
 });
