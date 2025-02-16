@@ -16,7 +16,7 @@ import MapDirections from './MapDirections';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-const MapScreen = () => {
+const MapScreen = ({route}) => {
   const [campus, setCampus] = useState('SGW');
   const [zoomLevel, setZoomLevel] = useState(0.005); 
   const [selectedBuilding, setSelectedBuilding] = useState(null); 
@@ -31,9 +31,12 @@ const MapScreen = () => {
   const [shuttleStop, setShuttleStop] = useState(null);
   const [toggleMapDirections, setToggleMapDirections] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
+  const {destinationLoc} = route.params || {};
+  const {destinationCoords} = route.params || {};
   const [centerOnUserLocation, setCenterOnUserLocation] = useState(true);
   const [isUserLocationFetched, setIsUserLocationFetched] = useState(false);
   const [activeButton, setActiveButton] = useState('user');
+  const [destinationActive, setDestinationActive] = useState(false);
 
   
   const campusLocations = {
@@ -137,6 +140,8 @@ const MapScreen = () => {
       setSelectedMarker(null);
       setCenterOnUserLocation(false);
       setActiveButton('SGW');
+      setDestinationActive(false);
+      setToggleMapDirections(false);
     }
   };
   
@@ -162,6 +167,8 @@ const MapScreen = () => {
       setSelectedMarker(null);
       setCenterOnUserLocation(false);
       setActiveButton('Loyola');
+      setDestinationActive(false);
+      setToggleMapDirections(false);
     }
   };
 
@@ -263,6 +270,60 @@ const handleUserLocation = () => {
     };
     addInitialMarkers();
   }, []);
+
+  useEffect(() => {
+    if (destinationLoc || destinationCoords) {
+      setDestinationActive(true);
+    } else {
+      setDestinationActive(false);
+    }
+  }, [destinationLoc, destinationCoords]);
+
+  useEffect(() => {
+    if (destinationLoc) {
+      console.log('Destination Location:', destinationLoc);
+      
+      const selectedBuilding = buildingsData.buildings.find(
+        (building) => building.name === destinationLoc
+      );
+  
+      if (selectedBuilding) {
+        handlePolygonPress(selectedBuilding); // Highlight the building
+        moveToLocation(selectedBuilding.markerCoord.latitude, selectedBuilding.markerCoord.longitude);
+        setToggleMapDirections(false);
+      }
+    }
+  }, [destinationLoc]);
+  
+  useEffect(() => {
+    if (destinationCoords) {
+      console.log('Processing directions for:', destinationCoords);
+  
+      // Check if it's a known building
+      const selectedBuilding = buildingsData.buildings.find(
+        (building) => building.name === destinationCoords
+      );
+  
+      if (selectedBuilding) {
+        setShuttleStop({
+          latitude: selectedBuilding.markerCoord.latitude,
+          longitude: selectedBuilding.markerCoord.longitude,
+        });
+        setToggleMapDirections(true);
+        moveToLocation(selectedBuilding.markerCoord.latitude, selectedBuilding.markerCoord.longitude);
+      } 
+      else if (destinationCoords.latitude && destinationCoords.longitude) {
+        // Handle raw latitude/longitude destinations
+        setShuttleStop(destinationCoords);
+        setToggleMapDirections(true);
+      } 
+      else {
+        console.error("Invalid destinationCoords format:", destinationCoords);
+      }
+    }
+  }, [destinationCoords]);
+  
+  
 
   return (
     <View style={styles.container}>
@@ -394,17 +455,26 @@ const handleUserLocation = () => {
           />
         )}
 
-        {buildingsData.buildings.map((building, index) => (
-          <Polygon
-            key={index}
-            coordinates={building.coordinates}
-            fillColor={building.fillColor}
-            strokeColor={building.strokeColor}
-            strokeWidth={2}
-            onPress={() => handlePolygonPress(building)} 
-            testID={`polygon-${index}`}
-          />
-        ))}
+        {buildingsData.buildings.map((building, index) => {
+          const isDestinationLoc = building.name === destinationLoc;
+          const isDestinationCoords = building.name === destinationCoords;
+          const polygonFillColor = (isDestinationCoords || isDestinationLoc) && destinationActive ? 'orange' : building.fillColor; // Set to red if it's the destination building
+
+
+          return (
+            <Polygon
+              key={index}
+              coordinates={building.coordinates}
+              fillColor={polygonFillColor}
+              strokeColor={building.strokeColor}
+              strokeWidth={2}
+              onPress={() => handlePolygonPress(building)} 
+              testID={`polygon-${index}`}
+            />
+          );
+        })}
+
+
         {showDirections && (
           <MapViewDirections
             origin={location}
@@ -425,6 +495,7 @@ const handleUserLocation = () => {
              onReady={handleDirections}
              />
         )}
+
       </MapView>
       <BuildingPopup
         building={selectedBuilding}
@@ -443,4 +514,3 @@ const handleUserLocation = () => {
 };
 
 export default MapScreen;
-
