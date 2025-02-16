@@ -32,7 +32,7 @@ export default function Calendar() {
   const [expandCards, setExpandCards] = useState({});
   const toggleExpandCard = (eventID) => {
     setExpandCards((otherStates) => ({
-      [eventID]: !otherStates[eventID]
+      [eventID]: !otherStates[eventID],
     }));
   };
   const navigation = useNavigation();
@@ -50,7 +50,7 @@ export default function Calendar() {
 
     if (data?.url) {
       const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUri);
-      
+
       if (result.type === "success" && result.url) {
         const { access_token, refresh_token, provider_token } = extractTokens(result.url);
         console.log("Extracted tokens:", { access_token, refresh_token, provider_token });
@@ -64,7 +64,7 @@ export default function Calendar() {
         setSession(updatedSession);
         setProviderToken(provider_token);
         console.log("Provider token set:", provider_token);
-        
+        // Immediately fetch calendars using the token.
         getGoogleCalendars(provider_token);
       }
     } else {
@@ -82,7 +82,7 @@ export default function Calendar() {
     });
   };
 
-  // Fetch all calendars using .
+  // Fetch all calendars using pagination.
   const getGoogleCalendars = async (tokenParam) => {
     const token = tokenParam || providerToken;
     console.log("Fetching calendars with token:", token);
@@ -109,16 +109,16 @@ export default function Calendar() {
         nextPageToken = response.data.nextPageToken;
       } while (nextPageToken);
       console.log("All fetched calendars:", fetchedCalendars);
-  
+
       // Sorting calendars with "Schedule 1" first
       fetchedCalendars.sort((a, b) => {
-        if (a.summary === "Schedule 1") return -1;  // "Schedule 1" first
+        if (a.summary === "Schedule 1") return -1; // "Schedule 1" first
         if (b.summary === "Schedule 1") return 1;
-        return a.summary.localeCompare(b.summary);  // Alphabetical order for other calendars
+        return a.summary.localeCompare(b.summary); // Alphabetical order for other calendars
       });
-  
+
       setCalendars(fetchedCalendars);
-  
+
       if (fetchedCalendars.length > 0) {
         setSelectedCalendar(fetchedCalendars[0]);
         getGoogleCalendarEvents(fetchedCalendars[0].id, token);
@@ -130,8 +130,7 @@ export default function Calendar() {
       }
     }
   };
-  
-  
+
   const getGoogleCalendarEvents = async (calendarId, token) => {
     console.log(`Fetching events for calendar ${calendarId} with token:`, token);
     if (!token) {
@@ -157,14 +156,13 @@ export default function Calendar() {
           params: {
             timeMin: minTime,
             timeMax: maxTime,
-            orderBy: 'startTime',
+            orderBy: "startTime",
             singleEvents: true,
-          }
+          },
         }
       );
       console.log("Fetched events:", response.data.items);
       setEvents(response.data.items);
-      
     } catch (error) {
       console.error("Error fetching Google Calendar events:", error);
       if (error.response && error.response.status === 401) {
@@ -236,7 +234,7 @@ export default function Calendar() {
                 events.map((event) => (
                   <Card key={event.id} style={styles.card}>
                     <Pressable onPress={() => toggleExpandCard(event.id)}>
-                      <Card.Content>
+                      <Card.Content style={styles.cardContent}>
                         <Text variant="titleMedium">{event.summary}</Text>
                         <View style={styles.eventDetails}>
                           <Text variant="bodySmall">
@@ -248,14 +246,13 @@ export default function Calendar() {
                         </View>
                       </Card.Content>
                     </Pressable>
-
                     {expandCards[event.id] && (
                       <View>
                         <Text variant="bodySmall" style={{ paddingLeft: 16 }}>
                           Location: {event.description}
                         </Text>
                         <View style={styles.cardButtons}>
-                          <Button 
+                          <Button
                             mode="contained"
                             onPress={() => {
                               const buildingCode = event.description;
@@ -266,16 +263,15 @@ export default function Calendar() {
                           >
                             Location
                           </Button>
-                          
-                          <Button 
-                            style={{ marginTop: 10 }} 
+                          <Button
+                            style={{ marginTop: 10 }}
                             mode="contained"
                             onPress={() => {
                               const buildingCode = event.description;
                               const code = buildingCode.match(/^[^\d\s]+/);
                               const building = mapData.buildings.find((building) => building.code === code[0]);
                               navigation.navigate("Map", { destinationCoords: building.name });
-                            }}  
+                            }}
                           >
                             Directions
                           </Button>
@@ -306,7 +302,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 20, 
+    padding: 20,  
   },
   header: {
     marginBottom: 20,
@@ -320,9 +316,17 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   card: {
-    marginVertical: 10,  
+    marginVertical: 10, 
     alignSelf: "center", 
-    width: "90%",       
+    width: "90%",  
+  },
+  
+  cardContent: {
+    paddingTop: 10,
+  },
+ 
+  eventDetails: {
+    marginBottom: 10,
   },
   noEvents: {
     textAlign: "center",
