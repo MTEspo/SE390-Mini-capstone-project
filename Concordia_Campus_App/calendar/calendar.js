@@ -6,7 +6,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Card, Text, Button, Menu, Provider } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import { extractTokens, convertDateTime} from "./calendarUtils";
+import { extractTokens, convertDateTime } from "./calendarUtils";
 import mapData from "./mapData";
 
 WebBrowser.maybeCompleteAuthSession();
@@ -32,11 +32,10 @@ export default function Calendar() {
   const [expandCards, setExpandCards] = useState({});
   const toggleExpandCard = (eventID) => {
     setExpandCards((otherStates) => ({
-      [eventID]: !otherStates[eventID]
+      [eventID]: !otherStates[eventID],
     }));
   };
   const navigation = useNavigation();
-
 
   const googleSignIn = async () => {
     const redirectUri = Linking.createURL("/");
@@ -51,7 +50,7 @@ export default function Calendar() {
 
     if (data?.url) {
       const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUri);
-      
+
       if (result.type === "success" && result.url) {
         const { access_token, refresh_token, provider_token } = extractTokens(result.url);
         console.log("Extracted tokens:", { access_token, refresh_token, provider_token });
@@ -110,16 +109,16 @@ export default function Calendar() {
         nextPageToken = response.data.nextPageToken;
       } while (nextPageToken);
       console.log("All fetched calendars:", fetchedCalendars);
-  
+
       // Sorting calendars with "Schedule 1" first
       fetchedCalendars.sort((a, b) => {
-        if (a.summary === "Schedule 1") return -1;  // "Schedule 1" first
+        if (a.summary === "Schedule 1") return -1; // "Schedule 1" first
         if (b.summary === "Schedule 1") return 1;
-        return a.summary.localeCompare(b.summary);  // Alphabetical order for other calendars
+        return a.summary.localeCompare(b.summary); // Alphabetical order for other calendars
       });
-  
+
       setCalendars(fetchedCalendars);
-  
+
       if (fetchedCalendars.length > 0) {
         setSelectedCalendar(fetchedCalendars[0]);
         getGoogleCalendarEvents(fetchedCalendars[0].id, token);
@@ -131,8 +130,7 @@ export default function Calendar() {
       }
     }
   };
-  
-  
+
   const getGoogleCalendarEvents = async (calendarId, token) => {
     console.log(`Fetching events for calendar ${calendarId} with token:`, token);
     if (!token) {
@@ -158,13 +156,13 @@ export default function Calendar() {
           params: {
             timeMin: minTime,
             timeMax: maxTime,
-            orderBy: 'startTime',
-            singleEvents: true,}
+            orderBy: "startTime",
+            singleEvents: true,
+          },
         }
       );
       console.log("Fetched events:", response.data.items);
       setEvents(response.data.items);
-      
     } catch (error) {
       console.error("Error fetching Google Calendar events:", error);
       if (error.response && error.response.status === 401) {
@@ -186,17 +184,12 @@ export default function Calendar() {
     const unsubscribe = navigation.addListener("focus", () => {
       if (providerToken) {
         getGoogleCalendars(providerToken);
-      }else{
+      } else {
         googleSignOut();
       }
     });
     return unsubscribe;
   }, [navigation, providerToken]);
-
-  
-
- 
-
 
   return (
     <Provider>
@@ -236,12 +229,12 @@ export default function Calendar() {
                 ))}
               </Menu>
             </View>
-            <ScrollView style={styles.eventList}>
+            <ScrollView style={styles.eventList} contentContainerStyle={styles.eventListContent}>
               {events.length > 0 ? (
                 events.map((event) => (
                   <Card key={event.id} style={styles.card}>
-                    <Pressable  onPress={() => toggleExpandCard(event.id)}>
-                      <Card.Content>
+                    <Pressable onPress={() => toggleExpandCard(event.id)}>
+                      <Card.Content style={styles.cardContent}>
                         <Text variant="titleMedium">{event.summary}</Text>
                         <View style={styles.eventDetails}>
                           <Text variant="bodySmall">
@@ -253,50 +246,38 @@ export default function Calendar() {
                         </View>
                       </Card.Content>
                     </Pressable>
-
                     {expandCards[event.id] && (
                       <View>
-            
-                          <Text variant= "bodySmall" style={{paddingLeft: 16}} >Location: {event.description}</Text>
-
-                        <View style ={styles.cardButtons}>
-                          <Button 
-                            mode = "contained"
-                            onPress={() => {
-                              const buildingCode = event.description;
-                              const code = buildingCode.match(/^[^\d\s]+/);
-
-                              
-                              const building = mapData.buildings.find((building) => building.code === code[0]);
-                      
-                              navigation.navigate("Map", {destinationLoc: building.name})
-                            }}
-                          >
-                            Location
-                          </Button>
-                          
-                          <Button 
-                            style={{ marginTop: 10 }} 
+                        <Text variant="bodySmall" style={{ paddingLeft: 16 }}>
+                          Location: {event.description}
+                        </Text>
+                        <View style={styles.cardButtons}>
+                          <Button
                             mode="contained"
                             onPress={() => {
                               const buildingCode = event.description;
                               const code = buildingCode.match(/^[^\d\s]+/);
-
-                              
                               const building = mapData.buildings.find((building) => building.code === code[0]);
-                      
-                              navigation.navigate("Map", {destinationCoords: building.name})
-                            }}  
+                              navigation.navigate("Map", { destinationLoc: building.name });
+                            }}
+                          >
+                            Location
+                          </Button>
+                          <Button
+                            style={{ marginTop: 10 }}
+                            mode="contained"
+                            onPress={() => {
+                              const buildingCode = event.description;
+                              const code = buildingCode.match(/^[^\d\s]+/);
+                              const building = mapData.buildings.find((building) => building.code === code[0]);
+                              navigation.navigate("Map", { destinationCoords: building.name });
+                            }}
                           >
                             Directions
                           </Button>
-
                         </View>
-                        
                       </View>
                     )}
-
-
                   </Card>
                 ))
               ) : (
@@ -321,15 +302,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 20,
+    padding: 20,  
   },
   header: {
     marginBottom: 20,
   },
   eventList: {
     flex: 1,
+    width: "100%",
+  },
+  eventListContent: {
+    alignItems: "center", 
+    paddingBottom: 20,
   },
   card: {
+    marginVertical: 10, 
+    alignSelf: "center", 
+    width: "90%",  
+  },
+  
+  cardContent: {
+    paddingTop: 10,
+  },
+ 
+  eventDetails: {
     marginBottom: 10,
   },
   noEvents: {
@@ -339,10 +335,9 @@ const styles = StyleSheet.create({
   signOutButton: {
     marginTop: 20,
   },
-  cardButtons:{
+  cardButtons: {
     flexDirection: "column",
     paddingHorizontal: 50,
     paddingVertical: 10,
-    
-  }
+  },
 });
