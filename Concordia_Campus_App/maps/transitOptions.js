@@ -31,13 +31,6 @@ const TransitScreen = ({showDirections, campus, routeData}) => {
     routeData(result.duration, result.distance);
   };
 
-  useEffect(() => {
-    return () => {
-      setEta(null);
-      setDistance(null);
-    };
-  }, []);
-
   return (
     <View style={styles.container}>
       {showDirections && (
