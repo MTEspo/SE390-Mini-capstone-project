@@ -6,7 +6,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Card, Text, Button, Menu, Provider } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import { extractTokens, convertDateTime} from "./calendarUtils";
+import { extractTokens, convertDateTime } from "./calendarUtils";
 import mapData from "./mapData";
 
 WebBrowser.maybeCompleteAuthSession();
@@ -37,7 +37,6 @@ export default function Calendar() {
   };
   const navigation = useNavigation();
 
-
   const googleSignIn = async () => {
     const redirectUri = Linking.createURL("/");
 
@@ -65,7 +64,7 @@ export default function Calendar() {
         setSession(updatedSession);
         setProviderToken(provider_token);
         console.log("Provider token set:", provider_token);
-        // Immediately fetch calendars using the token.
+        
         getGoogleCalendars(provider_token);
       }
     } else {
@@ -83,7 +82,7 @@ export default function Calendar() {
     });
   };
 
-  // Fetch all calendars using pagination.
+  // Fetch all calendars using .
   const getGoogleCalendars = async (tokenParam) => {
     const token = tokenParam || providerToken;
     console.log("Fetching calendars with token:", token);
@@ -159,7 +158,8 @@ export default function Calendar() {
             timeMin: minTime,
             timeMax: maxTime,
             orderBy: 'startTime',
-            singleEvents: true,}
+            singleEvents: true,
+          }
         }
       );
       console.log("Fetched events:", response.data.items);
@@ -186,17 +186,12 @@ export default function Calendar() {
     const unsubscribe = navigation.addListener("focus", () => {
       if (providerToken) {
         getGoogleCalendars(providerToken);
-      }else{
+      } else {
         googleSignOut();
       }
     });
     return unsubscribe;
   }, [navigation, providerToken]);
-
-  
-
- 
-
 
   return (
     <Provider>
@@ -236,11 +231,11 @@ export default function Calendar() {
                 ))}
               </Menu>
             </View>
-            <ScrollView style={styles.eventList}>
+            <ScrollView style={styles.eventList} contentContainerStyle={styles.eventListContent}>
               {events.length > 0 ? (
                 events.map((event) => (
                   <Card key={event.id} style={styles.card}>
-                    <Pressable  onPress={() => toggleExpandCard(event.id)}>
+                    <Pressable onPress={() => toggleExpandCard(event.id)}>
                       <Card.Content>
                         <Text variant="titleMedium">{event.summary}</Text>
                         <View style={styles.eventDetails}>
@@ -256,20 +251,17 @@ export default function Calendar() {
 
                     {expandCards[event.id] && (
                       <View>
-            
-                          <Text variant= "bodySmall" style={{paddingLeft: 16}} >Location: {event.description}</Text>
-
-                        <View style ={styles.cardButtons}>
+                        <Text variant="bodySmall" style={{ paddingLeft: 16 }}>
+                          Location: {event.description}
+                        </Text>
+                        <View style={styles.cardButtons}>
                           <Button 
-                            mode = "contained"
+                            mode="contained"
                             onPress={() => {
                               const buildingCode = event.description;
                               const code = buildingCode.match(/^[^\d\s]+/);
-
-                              
                               const building = mapData.buildings.find((building) => building.code === code[0]);
-                      
-                              navigation.navigate("Map", {destinationLoc: building.name})
+                              navigation.navigate("Map", { destinationLoc: building.name });
                             }}
                           >
                             Location
@@ -281,22 +273,15 @@ export default function Calendar() {
                             onPress={() => {
                               const buildingCode = event.description;
                               const code = buildingCode.match(/^[^\d\s]+/);
-
-                              
                               const building = mapData.buildings.find((building) => building.code === code[0]);
-                      
-                              navigation.navigate("Map", {destinationCoords: building.name})
+                              navigation.navigate("Map", { destinationCoords: building.name });
                             }}  
                           >
                             Directions
                           </Button>
-
                         </View>
-                        
                       </View>
                     )}
-
-
                   </Card>
                 ))
               ) : (
@@ -321,16 +306,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 20,
+    padding: 20, 
   },
   header: {
     marginBottom: 20,
   },
   eventList: {
     flex: 1,
+    width: "100%",
+  },
+  eventListContent: {
+    alignItems: "center", 
+    paddingBottom: 20,
   },
   card: {
-    marginBottom: 10,
+    marginVertical: 10,  
+    alignSelf: "center", 
+    width: "90%",       
   },
   noEvents: {
     textAlign: "center",
@@ -339,10 +331,9 @@ const styles = StyleSheet.create({
   signOutButton: {
     marginTop: 20,
   },
-  cardButtons:{
+  cardButtons: {
     flexDirection: "column",
     paddingHorizontal: 50,
     paddingVertical: 10,
-    
-  }
+  },
 });
