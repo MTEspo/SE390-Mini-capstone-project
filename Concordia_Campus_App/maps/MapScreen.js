@@ -12,6 +12,8 @@ import ShuttleBusMarker from './ShuttleBusMarker';
 import { getLocation } from './locationUtils';
 import MapDirections from './MapDirections';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import TransitScreen from './transitOptions.js';
+import RouteInfoContainer from './RouteInfoContainer.js';
 
 
 const MapScreen = ({route}) => {
@@ -116,6 +118,11 @@ const MapScreen = ({route}) => {
     setDistance(result.distance);
   };
 
+  const handleDirectionsToMap = (eta, distance) => {
+    setEta(eta);
+    setDistance(distance);
+  }
+
 
   const handleSelectSGW = () => {
     if (activeButton === 'SGW') {
@@ -189,6 +196,8 @@ const handleUserLocation = () => {
   setSelectedBuilding(null);
   setSelectedMarker(null);
   setActiveButton('user');
+  setEta(null);
+  setDistance(null);
 };
 
   const handleCampusDirections = () =>{
@@ -204,14 +213,14 @@ const handleUserLocation = () => {
     setShowDirections(false);
   }
 
- /*useEffect(() => {
+ useEffect(() => {
     return () => {
       setShowBuildingDirections(false);
       setShowDirections(false);
       setEta(null);
       setDistance(null);
     };
-  }, []);*/
+  }, []);
 
   useEffect(() => {
     const fetchUserLocation = async () => {
@@ -466,6 +475,7 @@ const handleUserLocation = () => {
           );
         })}
 
+        <TransitScreen showDirections={showDirections} campus={campus} routeData={handleDirectionsToMap}/>
 
         
         {selectedStart && selectedEnd && showBuildingDirections &&(
@@ -478,86 +488,16 @@ const handleUserLocation = () => {
             onReady={handleDirections}
           />
         )}
-        {showDirections && (
-          <>
-            {/* For driving mode (always blue) */}
-            {mode === 'DRIVING' && (
-              <MapViewDirections
-                origin={location}
-                destination={destinationLocation}
-                apikey={API_KEY}
-                strokeWidth={5}
-                strokeColor="blue"  // Driving mode is always blue
-                mode={mode}
-                onReady={handleDirections}
-              />
-            )}
-
-            {/* For walking mode (dashed blue line) */}
-            {mode === 'WALKING' && (           
-              <MapViewDirections
-                origin={location}
-                destination={destinationLocation}
-                apikey={API_KEY}
-                strokeWidth={5}
-                strokeColor="blue"
-                mode={mode}
-                onReady={handleDirections}
-                lineDashPattern={[2, 10]}  // Small dots (short lines with large gaps)
-            />
-          )}
-            {/* Transit Mode */}
-            {mode === 'TRANSIT' && (
-              <MapViewDirections
-                origin={location}
-                destination={destinationLocation}
-                apikey={API_KEY}
-                strokeWidth={5}
-                strokeColor="green"  // Change color for transit mode
-                mode="TRANSIT"
-                onReady={handleDirections}
-              />
-            )}
-          </>
-        )}
       </MapView>
+      
       <BuildingPopup
         building={selectedBuilding}
         onClose={handleClosePopup}
         testID="building-popup" 
       />
 
-      {showDirections && (
-        <View style={styles.modeContainer}>
-          <TouchableOpacity 
-            testID="driving-button"
-            onPress={() => setMode('DRIVING')} 
-            style={[styles.modeButton, mode === 'DRIVING' && { backgroundColor: 'blue' }]}>
-            <Text style={styles.modeText}>Driving</Text>
-          </TouchableOpacity>
+        <RouteInfoContainer eta={eta} distance={distance}/>
 
-          <TouchableOpacity
-            testID="walking-button"
-            onPress={() => setMode('WALKING')} 
-            style={[styles.modeButton, mode === 'WALKING' && { backgroundColor: 'blue' }]}>
-            <Text style={styles.modeText}>Walking</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            testID="transit-button"
-            onPress={() => setMode('TRANSIT')} 
-            style={[styles.modeButton, mode === 'TRANSIT' && { backgroundColor: 'green' }]}>
-            <Text style={styles.modeText}>Transit</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {eta !== null && distance !== null && (
-        <View style={[styles.routeInfoContainer, { flexDirection: 'row'}]}>
-          <Text style={styles.routeInfoText}>Distance: {Math.round(distance)} km</Text>
-          <Text style={styles.routeInfoText}>      ETA: {Math.round(eta)} min</Text>
-        </View>
-      )}
     </View>
   );
 };
