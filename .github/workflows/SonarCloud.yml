@@ -3,22 +3,21 @@ name: SonarCloud
 on:
   push:
     branches:
-      - main
+      - main  
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened]  
+
 jobs:
   sonarqube:
     name: SonarQube
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    runs-on: ubuntu-latest 
 
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v4
+    steps:
+      - uses: actions/checkout@v4  
         with:
-          projectKey: george-ezzat_SE390-Mini-capstone-project
-          organization: SOEN_390_mini_capstone_project
+          fetch-depth: 0  
+
+      - name: SonarQube Scan  
+        uses: SonarSource/sonarqube-scan-action@v4
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
