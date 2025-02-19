@@ -9,6 +9,7 @@ import Calendar from './calendar/calendar';
 import BuildingDirectionsMapScreen from './maps/BuildingDirectionsMapScreen';
 import { PaperProvider } from 'react-native-paper';
 import FullShuttleSchedule from './shuttle_bus/full_schedule'
+import IndoorMaps from './maps/IndoorMaps.js';
 
 
 const Drawer = createDrawerNavigator();
@@ -24,6 +25,7 @@ export default function App() {
         <Drawer.Screen name="Building Map Directions" component={BuildingDirectionsMapScreen}/>
         <Drawer.Screen name="Shuttle Bus Schedule" component={FullShuttleSchedule}/>
         <Drawer.Screen name="Transit Map" component={TransitScreen}/>
+        <Drawer.Screen name="Indoor map" component={IndoorMaps}/>
       </Drawer.Navigator>
     </NavigationContainer>
     </PaperProvider>
