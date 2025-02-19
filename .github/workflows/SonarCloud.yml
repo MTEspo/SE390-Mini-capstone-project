@@ -18,3 +18,8 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+           with:
+        args: >
+          -Dsonar.projectKey=george-ezzat_SE390-Mini-capstone-project
+          -Dsonar.organization=SOEN_390_mini_capstone_project
+          -Dsonar.sources=Concordia_Campus_App
