@@ -13,20 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-
-      - name: Ensure sonar-project.properties Exists
-        run: ls -la
-
-      - name: Extract SonarCloud Configuration
-        run: |
-          SONAR_ORG=$(grep '^sonar.organization=' sonar-project.properties | cut -d'=' -f2)
-          SONAR_PROJECT_KEY=$(grep '^sonar.projectKey=' sonar-project.properties | cut -d'=' -f2)
-          echo "Extracted sonar.organization: $SONAR_ORG"
-          echo "Extracted sonar.projectKey: $SONAR_PROJECT_KEY"
-          echo "SONAR_ORG=$SONAR_ORG" >> $GITHUB_ENV
-          echo "SONAR_PROJECT_KEY=$SONAR_PROJECT_KEY" >> $GITHUB_ENV
-
+          fetch-depth: 0
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4
         env:
