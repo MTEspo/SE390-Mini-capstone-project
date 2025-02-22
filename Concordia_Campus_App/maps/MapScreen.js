@@ -43,6 +43,10 @@ const MapScreen = ({route}) => {
   const [centerOnUserLocation, setCenterOnUserLocation] = useState(true);
   const [isUserLocationFetched, setIsUserLocationFetched] = useState(false);
   const [activeButton, setActiveButton] = useState('user');
+  const {destinationLoc} = route.params || {};
+  const {destinationCoords} = route.params || {};
+  const [destinationActive, setDestinationActive] = useState(false);
+  const [mode, setMode] = useState('DRIVING');
 
   const handleReturn = () => {
     setCurrentScreen("Map");
@@ -50,14 +54,6 @@ const MapScreen = ({route}) => {
     setSelectedStart(null);
     setSelectedEnd(null);
   };
-
-  const {destinationLoc} = route.params || {};
-  const {destinationCoords} = route.params || {};
-  const [centerOnUserLocation, setCenterOnUserLocation] = useState(true);
-  const [isUserLocationFetched, setIsUserLocationFetched] = useState(false);
-  const [activeButton, setActiveButton] = useState('user');
-  const [destinationActive, setDestinationActive] = useState(false);
-  const [mode, setMode] = useState('DRIVING');
   
   const campusLocations = {
     SGW: {
@@ -229,39 +225,10 @@ const MapScreen = ({route}) => {
     setDistance(result.distance);
   };
 
-  const handleSelectSGW = () => {
-    setShowDirections(false);
-    setEta(null);
-    setDistance(null);
-    setCampus('SGW');
-    setShowBuildingDirections(false);
-    setSelectedStart(null);
-    setSelectedEnd(null);
-    setSelectedBuilding(null);
-    setSelectedMarker(null);
-    setCenterOnUserLocation(false);
-    setActiveButton('SGW');
-  };
-
   const handleDirectionsToMap = (eta, distance) => {
     setEta(eta);
     setDistance(distance);
   }
-
-
-  const handleSelectLoyola = () => {
-    setShowDirections(false);
-    setEta(null);
-    setDistance(null);
-    setCampus('Loyola');
-    setShowBuildingDirections(false);
-    setSelectedStart(null);
-    setSelectedEnd(null);
-    setSelectedBuilding(null);
-    setSelectedMarker(null);
-    setCenterOnUserLocation(false);
-    setActiveButton('Loyola');
-  };
 
   const handleSelectSGW = () => {
     if (activeButton === 'SGW') {
