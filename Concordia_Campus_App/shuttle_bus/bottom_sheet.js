@@ -56,7 +56,7 @@ const BottomSheetComponent = ({ selectedStop, bottomSheetIndex, onSheetChanges, 
         <BottomSheet
             ref={bottomSheetRef}
             index={bottomSheetIndex}
-            snapPoints={["22%", "50%", "80%"]}
+            snapPoints={["20%", "50%", "80%"]}
             enablePanDownToClose={true}
             onChange={onSheetChanges}>
             
