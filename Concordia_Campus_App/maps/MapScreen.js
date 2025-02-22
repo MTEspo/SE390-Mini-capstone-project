@@ -569,7 +569,7 @@ const MapScreen = () => {
           />
         ))}
 
-          {selectedStart && selectedEnd && (
+        {selectedStart && selectedEnd && showBuildingDirections && (
               <MapViewDirections
                 origin={selectedStart}
                 destination={selectedEnd}
@@ -578,7 +578,7 @@ const MapScreen = () => {
                 strokeColor="blue"
                 onReady={handleDirections}
               />
-          )}
+         )}
   
         {showDirections && (
           <MapViewDirections
