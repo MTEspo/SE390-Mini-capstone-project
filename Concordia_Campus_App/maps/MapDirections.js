@@ -15,9 +15,11 @@ const MapDirections = ({userLocation, destinationLocation}) => {
                 coordinate={{
                     latitude: userLocation.latitude,
                     longitude: userLocation.longitude,
-                }}/>
+                }}
+                testID="marker"/>
             
-            <MapViewDirections
+            <MapViewDirections 
+                testID="map-view-directions"
                 key={userLocation.latitude + userLocation.longitude}
                 origin={{
                     latitude: userLocation.latitude,
@@ -29,7 +31,7 @@ const MapDirections = ({userLocation, destinationLocation}) => {
                 }}
                 apikey={API_KEY}
                 strokeWidth={4}
-                strokeColor="orange"/>
+                strokeColor="orange" />
         </>
     );
 

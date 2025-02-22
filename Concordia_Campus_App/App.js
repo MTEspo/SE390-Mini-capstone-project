@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import MapScreen from './maps/MapScreen';
+import TransitScreen from './maps/transitOptions.js';
 import { StatusBar } from 'expo-status-bar';
 import Calendar from './calendar/calendar';
 import { PaperProvider } from 'react-native-paper';
