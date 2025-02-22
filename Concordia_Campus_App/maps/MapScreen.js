@@ -485,17 +485,6 @@ const MapScreen = () => {
           </View>
         </>
       )}
-      
-      {selectedStart && selectedEnd && showBuildingDirections && (
-        <MapViewDirections
-          origin={selectedStart}
-          destination={selectedEnd}
-          apikey={API_KEY}
-          strokeWidth={5}
-          strokeColor="blue"
-          onReady={handleDirections}
-        />
-      )}
   
       <View style={styles.toggleButtonContainer}>
         {currentScreen === 'Map' ? (
@@ -579,6 +568,17 @@ const MapScreen = () => {
             onPress={() => handlePolygonPress(building)}
           />
         ))}
+
+          {selectedStart && selectedEnd && (
+              <MapViewDirections
+                origin={selectedStart}
+                destination={selectedEnd}
+                apikey={API_KEY}
+                strokeWidth={5}
+                strokeColor="blue"
+                onReady={handleDirections}
+              />
+          )}
   
         {showDirections && (
           <MapViewDirections
