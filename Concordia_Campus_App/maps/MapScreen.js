@@ -32,30 +32,22 @@ const MapScreen = () => {
   const [shuttleStop, setShuttleStop] = useState(null);
   const [toggleMapDirections, setToggleMapDirections] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
-
   const [currentScreen, setCurrentScreen] = useState('Map');
-  
-
   const [startQuery, setStartQuery] = useState('');
   const [destinationQuery, setDestinationQuery] = useState('');
   const [filteredStartBuildings, setFilteredStartBuildings] = useState([]);
   const [filteredDestinationBuildings, setFilteredDestinationBuildings] = useState([]);
   const [lastTappedBuilding, setLastTappedBuilding] = useState(null);
-
   const [centerOnUserLocation, setCenterOnUserLocation] = useState(true);
   const [isUserLocationFetched, setIsUserLocationFetched] = useState(false);
   const [activeButton, setActiveButton] = useState('user');
 
   const handleReturn = () => {
-
     setCurrentScreen("Map");
-  
     setShowBuildingDirections(false);
     setSelectedStart(null);
     setSelectedEnd(null);
   };
-  
-  
   
   const campusLocations = {
     SGW: {
@@ -73,7 +65,6 @@ const MapScreen = () => {
   };
 
   const location = campusLocations[campus];
-
 
   const handleStartSearch = (query) => {
     setStartQuery(query);
@@ -141,20 +132,15 @@ const MapScreen = () => {
       const location = await getLocation();
       console.log("Retrieved location:", location);
       const userPoint = { latitude: location.latitude, longitude: location.longitude };
-  
-      // Check if the user's current point falls inside a known building
       const currentBuilding = buildingsData.buildings.find((building) =>
         isPointInPolygon(userPoint, building.coordinates)
       );
-  
       if (currentBuilding) {
-        // If inside a known building, update using its info
         setSelectedStartBuilding(currentBuilding);
         setStartQuery(currentBuilding.name);
         setSelectedStart(currentBuilding.markerCoord);
         console.log("Using building:", currentBuilding.name);
       } else {
-        // Otherwise, update with a pseudo-building called "My Current Location"
         const pseudoBuilding = {
           name: "My Current Location",
           coordinates: [{ latitude: userPoint.latitude, longitude: userPoint.longitude }],
@@ -167,8 +153,6 @@ const MapScreen = () => {
         setSelectedStart(userPoint);
         console.log("Using pseudo building: My Current Location");
       }
-  
-      // Move the map to the current location
       moveToLocation(userPoint.latitude, userPoint.longitude);
     } catch (error) {
       console.error("Error retrieving location:", error);
@@ -176,27 +160,22 @@ const MapScreen = () => {
     }
   };
   
-  
-  
-
-
   useEffect(() => {
     let interval;
-      const fetchUserLocation = async () => {
-        const location = await getLocation();
-        if(location){
-          setUserLocation(location);
-        }
-      };
-      if(toggleMapDirections && shuttleStop){
-        fetchUserLocation();
-        interval = setInterval(fetchUserLocation, 5000);
+    const fetchUserLocation = async () => {
+      const location = await getLocation();
+      if(location){
+        setUserLocation(location);
       }
-      return () => {
-        if(interval) clearInterval(interval);
-      };
-    }, [toggleMapDirections,shuttleStop,currentScreen]);
-
+    };
+    if(toggleMapDirections && shuttleStop){
+      fetchUserLocation();
+      interval = setInterval(fetchUserLocation, 5000);
+    }
+    return () => {
+      if(interval) clearInterval(interval);
+    };
+  }, [toggleMapDirections, shuttleStop, currentScreen]);
 
   async function moveToLocation(latitude, longitude) {
     mapRef.current.animateToRegion(
@@ -222,7 +201,7 @@ const MapScreen = () => {
       setSelectedEnd(null);
       setShowBuildingDirections(false);
     }
-    setSelectedBuilding(building); // Update the selected building info
+    setSelectedBuilding(building);
     setSelectedMarker({
       latitude: building.markerCoord.latitude,
       longitude: building.markerCoord.longitude
@@ -231,7 +210,7 @@ const MapScreen = () => {
   };
 
   const handleClosePopup = () => {
-    setSelectedBuilding(null); // Close the popup by clearing the selected building
+    setSelectedBuilding(null);
   };
   const destinationLocation = campus === 'SGW' ? campusLocations.Loyola : campusLocations.SGW;
   const directionsText = campus === 'SGW' ? 'Directions To LOY' : 'Directions To SGW';
@@ -241,57 +220,55 @@ const MapScreen = () => {
     setDistance(result.distance);
   };
 
+  const handleSelectSGW = () => {
+    setShowDirections(false);
+    setEta(null);
+    setDistance(null);
+    setCampus('SGW');
+    setShowBuildingDirections(false);
+    setSelectedStart(null);
+    setSelectedEnd(null);
+    setSelectedBuilding(null);
+    setSelectedMarker(null);
+    setCenterOnUserLocation(false);
+    setActiveButton('SGW');
+  };
 
+  const handleSelectLoyola = () => {
+    setShowDirections(false);
+    setEta(null);
+    setDistance(null);
+    setCampus('Loyola');
+    setShowBuildingDirections(false);
+    setSelectedStart(null);
+    setSelectedEnd(null);
+    setSelectedBuilding(null);
+    setSelectedMarker(null);
+    setCenterOnUserLocation(false);
+    setActiveButton('Loyola');
+  };
 
-const handleSelectSGW = () => {
-  setShowDirections(false);
-  setEta(null);
-  setDistance(null);
-  setCampus('SGW');
-  setShowBuildingDirections(false);
-  setSelectedStart(null);
-  setSelectedEnd(null);
-  setSelectedBuilding(null);
-  setSelectedMarker(null);
-  setCenterOnUserLocation(false);
-  setActiveButton('SGW');
-};
-
-const handleSelectLoyola = () => {
-  setShowDirections(false);
-  setEta(null);
-  setDistance(null);
-  setCampus('Loyola');
-  setShowBuildingDirections(false);
-  setSelectedStart(null);
-  setSelectedEnd(null);
-  setSelectedBuilding(null);
-  setSelectedMarker(null);
-  setCenterOnUserLocation(false);
-  setActiveButton('Loyola');
-};
-
-const handleUserLocation = () => {
-  if(currentScreen === 'Building Map Directions'){
-    mapRef.current.animateToRegion(
-      {
-        latitude: userLocation.latitude,
-        longitude: userLocation.longitude,
-        latitudeDelta: zoomLevel,
-        longitudeDelta: zoomLevel,
-      },
-      1000
-    );
-  }
-  setCenterOnUserLocation(true);
-  setShowDirections(false);
-  setShowBuildingDirections(false);
-  setSelectedStart(null);
-  setSelectedEnd(null);
-  setSelectedBuilding(null);
-  setSelectedMarker(null);
-  setActiveButton('user');
-};
+  const handleUserLocation = () => {
+    if(currentScreen === 'Building Map Directions'){
+      mapRef.current.animateToRegion(
+        {
+          latitude: userLocation.latitude,
+          longitude: userLocation.longitude,
+          latitudeDelta: zoomLevel,
+          longitudeDelta: zoomLevel,
+        },
+        1000
+      );
+    }
+    setCenterOnUserLocation(true);
+    setShowDirections(false);
+    setShowBuildingDirections(false);
+    setSelectedStart(null);
+    setSelectedEnd(null);
+    setSelectedBuilding(null);
+    setSelectedMarker(null);
+    setActiveButton('user');
+  };
 
   const handleCampusDirections = () =>{
     if (activeButton === 'user') return;
@@ -299,20 +276,16 @@ const handleUserLocation = () => {
     setSelectedStart(null);
     setSelectedEnd(null);
     setShowBuildingDirections(false);
-  }
+  };
 
   const handleBuildingDirections = async () => {
     setShowDirections(false);
     if(currentScreen === 'Map'){
-
       setCurrentScreen("Building Map Directions");
-
-      setSelectedStartBuilding(null)
-      setSelectedDestination(null)
-
+      setSelectedStartBuilding(null);
+      setSelectedDestination(null);
       let closestCampus = null;
       let minDistance = Infinity;
-
       for(const loc in campusLocations){
         const campus = campusLocations[loc];
         const distance = getDistance({ latitude: userLocation.latitude, longitude: userLocation.longitude },{ latitude: campus.latitude, longitude: campus.longitude });
@@ -321,9 +294,7 @@ const handleUserLocation = () => {
           closestCampus = campus;
         }
       }
-      
-      setActiveButton(null)
-
+      setActiveButton(null);
       if (closestCampus && mapRef.current) {
         mapRef.current.animateToRegion(
           {
@@ -336,12 +307,11 @@ const handleUserLocation = () => {
         );
       }
       setShowDirections(false);
-
-    }else if(currentScreen === 'Building Map Directions'){
+    } else if(currentScreen === 'Building Map Directions'){
       setCurrentScreen("Map");
       setShowDirections(false);
     }
-  }
+  };
 
   useEffect(() => {
     return () => {
@@ -382,146 +352,140 @@ const handleUserLocation = () => {
   }, [campus, zoomLevel]);
 
   return (
-
     <View style={styles.container}>
-      
       {currentScreen === 'Map' ? (
-  <View style={styles.searchBarContainer}>
-    <GooglePlacesAutocomplete
-      fetchDetails={true}
-      placeholder="Search Building or Class..."
-      styles={{
-        textInput: styles.searchBar,
-      }}
-      query={{
-        key: API_KEY,
-        language: 'en',
-      }}
-      onPress={(data, details = null) => {
-        moveToLocation(details?.geometry?.location.lat, details?.geometry?.location.lng);
-        setSelectedMarker({
-          latitude: details?.geometry?.location.lat,
-          longitude: details?.geometry?.location.lng,
-        });
-      }}
-      onFail={(error) => console.log('Error:', error)}
-    />
-  </View>
-) : (
-  <>
-    {/* Building Directions Input Container Positioned at the Top */}
-    <View
-      style={[
-        styles.searchContainer,
-        {
-          position: 'absolute',
-          left: 10,
-          right: 10,
-          top: 10, 
-          backgroundColor: 'transparent', 
-          padding: 0,
-          borderRadius: 0,
-          zIndex: 20,
-        },
-      ]}
-    >
-      <TextInput
-        style={[
-          styles.searchBar,
-          { backgroundColor: '#800000', color: '#FFFFFF', width: '100%' },
-        ]}
-        placeholder="Select Start Building..."
-        placeholderTextColor="#FFFFFF"
-        value={startQuery}
-        onChangeText={handleStartSearch}
-        onFocus={() => setFilteredStartBuildings([])}
-      />
-      {filteredStartBuildings.length > 0 && (
-        <FlatList
-          data={filteredStartBuildings}
-          keyExtractor={(item) => item.name}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => {
-                setSelectedStart(item);
-                setStartQuery(item.name);
-                setFilteredStartBuildings([]);
-              }}
-            >
-              <Text style={styles.searchResultItem}>{item.name}</Text>
+        <View style={styles.searchBarContainer}>
+          <GooglePlacesAutocomplete
+            fetchDetails={true}
+            placeholder="Search Building or Class..."
+            styles={{
+              textInput: styles.searchBar,
+            }}
+            query={{
+              key: API_KEY,
+              language: 'en',
+            }}
+            onPress={(data, details = null) => {
+              moveToLocation(details?.geometry?.location.lat, details?.geometry?.location.lng);
+              setSelectedMarker({
+                latitude: details?.geometry?.location.lat,
+                longitude: details?.geometry?.location.lng,
+              });
+            }}
+            onFail={(error) => console.log('Error:', error)}
+          />
+        </View>
+      ) : (
+        <>
+          <View
+            style={[
+              styles.searchContainer,
+              {
+                position: 'absolute',
+                left: 10,
+                right: 10,
+                top: 10, 
+                backgroundColor: 'transparent', 
+                padding: 0,
+                borderRadius: 0,
+                zIndex: 20,
+              },
+            ]}
+          >
+            <TextInput
+              style={[
+                styles.searchBar,
+                { backgroundColor: '#800000', color: '#FFFFFF', width: '100%' },
+              ]}
+              placeholder="Select Start Building..."
+              placeholderTextColor="#FFFFFF"
+              value={startQuery}
+              onChangeText={handleStartSearch}
+              onFocus={() => setFilteredStartBuildings([])}
+            />
+            {filteredStartBuildings.length > 0 && (
+              <FlatList
+                data={filteredStartBuildings}
+                keyExtractor={(item) => item.name}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setSelectedStartBuilding(item);
+                      setSelectedStart(item.markerCoord);
+                      setStartQuery(item.name);
+                      setFilteredStartBuildings([]);
+                    }}
+                  >
+                    <Text style={styles.searchResultItem}>{item.name}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+            <TouchableOpacity style={styles.useLocationButton} onPress={handleUseCurrentLocation}>
+              <Text style={styles.useLocationButtonText}>Use My Current Location</Text>
             </TouchableOpacity>
-          )}
-        />
-      )}
-
-      <TouchableOpacity style={styles.useLocationButton} onPress={handleUseCurrentLocation}>
-        <Text style={styles.useLocationButtonText}>Use My Current Location</Text>
-      </TouchableOpacity>
-
-      <TextInput
-        style={[
-          styles.searchBar,
-          {
-            backgroundColor: '#800000',
-            color: '#FFFFFF',
-            width: '100%',
-            marginTop: 10,
-          },
-        ]}
-        placeholder="Select Destination Building..."
-        placeholderTextColor="#FFFFFF"
-        value={destinationQuery}
-        onChangeText={handleDestinationSearch}
-        onFocus={() => setFilteredDestinationBuildings([])}
-      />
-      {filteredDestinationBuildings.length > 0 && (
-        <FlatList
-          data={filteredDestinationBuildings}
-          keyExtractor={(item) => item.name}
-          renderItem={({ item }) => (
+            <TextInput
+              style={[
+                styles.searchBar,
+                {
+                  backgroundColor: '#800000',
+                  color: '#FFFFFF',
+                  width: '100%',
+                  marginTop: 10,
+                },
+              ]}
+              placeholder="Select Destination Building..."
+              placeholderTextColor="#FFFFFF"
+              value={destinationQuery}
+              onChangeText={handleDestinationSearch}
+              onFocus={() => setFilteredDestinationBuildings([])}
+            />
+            {filteredDestinationBuildings.length > 0 && (
+              <FlatList
+                data={filteredDestinationBuildings}
+                keyExtractor={(item) => item.name}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setSelectedDestination(item);
+                      setDestinationQuery(item.name);
+                      setFilteredDestinationBuildings([]);
+                    }}
+                  >
+                    <Text style={styles.searchResultItem}>{item.name}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+          </View>
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 10,
+              left: 10,
+              zIndex: 30,
+            }}
+          >
             <TouchableOpacity
-              onPress={() => {
-                setSelectedDestination(item);
-                setDestinationQuery(item.name);
-                setFilteredDestinationBuildings([]);
-              }}
+              style={[
+                styles.searchBar,
+                {
+                  backgroundColor: '#800000',
+                  paddingVertical: 10,
+                  paddingHorizontal: 20,
+                  alignSelf: 'flex-start',
+                },
+              ]}
+              onPress={handleReturn}
             >
-              <Text style={styles.searchResultItem}>{item.name}</Text>
+              <Text style={[styles.searchResultItem, { color: '#FFFFFF', textAlign: 'center' }]}>
+                Return
+              </Text>
             </TouchableOpacity>
-          )}
-        />
+          </View>
+        </>
       )}
-    </View>
-
-    {/* Return Button Positioned at the Bottom Left, Styled Like the Input Fields */}
-    <View
-      style={{
-        position: 'absolute',
-        bottom: 10,
-        left: 10,
-        zIndex: 30,
-      }}
-    >
-      <TouchableOpacity
-        style={[
-          styles.searchBar,
-          {
-            backgroundColor: '#800000',
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            alignSelf: 'flex-start',
-          },
-        ]}
-        onPress={handleReturn}
-      >
-        <Text style={[styles.searchResultItem, { color: '#FFFFFF', textAlign: 'center' }]}>
-          Return
-        </Text>
-      </TouchableOpacity>
-    </View>
-  </>
-)}
-  
+      
       {selectedStart && selectedEnd && showBuildingDirections && (
         <MapViewDirections
           origin={selectedStart}
@@ -533,46 +497,42 @@ const handleUserLocation = () => {
         />
       )}
   
-
-  <View style={styles.toggleButtonContainer}>
-  {currentScreen === 'Map' ? (
-    <>
-      <TouchableOpacity
-        style={activeButton === 'SGW' ? styles.sgwButtonActive : styles.sgwButton}
-        onPress={handleSelectSGW}
-      >
-        <Text style={activeButton === 'SGW' ? styles.highlightedText : styles.normalText}>SGW</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={activeButton === 'Loyola' ? styles.loyolaButtonActive : styles.loyolaButton}
-        onPress={handleSelectLoyola}
-      >
-        <Text style={activeButton === 'Loyola' ? styles.highlightedText : styles.normalText}>LOY</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={activeButton === 'user' ? styles.userLocationButtonActive : styles.userLocationButton}
-        onPress={handleUserLocation}
-      >
-        <Icon name="user" size={20} color={activeButton === 'user' ? 'blue' : 'white'} />
-      </TouchableOpacity>
-      {activeButton !== 'user' && (
-        <TouchableOpacity style={styles.directionsButton} onPress={handleCampusDirections}>
-          <Text style={styles.directionsButtonText}>{directionsText}</Text>
-        </TouchableOpacity>
-      )}
-      <TouchableOpacity style={styles.directionsButton} onPress={handleBuildingDirections}>
-        <Text style={styles.directionsButtonText}>Building Directions</Text>
-      </TouchableOpacity>
-    </>
-  ) : (
-    
-    <TouchableOpacity style={styles.returnButton} onPress={handleReturn}>
-      <Text style={styles.returnButtonText}>Return</Text>
-    </TouchableOpacity>
-  )}
-</View>
-
-
+      <View style={styles.toggleButtonContainer}>
+        {currentScreen === 'Map' ? (
+          <>
+            <TouchableOpacity
+              style={activeButton === 'SGW' ? styles.sgwButtonActive : styles.sgwButton}
+              onPress={handleSelectSGW}
+            >
+              <Text style={activeButton === 'SGW' ? styles.highlightedText : styles.normalText}>SGW</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={activeButton === 'Loyola' ? styles.loyolaButtonActive : styles.loyolaButton}
+              onPress={handleSelectLoyola}
+            >
+              <Text style={activeButton === 'Loyola' ? styles.highlightedText : styles.normalText}>LOY</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={activeButton === 'user' ? styles.userLocationButtonActive : styles.userLocationButton}
+              onPress={handleUserLocation}
+            >
+              <Icon name="user" size={20} color={activeButton === 'user' ? 'blue' : 'white'} />
+            </TouchableOpacity>
+            {activeButton !== 'user' && (
+              <TouchableOpacity style={styles.directionsButton} onPress={handleCampusDirections}>
+                <Text style={styles.directionsButtonText}>{directionsText}</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity style={styles.directionsButton} onPress={handleBuildingDirections}>
+              <Text style={styles.directionsButtonText}>Building Directions</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <TouchableOpacity style={styles.returnButton} onPress={handleReturn}>
+            <Text style={styles.returnButtonText}>Return</Text>
+          </TouchableOpacity>
+        )}
+      </View>
   
       <MapView
         ref={mapRef}
@@ -590,7 +550,6 @@ const handleUserLocation = () => {
           longitudeDelta: zoomLevel,
         }}
       >
-        {/* ... other markers and polygons ... */}
         {isUserLocationFetched && (
           <Marker
             coordinate={{
@@ -609,7 +568,6 @@ const handleUserLocation = () => {
         {toggleMapDirections && userLocation && shuttleStop && (
           <MapDirections userLocation={userLocation} destinationLocation={shuttleStop} />
         )}
-
   
         {buildingsData.buildings.map((building, index) => (
           <Polygon
@@ -618,7 +576,7 @@ const handleUserLocation = () => {
             fillColor={building.fillColor}
             strokeColor={building.strokeColor}
             strokeWidth={2}
-            onPress={() => handlePolygonPress(building)} // Handle the polygon press
+            onPress={() => handlePolygonPress(building)}
           />
         ))}
   
@@ -633,24 +591,12 @@ const handleUserLocation = () => {
           />
         )}
   
-        {selectedStart && selectedEnd && showBuildingDirections && (
-          <MapViewDirections
-            origin={selectedStart}
-            destination={selectedEnd}
-            apikey={API_KEY}
-            strokeWidth={5}
-            strokeColor="blue"
-            onReady={handleDirections}
-          />
-        )}
-
         {currentScreen === 'Building Map Directions' ? (
           <>
             {buildingsData.buildings.map((building) => {
               let fillColor = building.fillColor;
               if (building === selectedStartBuilding) fillColor = 'green';
               else if (building === selectedDestination) fillColor = 'blue';
-
               return (
                 <Polygon
                   key={building.name}
@@ -662,7 +608,6 @@ const handleUserLocation = () => {
                 />
               );
             })}
-
             {lastTappedBuilding && (
               <Marker
                 coordinate={lastTappedBuilding.markerCoord}
@@ -673,21 +618,20 @@ const handleUserLocation = () => {
         ) : null}
       </MapView>
   
-      {/* Render the BuildingPopup component with the close handler */}
       <BuildingPopup building={selectedBuilding} onClose={handleClosePopup} />
-
+  
       {currentScreen === 'Map' ? (
-      <TouchableOpacity
-        style={styles.directionsButton}
-        onPress={handleCampusDirections}
-      >
-        <View style={styles.directionsButton}>
-          <Image source={require('../assets/arrow.png')} style={styles.buttonImage} />
-          <Text style={styles.directionsButtonText}>{directionsText}</Text>
-        </View>
-      </TouchableOpacity>
-      ):null} 
-
+        <TouchableOpacity
+          style={styles.directionsButton}
+          onPress={handleCampusDirections}
+        >
+          <View style={styles.directionsButton}>
+            <Image source={require('../assets/arrow.png')} style={styles.buttonImage} />
+            <Text style={styles.directionsButtonText}>{directionsText}</Text>
+          </View>
+        </TouchableOpacity>
+      ) : null} 
+  
       {eta !== null && distance !== null && (
         <View style={[styles.routeInfoContainer, { flexDirection: 'row'}]}>
           <Text style={styles.routeInfoText}>Distance: {Math.round(distance)} km</Text>
@@ -696,8 +640,6 @@ const handleUserLocation = () => {
       )}
     </View>
   );
-  
 };
-
 
 export default MapScreen;
