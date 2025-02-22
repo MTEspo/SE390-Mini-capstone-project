@@ -614,7 +614,7 @@ const handleUserLocation = () => {
       <View style={styles.toggleButtonContainer}>
         {currentScreen === 'Map' ? (
           <>
-                   <TouchableOpacity
+        <TouchableOpacity
           style={activeButton === 'SGW' ? styles.sgwButtonActive : styles.sgwButton}
           onPress={handleSelectSGW}
           testID="sgwButton"
@@ -640,6 +640,9 @@ const handleUserLocation = () => {
             <Text style={styles.directionsButtonText}>{directionsText}</Text>
           </TouchableOpacity>
         )}
+                    <TouchableOpacity style={styles.directionsButton} onPress={handleBuildingDirections}>
+              <Text style={styles.directionsButtonText}>Building Directions</Text>
+            </TouchableOpacity>
           </>
         ) : (
           <TouchableOpacity style={styles.returnButton} onPress={handleReturn}>
