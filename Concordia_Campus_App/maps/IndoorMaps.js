@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity } from 'react-native';
-import { Picker } from '@react-native-picker/picker'; // Import Picker from React Native Picker
 
 const IndoorMaps = () => {
   // Available buildings and floors with images for the buildings
@@ -59,17 +58,30 @@ const IndoorMaps = () => {
   return (
     <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
       <View style={styles.header}>
-        {/* Building Picker (Dropdown) */}
-        <Picker
-          selectedValue={selectedBuilding}
-          onValueChange={(itemValue) => setSelectedBuilding(itemValue)}
-          style={styles.picker}
-        >
-          {filteredBuildings.map((building) => (
-            <Picker.Item key={building} label={building} value={building} />
-          ))}
-        </Picker>
+      {/* Search Bar */}
+      <TextInput
+        style={styles.searchBar_insidemap}
+        placeholder="Search for a room"
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
+      
+      {/* Picker Dropdown */}
+      <View style={styles.buildingButtonsContainer}>
+        {filteredBuildings.map((building) => (
+          <TouchableOpacity
+            key={building}
+            style={[
+              styles.buildingButton,
+              selectedBuilding === building && styles.selectedBuildingButton,
+            ]}
+            onPress={() => setSelectedBuilding(building)} // Set building on button press
+          >
+            <Text style={styles.buildingButtonText}>{building}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
+    </View>
 
       {/* Display Floor Plan */}
       <View style={styles.overlay}>
@@ -85,19 +97,19 @@ const IndoorMaps = () => {
       <View style={styles.floorButtonsContainer}>
         {/* Rectangular Box for all Floor Buttons */}
         <View style={styles.floorButtonsBox}>
-          {Object.keys(floorPlans[selectedBuilding].floors).map((floor) => (
-            <TouchableOpacity
-              key={floor}
-              style={[
-                styles.floorButton,
-                selectedFloor === floor && styles.selectedButton, // Highlight selected button
-              ]}
-              onPress={() => setSelectedFloor(floor)} // Set floor on button press
-            >
-              <Text style={styles.floorButtonText}>{floor}</Text> {/* Only show the floor number */}
-            </TouchableOpacity>
-          ))}
-        </View>
+        {Object.keys(floorPlans[selectedBuilding].floors).map((floor) => (
+        <TouchableOpacity
+          key={floor}
+          style={[
+            styles.floorButton,
+            selectedFloor === floor && styles.selectedButton, // Highlight selected button
+          ]}
+          onPress={() => setSelectedFloor(floor)} // Set floor on button press
+        >
+          <Text style={styles.floorButtonText}>{floor}</Text>
+        </TouchableOpacity>
+      ))}
+      </View>
       </View>
     </ScrollView>
   );
@@ -113,16 +125,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: 'row',  // Arrange search bar and picker horizontally
+    alignItems: 'center',  // Vertically center them
+    justifyContent: 'flex-start',  // Align items to the left
     width: '100%',
     marginBottom: 20,
-    zIndex: 2, 
+    zIndex: 2,
   },
-  picker: {
+  searchBar_insidemap: {
     height: 40,
-    width: '80%',
+    width: '50%',  
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    left:-8,
+    marginRight: 10,  
+  },
+  buildingButtonsContainer: {
+    flexDirection: 'column',
+    left:-10,
   },
   overlay: {
     flex: 1,
@@ -152,7 +175,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    backgroundColor: '#f8f8f8', // Rectangular background for the floor buttons
+    backgroundColor: '#f8f8f8',
     padding: 10,
     borderRadius: 10,
     borderWidth: 1,
