@@ -11,5 +11,5 @@ export function extractTokens(url){
 export function convertDateTime(input) {
     if (!input) return "N/A";
     const dateTime = new Date(input);
-    return dateTime.toLocaleString();
+    return dateTime.toLocaleString("en-CA", { timeZone: "EST" });
   }
