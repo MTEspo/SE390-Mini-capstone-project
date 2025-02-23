@@ -43,15 +43,6 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: MTEspo/SE390-Mini-capstone-project
-          
-      - name: Test Report
-        uses: dorny/test-reporter@v1.9.1
-        if: success() || failure()
-        with:
-          artifact: test-results
-          name: JEST Tests
-          path: '*.xml'
-          reporter: jest-junit
 
       # - name: Setup EAS
       #   uses: expo/expo-github-action@v8
