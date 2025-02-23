@@ -49,7 +49,7 @@ jobs:
         if: success() || failure()
         with:
           name: JEST Tests
-          path: Concordia_Campus_app/jest-junit.xml
+          path: jest-junit.xml
           reporter: jest-junit
 
       # - name: Setup EAS
