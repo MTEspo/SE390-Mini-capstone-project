@@ -48,8 +48,9 @@ jobs:
         uses: dorny/test-reporter@v1.9.1
         if: success() || failure()
         with:
-          name: Jest Tests
-          path: reports/jest-*.xml
+          artifact: test-results
+          name: JEST Tests
+          path: *.xml
           reporter: jest-junit
 
       # - name: Setup EAS
