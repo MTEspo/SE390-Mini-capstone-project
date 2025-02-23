@@ -3,6 +3,7 @@ import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 import BuildingPopup from '../maps/BuildingPopup';
 import MapScreen from '../maps/MapScreen';
 
+jest.mock('@react-native-async-storage/async-storage', () => require('@react-native-async-storage/async-storage/jest/async-storage-mock') );
 
 jest.mock('react-native-vector-icons', () => ({
   FontAwesome: () => <mock-Icon />,
@@ -76,7 +77,7 @@ describe('BuildingPopup', () => {
 
 describe('MapScreen', () => {
     it('renders polygons with correct colors', async () => {
-        const { getAllByTestId } = render(<MapScreen />);
+        const { getAllByTestId } = render(<MapScreen route={{params: "test"}} />);
       
         // Wrap async state update in act()
         await act(async () => {
@@ -92,7 +93,7 @@ describe('MapScreen', () => {
       });
 
   it('renders BuildingPopup when polygon is pressed', async () => {
-    const { getByTestId, findByTestId } = render(<MapScreen />);
+    const { getByTestId, findByTestId } = render(<MapScreen route={{params: "test"}} />);
 
     const polygon = getByTestId('polygon-0');
 

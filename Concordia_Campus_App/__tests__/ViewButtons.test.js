@@ -2,7 +2,7 @@ import MapScreen from '../maps/MapScreen';
 import React from 'react';
 import { render, fireEvent, screen, waitFor, act } from '@testing-library/react-native';
 
-
+jest.mock('@react-native-async-storage/async-storage', () => require('@react-native-async-storage/async-storage/jest/async-storage-mock') );
 
 jest.mock('react-native-vector-icons', () => ({
     FontAwesome: () => <mock-Icon />,
@@ -40,7 +40,7 @@ jest.mock('react-native-vector-icons', () => ({
 describe('MapScreen Toggle Button Tests', () => {
 
     it('should render toggle buttons correctly', async () => {
-        render(<MapScreen />);
+        render(<MapScreen route={{params: "test"}} />);
         await act(async () => {
             const sgwButton =  screen.findByTestId('sgwButton');
             const loyolaButton =  screen.findByTestId('loyolaButton');
@@ -55,7 +55,7 @@ describe('MapScreen Toggle Button Tests', () => {
 
 
     it('should update active button correctly when pressing SGW, Loyola, or User Location', async () => {
-        render(<MapScreen />);
+        render(<MapScreen route={{params: "test"}} />);
       
         await act(async () => {
           const sgwButton = screen.getByTestId('sgwButton');
