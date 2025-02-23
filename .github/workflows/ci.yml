@@ -45,6 +45,8 @@ jobs:
           slug: MTEspo/SE390-Mini-capstone-project
           
       - name: Test Report
+        run: |
+          cd Concordia_Campus_App
         uses: dorny/test-reporter@v1.9.1 
         if: success() || failure()
         with:
