@@ -736,6 +736,7 @@ const handleUserLocation = () => {
                   strokeColor={building.strokeColor}
                   strokeWidth={2}
                   onPress={() => handleSelectBuilding(building)}
+                  testID={"test-"+building.name}
                 />
               );
             })}

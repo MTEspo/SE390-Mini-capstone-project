@@ -3,7 +3,6 @@ import { render, fireEvent, act } from "@testing-library/react-native";
 import Calendar from "../calendar/calendar";
 import { extractTokens } from "../calendar/calendarUtils";
 import * as axios from "axios";
-import { createClient } from "@supabase/supabase-js";
 
 jest.mock("axios");
 
