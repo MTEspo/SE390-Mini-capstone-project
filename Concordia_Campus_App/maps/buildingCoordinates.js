@@ -464,24 +464,37 @@ const buildingsData = {
     {
       "name": "Vanier Library Building",
       "coordinates": [
-        { "latitude": 45.45931317341766, "longitude": -73.63866511498837 },
-        { "latitude": 45.45915702171947, "longitude": -73.63878849659288 },
-        { "latitude": 45.45919464867425, "longitude": -73.63889042052703 },
-        { "latitude": 45.459091174488194, "longitude": -73.63896820458206 },
-        { "latitude": 45.45904978476062, "longitude": -73.6388635984391 },
-        { "latitude": 45.45884847974324, "longitude": -73.63902721317551 },
-        { "latitude": 45.458632123082104, "longitude": -73.63846663153767 },
-        { "latitude": 45.45896512385879, "longitude": -73.63820913948784 },
-        { "latitude": 45.45890115776002, "longitude": -73.63800260939931 },
-        { "latitude": 45.45910152191424, "longitude": -73.63784704128929 },
-        { "latitude": 45.45921064012132, "longitude": -73.6381326965258 },
-        { "latitude": 45.45913350485889, "longitude": -73.63819706953683 }
+      { "latitude": 45.45931293414405, "longitude": -73.6386657538376 },
+      { "latitude": 45.459158663793566, "longitude": -73.63878645323659 },
+      { "latitude": 45.45919629074723, "longitude": -73.6388883771735 },
+      { "latitude": 45.45909093521367, "longitude": -73.63896884343949 },
+      { "latitude": 45.459049545485925, "longitude": -73.63886691950258 },
+      { "latitude": 45.45885764726021, "longitude": -73.63901712319908 },
+      { "latitude": 45.45872783338428, "longitude": -73.63871671580607 },
+      { "latitude": 45.45920946017509, "longitude": -73.63839485074212 }
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
       "popUp": { "name": "Vanier Library Building","address": "7141 Sherbrooke St W, Montreal, Quebec H4B 1R6", "codes":"Class Codes: VL"},
-      "markerCoord": { "latitude": 45.45908740777437, "longitude": -73.63861054581692 }
-    },
+      "markerCoord": { "latitude": 45.45910034196574,  "longitude": -73.63869257592627 }
+      },
+      {
+        "name": "Vanier Extension",
+        "coordinates": [
+        { "latitude": 45.45872783338428, "longitude": -73.63871671580607 },
+        { "latitude": 45.45920946017509, "longitude": -73.63839485074212 },
+        { "latitude": 45.45913232491104, "longitude": -73.63819636728603 },
+        { "latitude": 45.4592132228682, "longitude": -73.63813199427322 },
+        { "latitude": 45.45910034196574, "longitude": -73.63785036234228 },
+        { "latitude": 45.458904681199485, "longitude": -73.63800056603878 },
+        { "latitude": 45.45895359645469, "longitude": -73.63819904949489 },
+        { "latitude": 45.45863188380562, "longitude": -73.63846995259037 }
+        ],
+        "fillColor": "#800000",
+        "strokeColor": "#000000",
+        "popUp": { "name": "Vanier Extension","address": "7141 Sherbrooke St W, Montreal, Quebec H4B 1R6", "codes":"Class Codes: VL"},
+        "markerCoord": { "latitude": 45.45900063031391, "longitude": -73.6381588163619 }
+        },
     {
       "name": "Oscar Peterson Concert Hall",
       "coordinates": [
