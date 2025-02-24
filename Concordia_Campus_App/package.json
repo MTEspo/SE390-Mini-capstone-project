@@ -7,7 +7,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "test": "jest",
+    "test": "jest --ci --reporters=default --reporters=jest-junit",
     "test:coverage": "jest --coverage",
     "uploadCodeCove": "codecov",
     "clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install"
@@ -27,6 +27,15 @@
       "**/__tests__/*.js"
     ]
   },
+  "jest-junit": {
+    "outputDirectory": "reports",
+    "outputName": "jest-junit.xml",
+    "ancestorSeparator": " › ",
+    "uniqueOutputName": "false",
+    "suiteNameTemplate": "{filepath}",
+    "classNameTemplate": "{classname}",
+    "titleTemplate": "{title}"
+  },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5.0.6",
     "@react-native-async-storage/async-storage": "^2.1.1",
@@ -44,6 +53,7 @@
     "expo-status-bar": "~2.0.1",
     "expo-web-browser": "^14.0.2",
     "geolib": "^3.3.4",
+    "jest-junit": "^16.0.0",
     "moment-timezone": "^0.5.47",
     "react": "18.3.1",
     "react-native": "0.76.6",

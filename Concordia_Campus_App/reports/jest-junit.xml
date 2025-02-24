@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="36" failures="0" errors="0" time="4.725">
+  <testsuite name="__tests__\locationUtils.test.js" errors="0" failures="0" skipped="0" timestamp="2025-02-24T19:05:33" time="1.213" tests="2">
+    <testcase classname="getLocation" name="returns location coordinates when permission is granted" time="0.011">
+    </testcase>
+    <testcase classname="getLocation" name="returns null when permission is denied" time="0.009">
+    </testcase>
+  </testsuite>
+  <testsuite name="__tests__\CalendarUtils.test.js" errors="0" failures="0" skipped="0" timestamp="2025-02-24T19:05:33" time="1.269" tests="3">
+    <testcase classname="Calender Utils tests" name="gets tokens from url" time="0.05">
+    </testcase>
+    <testcase classname="Calender Utils tests" name="gets formated date and time from dateTime" time="0.022">
+    </testcase>
+    <testcase classname="Calender Utils tests" name="returns N/A if no dateTime is provided" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="__tests__\RouteInfoContainer.test.js" errors="0" failures="0" skipped="0" timestamp="2025-02-24T19:05:33" time="1.583" tests="1">
+    <testcase classname="Route Info Container Component" name="renders correctly" time="0.138">
+    </testcase>
+  </testsuite>
+  <testsuite name="__tests__\MapScreen.test.js" errors="0" failures="0" skipped="0" timestamp="2025-02-24T19:05:33" time="1.61" tests="1">
+    <testcase classname="handleCampusDirections" name="should show directions when &quot;Get directions&quot; button is pressed" time="0.252">
+    </testcase>
+  </testsuite>
+  <testsuite name="__tests__\TransitOptions.test.js" errors="0" failures="0" skipped="0" timestamp="2025-02-24T19:05:33" time="1.836" tests="4">
+    <testcase classname="TransitScreen Component" name="renders correctly" time="0.349">
+    </testcase>
+    <testcase classname="TransitScreen Component" name="shows directions when button is pressed" time="0.006">
+    </testcase>
+    <testcase classname="TransitScreen Component" name="sets default mode to driving" time="0.015">
+    </testcase>
+    <testcase classname="TransitScreen Component" name="updates mode when mode buttons are pressed" time="0.016">
+    </testcase>
+  </testsuite>
+  <testsuite name="__tests__\ShuttleArrival.test.js" errors="0" failures="0" skipped="0" timestamp="2025-02-24T19:05:33" time="1.847" tests="2">
+    <testcase classname="ArrivalDisplay Component" name="renders weekday schedule correctly" time="0.468">
+    </testcase>
+    <testcase classname="ArrivalDisplay Component" name="shows no more buses message when all buses have passed" time="0.016">
+    </testcase>
+  </testsuite>
+  <testsuite name="__tests__\MapDirections.test.js" errors="0" failures="0" skipped="0" timestamp="2025-02-24T19:05:33" time="1.865" tests="3">
+    <testcase classname="MapDirections component" name="should render null when userLocation or destinationLocation is missing" time="0.086">
+    </testcase>
+    <testcase classname="MapDirections component" name="should render Marker and MapViewDirections when userLocation and destinationLocation are provided" time="0.008">
+    </testcase>
+    <testcase classname="MapDirections component" name="should render MapViewDirections with correct origin and destination coordinates" time="0.015">
+    </testcase>
+  </testsuite>
+  <testsuite name="__tests__\ShuttleBusMarker.test.js" errors="0" failures="0" skipped="0" timestamp="2025-02-24T19:05:33" time="1.97" tests="5">
+    <testcase classname="ShuttleBusMarker" name="renders all shuttle stop markers" time="0.273">
+    </testcase>
+    <testcase classname="ShuttleBusMarker" name="stores cookie from initial fetch" time="0.08">
+    </testcase>
+    <testcase classname="ShuttleBusMarker" name="handles marker press correctly" time="0.142">
+    </testcase>
+    <testcase classname="ShuttleBusMarker" name="renders bus markers when shuttle marker pressed" time="0.016">
+    </testcase>
+    <testcase classname="ShuttleBusMarker" name="handles bottom sheet changes correctly" time="0.015">
+    </testcase>
+  </testsuite>
+  <testsuite name="__tests__\Calendar.test.js" errors="0" failures="0" skipped="0" timestamp="2025-02-24T19:05:33" time="2.895" tests="6">
+    <testcase classname="Calendar Tests That Should Pass" name="renders sign-in button when no session exists" time="0.079">
+    </testcase>
+    <testcase classname="Calendar Tests That Should Pass" name="calls googleSignIn on button press" time="0.096">
+    </testcase>
+    <testcase classname="Calendar Tests That Should Pass" name="renders sign-out button after sign-in" time="0.078">
+    </testcase>
+    <testcase classname="Calendar Tests That Should Pass" name="calls googleSignOut on button press" time="0.077">
+    </testcase>
+    <testcase classname="Calendar Tests That Should Pass" name="renders calendars after sign-in" time="0.032">
+    </testcase>
+    <testcase classname="Calendar Tests That Should Pass" name="get calendars and events" time="0.078">
+    </testcase>
+  </testsuite>
+  <testsuite name="__tests__\PopUp.test.js" errors="0" failures="0" skipped="0" timestamp="2025-02-24T19:05:33" time="3.147" tests="5">
+    <testcase classname="BuildingPopup" name="renders correctly" time="0.029">
+    </testcase>
+    <testcase classname="BuildingPopup" name="calls onClose when close button is pressed" time="0.003">
+    </testcase>
+    <testcase classname="BuildingPopup" name="does not render when building is null" time="0.015">
+    </testcase>
+    <testcase classname="MapScreen" name="renders polygons with correct colors" time="0.08">
+    </testcase>
+    <testcase classname="MapScreen" name="renders BuildingPopup when polygon is pressed" time="0.046">
+    </testcase>
+  </testsuite>
+  <testsuite name="__tests__\ViewButtons.test.js" errors="0" failures="0" skipped="0" timestamp="2025-02-24T19:05:33" time="3.194" tests="2">
+    <testcase classname="MapScreen Toggle Button Tests" name="should render toggle buttons correctly" time="0.115">
+    </testcase>
+    <testcase classname="MapScreen Toggle Button Tests" name="should update active button correctly when pressing SGW, Loyola, or User Location" time="0.076">
+    </testcase>
+  </testsuite>
+  <testsuite name="__tests__\Startdestination.test.js" errors="0" failures="0" skipped="0" timestamp="2025-02-24T19:05:33" time="3.442" tests="2">
+    <testcase classname="BuildingDirectionsMapScreen - Start and Destination Selection" name="displays different colored buildings when both start and destination buildings are selected" time="0.126">
+    </testcase>
+    <testcase classname="BuildingDirectionsMapScreen - Start and Destination Selection" name="sets the current building as start when &quot;Use My Current Location&quot; is pressed" time="0.062">
+    </testcase>
+  </testsuite>
+</testsuites>
