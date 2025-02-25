@@ -43,6 +43,7 @@ const MapScreen = ({route}) => {
   const [centerOnUserLocation, setCenterOnUserLocation] = useState(true);
   const [isUserLocationFetched, setIsUserLocationFetched] = useState(false);
   const [activeButton, setActiveButton] = useState('user');
+  const [activeCampusDirections, setActiveCampusDirectiosn] = useState(false);
   const {destinationLoc} = route.params || {};
   const {destinationCoords} = route.params || {};
   const [destinationActive, setDestinationActive] = useState(false);
@@ -52,6 +53,7 @@ const MapScreen = ({route}) => {
     setShowBuildingDirections(false);
     setSelectedStart(null);
     setSelectedEnd(null);
+    setActiveCampusDirectiosn(false);
   };
   
   const campusLocations = {
@@ -256,6 +258,7 @@ const MapScreen = ({route}) => {
       setActiveButton('SGW');
       setDestinationActive(false);
       setToggleMapDirections(false);
+      setActiveCampusDirectiosn(false);
     }
   };
   
@@ -283,6 +286,7 @@ const MapScreen = ({route}) => {
       setActiveButton('Loyola');
       setDestinationActive(false);
       setToggleMapDirections(false);
+      setActiveCampusDirectiosn(false);
     }
   };
 
@@ -316,6 +320,7 @@ const handleUserLocation = () => {
   setSelectedBuilding(null);
   setSelectedMarker(null);
   setActiveButton('user');
+  setActiveCampusDirectiosn(false);
   setEta(null);
   setDistance(null);
 };
@@ -326,6 +331,14 @@ const handleUserLocation = () => {
     setSelectedStart(null);
     setSelectedEnd(null);
     setShowBuildingDirections(false);
+    setActiveCampusDirectiosn(true);
+
+    if(activeCampusDirections){
+      setShowDirections(false);
+      setEta(null);
+      setDistance(null);
+      setActiveCampusDirectiosn(false);
+    }
   };
 
   const handleBuildingDirections = async () => {
@@ -627,33 +640,41 @@ const handleUserLocation = () => {
       <View style={styles.toggleButtonContainer}>
         {currentScreen === 'Map' ? (
           <>
-        <TouchableOpacity
-          style={activeButton === 'SGW' ? styles.sgwButtonActive : styles.sgwButton}
-          onPress={handleSelectSGW}
-          testID="sgwButton"
-        >
-          <Text style={activeButton === 'SGW' ? styles.highlightedText : styles.normalText}>SGW</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={activeButton === 'Loyola' ? styles.loyolaButtonActive : styles.loyolaButton}
-          onPress={handleSelectLoyola}
-          testID="loyolaButton"
-        >
-          <Text style={activeButton === 'Loyola' ? styles.highlightedText : styles.normalText}>LOY</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={activeButton === 'user' ? styles.userLocationButtonActive : styles.userLocationButton}
-          onPress={handleUserLocation}
-          testID="userLocationButton"
-        >
-          <Icon name="user" size={20} color={activeButton === 'user' ? 'blue' : 'white'} />
-        </TouchableOpacity>
-        {activeButton !== 'user' && (
-          <TouchableOpacity style={styles.directionsButton} onPress={handleCampusDirections} testID="directions-button">
-            <Text style={styles.directionsButtonText}>{directionsText}</Text>
-          </TouchableOpacity>
-        )}
-                    <TouchableOpacity style={styles.directionsButton} onPress={handleBuildingDirections}>
+            <TouchableOpacity
+              style={activeButton === 'SGW' ? styles.sgwButtonActive : styles.sgwButton}
+              onPress={handleSelectSGW}
+              testID="sgwButton"
+            >
+              <Text style={activeButton === 'SGW' ? styles.highlightedText : styles.normalText}>SGW</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={activeButton === 'Loyola' ? styles.loyolaButtonActive : styles.loyolaButton}
+              onPress={handleSelectLoyola}
+              testID="loyolaButton"
+            >
+              <Text style={activeButton === 'Loyola' ? styles.highlightedText : styles.normalText}>LOY</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={activeButton === 'user' ? styles.userLocationButtonActive : styles.userLocationButton}
+              onPress={handleUserLocation}
+              testID="userLocationButton"
+            >
+              <Icon name="user" size={20} color={activeButton === 'user' ? 'blue' : 'white'} />
+            </TouchableOpacity>
+            
+            {activeButton !== 'user' && (
+              <TouchableOpacity 
+                style={(!activeCampusDirections) ? styles.directionsButton : styles.directionsButtonActive} 
+                onPress={handleCampusDirections} 
+                testID="directions-button"
+              >
+                <Text style={(!activeCampusDirections) ? styles.directionsButtonText: styles.highlightedText}>{(!activeCampusDirections) ? directionsText : "Cancel Directions"}</Text>
+              </TouchableOpacity>
+            )}
+            
+            <TouchableOpacity style={styles.directionsButton} onPress={handleBuildingDirections}>
               <Text style={styles.directionsButtonText}>Building Directions</Text>
             </TouchableOpacity>
           </>

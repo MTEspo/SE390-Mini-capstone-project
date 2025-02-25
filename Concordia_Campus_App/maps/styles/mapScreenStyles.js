@@ -232,7 +232,20 @@ modeText: {
     fontSize: 15,
     fontWeight: 'bold',
     marginHorizontal: 15,
- }, 
+ },
+ directionsButtonActive: {
+  backgroundColor: 'white', 
+  borderRadius: 10,
+  paddingVertical: 8,
+  paddingHorizontal: 15,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderWidth: 1,
+  borderColor: 'black',
+  marginTop: 5,
+  flexDirection: 'row',
+  width: 'auto',
+ }
 });
 
 export default styles;
