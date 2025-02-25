@@ -43,7 +43,7 @@ const MapScreen = ({route}) => {
   const [centerOnUserLocation, setCenterOnUserLocation] = useState(true);
   const [isUserLocationFetched, setIsUserLocationFetched] = useState(false);
   const [activeButton, setActiveButton] = useState('user');
-  const [activeCampusDirections, setActiveCampusDirectiosn] = useState(false);
+  const [activeCampusDirections, setActiveCampusDirections] = useState(false);
   const {destinationLoc} = route.params || {};
   const {destinationCoords} = route.params || {};
   const [destinationActive, setDestinationActive] = useState(false);
@@ -53,7 +53,7 @@ const MapScreen = ({route}) => {
     setShowBuildingDirections(false);
     setSelectedStart(null);
     setSelectedEnd(null);
-    setActiveCampusDirectiosn(false);
+    setActiveCampusDirections(false);
   };
   
   const campusLocations = {
@@ -259,7 +259,7 @@ const MapScreen = ({route}) => {
       setActiveButton('SGW');
       setDestinationActive(false);
       setToggleMapDirections(false);
-      setActiveCampusDirectiosn(false);
+      setActiveCampusDirections(false);
     }
   };
   
@@ -287,7 +287,7 @@ const MapScreen = ({route}) => {
       setActiveButton('Loyola');
       setDestinationActive(false);
       setToggleMapDirections(false);
-      setActiveCampusDirectiosn(false);
+      setActiveCampusDirections(false);
     }
   };
 
@@ -321,7 +321,7 @@ const handleUserLocation = () => {
   setSelectedBuilding(null);
   setSelectedMarker(null);
   setActiveButton('user');
-  setActiveCampusDirectiosn(false);
+  setActiveCampusDirections(false);
   setEta(null);
   setDistance(null);
 };
@@ -332,13 +332,13 @@ const handleUserLocation = () => {
     setSelectedStart(null);
     setSelectedEnd(null);
     setShowBuildingDirections(false);
-    setActiveCampusDirectiosn(true);
+    setActiveCampusDirections(true);
 
     if(activeCampusDirections){
       setShowDirections(false);
       setEta(null);
       setDistance(null);
-      setActiveCampusDirectiosn(false);
+      setActiveCampusDirections(false);
     }
   };
 
