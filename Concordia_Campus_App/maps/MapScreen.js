@@ -720,7 +720,10 @@ const handleUserLocation = () => {
           );
         })}
         
-        <TransitScreen showDirections={showDirections} campus={campus} routeData={handleDirectionsToMap}/>
+        {showDirections && (
+          <TransitScreen showDirections={showDirections} campus={campus} routeData={handleDirectionsToMap}/>
+        )}
+        
           
         {currentScreen === 'Building Map Directions' ? (
           <>
