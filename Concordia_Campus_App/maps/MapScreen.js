@@ -761,11 +761,11 @@ const handleUserLocation = () => {
       </MapView>
       
       {currentScreen === "Map" ? (
-              <BuildingPopup
-              building={selectedBuilding}
-              onClose={handleClosePopup}
-              testID="building-popup" 
-            />
+        <BuildingPopup
+          building={selectedBuilding}
+          onClose={handleClosePopup}
+          testID="building-popup" 
+        />
       ) : null}
       
       {currentScreen === 'Building Map Directions' ? (
