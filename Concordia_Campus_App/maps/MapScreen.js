@@ -684,9 +684,11 @@ const handleUserLocation = () => {
         <Marker coordinate={location} title={location.title} description={location.description} />
         <Marker coordinate={destinationLocation} title={destinationLocation.title} description={destinationLocation.description} />
   
-        <ShuttleBusMarker setToggleMapDirections={setToggleMapDirections} setShuttleStop={setShuttleStop} />
-  
-        {toggleMapDirections && userLocation && shuttleStop && (
+        {!showDirections && (
+          <ShuttleBusMarker setToggleMapDirections={setToggleMapDirections} setShuttleStop={setShuttleStop} />
+        )}  
+
+        {!showDirections && toggleMapDirections && userLocation && shuttleStop && (
           <MapDirections userLocation={userLocation} destinationLocation={shuttleStop} />
         )}
 
@@ -720,7 +722,10 @@ const handleUserLocation = () => {
           );
         })}
         
-        <TransitScreen showDirections={showDirections} campus={campus} routeData={handleDirectionsToMap}/>
+        {showDirections && (
+          <TransitScreen showDirections={showDirections} campus={campus} routeData={handleDirectionsToMap}/>
+        )}
+        
           
         {currentScreen === 'Building Map Directions' ? (
           <>
@@ -768,7 +773,10 @@ const handleUserLocation = () => {
         </TouchableOpacity>
       ) : null} 
 
+      {showDirections && (
         <RouteInfoContainer eta={eta} distance={distance}/>
+      )}
+        
     </View>
   );
 };
