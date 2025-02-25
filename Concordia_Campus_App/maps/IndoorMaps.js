@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import ReactNativeZoomableView from "@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView";
 
 const IndoorMaps = () => {
   // Available buildings and floors with images for the buildings
@@ -85,12 +86,38 @@ const IndoorMaps = () => {
 
       {/* Display Floor Plan */}
       <View style={styles.overlay}>
-        {/* Floor Plan Image */}
-        {floorPlan ? (
-          <Image source={floorPlan} style={styles.image} />
-        ) : (
-          <Text style={styles.errorText}>Floor plan not available</Text>
-        )}
+      <ScrollView 
+          horizontal 
+          contentContainerStyle={styles.horizontalScrollView}
+          showsHorizontalScrollIndicator={false}
+          style={styles.scrollViewContainer}
+        >
+                  {/* Zoomable Image Container */}
+          <View style={styles.zoomableContainer}>
+            {/* Zoomable View */}
+            {floorPlan ? (
+              <ReactNativeZoomableView
+                maxZoom={3.0} // Max zoom level
+                minZoom={1.0} // Min zoom level
+                bindToBorders={true} // Ensures the image stays within bounds when zoomed out
+                zoomStep={0.5} // Zoom step
+                pinchToZoomIn={true} // Allow pinch zoom
+                pinchToZoomOut={true} // Allow pinch zoom out
+                contentWidth={1000} // Allow width to adjust dynamically
+                contentHeight={1000} // Allow height to adjust dynamically
+                style={styles.zoomableView}
+              >
+                <Image
+                  source={floorPlan}
+                  style={styles.image}
+                  resizeMode="contain" // Ensure image scales correctly within container
+                />
+              </ReactNativeZoomableView>
+            ) : (
+              <Text style={styles.errorText}>Floor plan not available</Text>
+            )}
+          </View>
+        </ScrollView>
       </View>
 
       {/* Floor Buttons Container */}
@@ -125,9 +152,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
   },
   header: {
-    flexDirection: 'row',  // Arrange search bar and picker horizontally
-    alignItems: 'center',  // Vertically center them
-    justifyContent: 'flex-start',  // Align items to the left
+    flexDirection: 'row',  
+    alignItems: 'center',  
+    justifyContent: 'flex-start',  
     width: '100%',
     marginBottom: 20,
     zIndex: 2,
@@ -153,10 +180,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 1,
   },
+   zoomableContainer: {
+    position: 'relative', // Create the positioning context for the zoomable image
+    width: '100%',
+    height: 600, // Fixed height for zoomable image
+  },
+  zoomableView: {
+    width: '100%', 
+    height: 600, 
+    alignSelf: 'center',
+  },
   image: {
     width: 600,
     height: 600,
-    marginBottom: 20,
     alignSelf: 'center',
   },
   errorText: {
@@ -187,11 +223,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     margin: 5,
-    width: 60,  // Adjust width for a cleaner layout
+    width: 60, 
     alignItems: 'center',
   },
   selectedButton: {
-    backgroundColor: '#FF4D00', // Highlight selected floor button
+    backgroundColor: '#FF4D00', 
   },
   floorButtonText: {
     color: '#fff',
