@@ -194,23 +194,26 @@ const MapScreen = ({route}) => {
   }
 
   const handlePolygonPress = (building) => {
-    if(!selectedStart){
-      setSelectedStart(building.markerCoord);
-      setShowBuildingDirections(false);
-    } else if (!selectedEnd) {
-      setSelectedEnd(building.markerCoord);
-      setShowBuildingDirections(false);
-    } else {
-      setSelectedStart(building.markerCoord);
-      setSelectedEnd(null);
+    if(currentScreen === "Building Map Directions"){
+      if(!selectedStart){
+        setSelectedStart(building.markerCoord);
+        setShowBuildingDirections(false);
+      } else if (!selectedEnd) {
+        setSelectedEnd(building.markerCoord);
+        setShowBuildingDirections(false);
+      } else {
+        setSelectedStart(building.markerCoord);
+        setSelectedEnd(null);
+        setShowBuildingDirections(false);
+      }
+    }else{
+      setSelectedBuilding(building);
+      setSelectedMarker({
+        latitude: building.markerCoord.latitude,
+        longitude: building.markerCoord.longitude
+      });
       setShowBuildingDirections(false);
     }
-    setSelectedBuilding(building);
-    setSelectedMarker({
-      latitude: building.markerCoord.latitude,
-      longitude: building.markerCoord.longitude
-    });
-    setShowBuildingDirections(false);
   };
 
   const handleClosePopup = () => {
@@ -483,7 +486,7 @@ const handleUserLocation = () => {
         <View style={styles.searchBarContainer}>
           <GooglePlacesAutocomplete
             fetchDetails={true}
-            placeholder="Search Building or Class..."
+            placeholder="Search for Point of Interest..."
             styles={{
               textInput: styles.searchBar,
             }}
@@ -714,7 +717,6 @@ const handleUserLocation = () => {
           const isDestinationCoords = building.name === destinationCoords;
           const polygonFillColor = (isDestinationCoords || isDestinationLoc) && destinationActive ? 'orange' : building.fillColor; // Set to red if it's the destination building
 
-
           return (
             <Polygon
               key={index}
@@ -728,10 +730,8 @@ const handleUserLocation = () => {
           );
         })}
         
-          <TransitScreen showDirections={showDirections} campus={campus} routeData={handleDirectionsToMap} />
+        <TransitScreen showDirections={showDirections} campus={campus} routeData={handleDirectionsToMap} />
 
-        
-          
         {currentScreen === 'Building Map Directions' ? (
           <>
             {buildingsData.buildings.map((building) => {
