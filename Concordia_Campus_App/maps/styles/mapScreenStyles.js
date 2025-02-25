@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
      fontWeight: 'bold'
  }, 
  routeInfoContainer: {
+  zIndex: 1,
   position: 'absolute', 
   bottom: 60, 
   width: '90%',
@@ -153,6 +154,8 @@ const styles = StyleSheet.create({
   backgroundColor: '#800000',
   padding: 10,
   borderRadius: 10,
+  borderColor: 'black',
+  borderWidth: 0.5,
 },
 routeInfoText: {
   fontSize: 16,
@@ -171,14 +174,14 @@ modeContainer: {
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
-  //backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent background
   borderRadius: 20,
   paddingHorizontal: 10,
   paddingVertical: 5,
   width: 220, // Adjust the width of the container
-  marginBottom: 60
+  marginBottom: 60,
 },
 modeButton: { 
+  zIndex: 1,
   marginHorizontal: 15,
   backgroundColor: '#800000',
   paddingVertical: 10,
@@ -186,6 +189,8 @@ modeButton: {
   borderRadius: 20,
   justifyContent: 'center',
   alignItems: 'center',
+  borderWidth: 0.5,
+  borderColor: 'black',
 },
 modeText: { 
   fontSize: 16,

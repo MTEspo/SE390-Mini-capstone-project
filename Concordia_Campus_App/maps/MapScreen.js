@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import 'react-native-get-random-values';
-import { View, Text, TouchableOpacity, Image, StyleSheet, FlatList, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList, TextInput, Alert} from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; 
 import buildingsData from './buildingCoordinates.js';
@@ -229,6 +229,7 @@ const MapScreen = ({route}) => {
     setDistance(result.distance);
   };
 
+  // Gets direction data from the TransitOptions component and returns it to the map screen.
   const handleDirectionsToMap = (eta, distance) => {
     setEta(eta);
     setDistance(distance);
@@ -378,14 +379,14 @@ const handleUserLocation = () => {
     }
   };
 
- useEffect(() => {
-    return () => {
-      setShowBuildingDirections(false);
-      setShowDirections(false);
-      setEta(null);
-      setDistance(null);
-    };
-  }, []);
+  useEffect(() => {
+      return () => {
+        setShowBuildingDirections(false);
+        setShowDirections(false);
+        setEta(null);
+        setDistance(null);
+      };
+    }, []);
 
 
   const fetchUserLocation = async () => {
@@ -490,8 +491,6 @@ const handleUserLocation = () => {
       }
     }
   }, [destinationCoords]);
-  
-  
 
   return (
     <View style={styles.container}>
