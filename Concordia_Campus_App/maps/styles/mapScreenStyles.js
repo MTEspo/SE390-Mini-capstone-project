@@ -52,7 +52,9 @@ const styles = StyleSheet.create({
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 5
+    marginRight: 5,
+    borderWidth: 1,
+    borderColor: 'black',
   },
   sgwButtonActive: {
     backgroundColor: 'white', 
@@ -74,7 +76,9 @@ const styles = StyleSheet.create({
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 5
+    marginRight: 5,
+    borderWidth: 1,
+    borderColor: 'black'
   },
   loyolaButtonActive: {
     backgroundColor: 'white', 
@@ -96,7 +100,9 @@ const styles = StyleSheet.create({
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 5
+    marginRight: 5,
+    borderWidth: 1,
+    borderColor: 'black'
   },
   userLocationButtonActive: {
     backgroundColor: 'white', 
@@ -118,7 +124,7 @@ const styles = StyleSheet.create({
   highlightedText: {
     fontSize: 16,
     color: 'blue',
-     fontWeight: 'bold'
+    fontWeight: 'bold'
   },
   directionsButton: {
     backgroundColor: '#800000',
@@ -129,6 +135,8 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     flexDirection: 'row',
     width: 'auto',
+    borderWidth: 1,
+    borderColor: 'black'
   },
   directionsButtonText: {
     color: 'white',
@@ -196,7 +204,35 @@ modeText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold'
-  }
+  },
+  searchResultItem: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+  },
+  searchResultItemNoBorder: {
+    backgroundColor: 'white',
+    padding: 10,
+  },
+  flatListResult: {
+    borderRadius: 5
+  },
+  useCurrentLocationBtn: {
+    backgroundColor: '#800000',
+    borderRadius: 10,
+    paddingVertical: 8,
+    marginTop: 5,
+    borderWidth: 1,
+    borderColor: 'black',
+    alignSelf: 'flex-start',
+  },
+  useCurrentLocationText: {
+    color: 'white',
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginHorizontal: 15,
+ }, 
 });
 
 export default styles;

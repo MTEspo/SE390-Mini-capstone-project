@@ -46,6 +46,7 @@ const MapScreen = ({route}) => {
   const {destinationLoc} = route.params || {};
   const {destinationCoords} = route.params || {};
   const [destinationActive, setDestinationActive] = useState(false);
+  const [searchResultBgrndColor, setSearchResultBgrndColor] = useState(false);
   const [mode, setMode] = useState('DRIVING');
 
   const handleReturn = () => {
@@ -520,7 +521,7 @@ const handleUserLocation = () => {
             <TextInput
               style={[
                 styles.searchBar,
-                { backgroundColor: '#800000', color: '#FFFFFF', width: '100%' },
+                { backgroundColor: '#800000', color: '#FFFFFF', width: '100%', borderColor: 'black' },
               ]}
               placeholder="Select Start Building..."
               placeholderTextColor="#FFFFFF"
@@ -530,9 +531,10 @@ const handleUserLocation = () => {
             />
             {filteredStartBuildings.length > 0 && (
               <FlatList
+                style={styles.flatListResult}
                 data={filteredStartBuildings}
                 keyExtractor={(item) => item.name}
-                renderItem={({ item }) => (
+                renderItem={({ item, index }) => (
                   <TouchableOpacity
                     onPress={() => {
                       setSelectedStartBuilding(item);
@@ -541,13 +543,13 @@ const handleUserLocation = () => {
                       setFilteredStartBuildings([]);
                     }}
                   >
-                    <Text style={styles.searchResultItem}>{item.name}</Text>
+                    <Text style={(index === filteredStartBuildings.length - 1 ) ? styles.searchResultItemNoBorder : styles.searchResultItem}>{item.name}</Text>
                   </TouchableOpacity>
                 )}
               />
             )}
-            <TouchableOpacity style={styles.useLocationButton} onPress={handleUseCurrentLocation}>
-              <Text style={styles.useLocationButtonText}>Use My Current Location</Text>
+            <TouchableOpacity style={styles.useCurrentLocationBtn} onPress={handleUseCurrentLocation}>
+              <Text style={styles.useCurrentLocationText}>Use My Current Location</Text>
             </TouchableOpacity>
             <TextInput
               style={[
@@ -557,6 +559,7 @@ const handleUserLocation = () => {
                   color: '#FFFFFF',
                   width: '100%',
                   marginTop: 10,
+                  borderColor: 'black'
                 },
               ]}
               placeholder="Select Destination Building..."
@@ -567,17 +570,20 @@ const handleUserLocation = () => {
             />
             {filteredDestinationBuildings.length > 0 && (
               <FlatList
+                style={styles.flatListResult}
                 data={filteredDestinationBuildings}
                 keyExtractor={(item) => item.name}
-                renderItem={({ item }) => (
+                renderItem={({ item, index }) => (
                   <TouchableOpacity
+                    style={(index === filteredDestinationBuildings.length - 1 ) ? styles.searchResultItemNoBorder : styles.searchResultItem}
+                    activeOpacity={0.6}
                     onPress={() => {
                       setSelectedDestination(item);
                       setDestinationQuery(item.name);
                       setFilteredDestinationBuildings([]);
                     }}
                   >
-                    <Text style={styles.searchResultItem}>{item.name}</Text>
+                    <Text style={ (searchResultBgrndColor) ? styles.searchResultItemClicked : true }>{item.name}</Text>
                   </TouchableOpacity>
                 )}
               />
@@ -603,7 +609,7 @@ const handleUserLocation = () => {
               ]}
               onPress={handleReturn}
             >
-              <Text style={[styles.searchResultItem, { color: '#FFFFFF', textAlign: 'center' }]}>
+              <Text style={{ color: '#FFFFFF', textAlign: 'center' }}>
                 Return
               </Text>
             </TouchableOpacity>
@@ -644,11 +650,7 @@ const handleUserLocation = () => {
               <Text style={styles.directionsButtonText}>Building Directions</Text>
             </TouchableOpacity>
           </>
-        ) : (
-          <TouchableOpacity style={styles.returnButton} onPress={handleReturn}>
-            <Text style={styles.returnButtonText}>Return</Text>
-          </TouchableOpacity>
-         )}
+        ) : (null)}
       </View>
   
       <MapView
