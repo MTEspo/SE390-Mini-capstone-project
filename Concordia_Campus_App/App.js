@@ -8,7 +8,6 @@ import { StatusBar } from 'expo-status-bar';
 import Calendar from './calendar/calendar';
 import { PaperProvider } from 'react-native-paper';
 import FullShuttleSchedule from './shuttle_bus/full_schedule'
-import IndoorMaps from './maps/IndoorMaps.js';
 
 
 
@@ -23,7 +22,6 @@ export default function App() {
         <Drawer.Screen name="Map" component={MapScreen}/>
         <Drawer.Screen name="Calendar" component={Calendar} />
         <Drawer.Screen name="Shuttle Bus Schedule" component={FullShuttleSchedule} />
-        <Drawer.Screen name="Indoor map" component={IndoorMaps}/>
       </Drawer.Navigator>
     </NavigationContainer>
     </PaperProvider>
