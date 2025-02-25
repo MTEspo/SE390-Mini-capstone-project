@@ -46,8 +46,6 @@ const MapScreen = ({route}) => {
   const {destinationLoc} = route.params || {};
   const {destinationCoords} = route.params || {};
   const [destinationActive, setDestinationActive] = useState(false);
-  const [searchResultBgrndColor, setSearchResultBgrndColor] = useState(false);
-  const [mode, setMode] = useState('DRIVING');
 
   const handleReturn = () => {
     setCurrentScreen("Map");
@@ -333,6 +331,8 @@ const handleUserLocation = () => {
       setCurrentScreen("Building Map Directions");
       setSelectedStartBuilding(null);
       setSelectedDestination(null);
+      setEta(null);
+      setDistance(null);
       let closestCampus = null;
       let minDistance = Infinity;
       for(const loc in campusLocations){
@@ -370,6 +370,7 @@ const handleUserLocation = () => {
       setDistance(null);
     };
   }, []);
+
 
   const fetchUserLocation = async () => {
     const location = await getLocation();
@@ -536,6 +537,8 @@ const handleUserLocation = () => {
                 keyExtractor={(item) => item.name}
                 renderItem={({ item, index }) => (
                   <TouchableOpacity
+                    style={(index === filteredStartBuildings.length - 1 ) ? styles.searchResultItemNoBorder : styles.searchResultItem}
+                    activeOpacity={0.6}
                     onPress={() => {
                       setSelectedStartBuilding(item);
                       setSelectedStart(item.markerCoord);
@@ -543,7 +546,7 @@ const handleUserLocation = () => {
                       setFilteredStartBuildings([]);
                     }}
                   >
-                    <Text style={(index === filteredStartBuildings.length - 1 ) ? styles.searchResultItemNoBorder : styles.searchResultItem}>{item.name}</Text>
+                    <Text>{item.name}</Text>
                   </TouchableOpacity>
                 )}
               />
@@ -579,11 +582,12 @@ const handleUserLocation = () => {
                     activeOpacity={0.6}
                     onPress={() => {
                       setSelectedDestination(item);
+                      setSelectedEnd(item.markerCoord);
                       setDestinationQuery(item.name);
                       setFilteredDestinationBuildings([]);
                     }}
                   >
-                    <Text style={ (searchResultBgrndColor) ? styles.searchResultItemClicked : true }>{item.name}</Text>
+                    <Text>{item.name}</Text>
                   </TouchableOpacity>
                 )}
               />
@@ -724,9 +728,8 @@ const handleUserLocation = () => {
           );
         })}
         
-        {showDirections && (
-          <TransitScreen showDirections={showDirections} campus={campus} routeData={handleDirectionsToMap}/>
-        )}
+          <TransitScreen showDirections={showDirections} campus={campus} routeData={handleDirectionsToMap} />
+
         
           
         {currentScreen === 'Building Map Directions' ? (
@@ -775,9 +778,7 @@ const handleUserLocation = () => {
         </TouchableOpacity>
       ) : null} 
 
-      {showDirections && (
-        <RouteInfoContainer eta={eta} distance={distance}/>
-      )}
+      <RouteInfoContainer eta={eta} distance={distance}/>
         
     </View>
   );

@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
  }, 
  routeInfoContainer: {
   position: 'absolute', 
-  bottom: 40, 
+  bottom: 60, 
   width: '90%',
   flexDirection: 'row', 
   justifyContent: 'space-between',
@@ -165,7 +165,7 @@ buttonImage: {
 },
 modeContainer: {
   position: 'absolute',
-  bottom: 30, // Places it right above the directions button
+  bottom: 40, // Places it right above the directions button
   left: '50%',
   transform: [{ translateX: -110 }], // Centers the container
   flexDirection: 'row',
