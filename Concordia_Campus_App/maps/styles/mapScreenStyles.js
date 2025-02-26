@@ -52,7 +52,10 @@ const styles = StyleSheet.create({
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 5
+    marginRight: 5,
+    marginBottom: 5,
+    borderWidth: 1,
+    borderColor: 'black',
   },
   sgwButtonActive: {
     backgroundColor: 'white', 
@@ -64,7 +67,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'black',
-    marginRight: 5
+    marginRight: 5,
+    marginBottom: 5,
   },
   loyolaButton: {
     backgroundColor: '#800000', 
@@ -74,7 +78,10 @@ const styles = StyleSheet.create({
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 5
+    marginRight: 5,
+    borderWidth: 1,
+    borderColor: 'black',
+    marginBottom: 5,
   },
   loyolaButtonActive: {
     backgroundColor: 'white', 
@@ -86,7 +93,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'black',
-    marginRight: 5
+    marginRight: 5,
+    marginBottom: 5,
   },
   userLocationButton: {
     backgroundColor: '#800000', 
@@ -96,7 +104,9 @@ const styles = StyleSheet.create({
     width: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 5
+    marginRight: 5,
+    borderWidth: 1,
+    borderColor: 'black'
   },
   userLocationButtonActive: {
     backgroundColor: 'white', 
@@ -118,7 +128,7 @@ const styles = StyleSheet.create({
   highlightedText: {
     fontSize: 16,
     color: 'blue',
-     fontWeight: 'bold'
+    fontWeight: 'bold'
   },
   directionsButton: {
     backgroundColor: '#800000',
@@ -129,6 +139,8 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     flexDirection: 'row',
     width: 'auto',
+    borderWidth: 1,
+    borderColor: 'black'
   },
   directionsButtonText: {
     color: 'white',
@@ -136,8 +148,9 @@ const styles = StyleSheet.create({
      fontWeight: 'bold'
  }, 
  routeInfoContainer: {
+  zIndex: 1,
   position: 'absolute', 
-  bottom: 40, 
+  bottom: 60, 
   width: '90%',
   flexDirection: 'row', 
   justifyContent: 'space-between',
@@ -145,6 +158,8 @@ const styles = StyleSheet.create({
   backgroundColor: '#800000',
   padding: 10,
   borderRadius: 10,
+  borderColor: 'black',
+  borderWidth: 0.5,
 },
 routeInfoText: {
   fontSize: 16,
@@ -157,20 +172,20 @@ buttonImage: {
 },
 modeContainer: {
   position: 'absolute',
-  bottom: 30, // Places it right above the directions button
+  bottom: 40, // Places it right above the directions button
   left: '50%',
   transform: [{ translateX: -110 }], // Centers the container
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
-  //backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent background
   borderRadius: 20,
   paddingHorizontal: 10,
   paddingVertical: 5,
   width: 220, // Adjust the width of the container
-  marginBottom: 60
+  marginBottom: 60,
 },
 modeButton: { 
+  zIndex: 1,
   marginHorizontal: 15,
   backgroundColor: '#800000',
   paddingVertical: 10,
@@ -178,6 +193,8 @@ modeButton: {
   borderRadius: 20,
   justifyContent: 'center',
   alignItems: 'center',
+  borderWidth: 0.5,
+  borderColor: 'black',
 },
 modeText: { 
   fontSize: 16,
@@ -196,7 +213,48 @@ modeText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold'
-  }
+  },
+  searchResultItem: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+  },
+  searchResultItemNoBorder: {
+    backgroundColor: 'white',
+    padding: 10,
+  },
+  flatListResult: {
+    borderRadius: 5
+  },
+  useCurrentLocationBtn: {
+    backgroundColor: '#800000',
+    borderRadius: 10,
+    paddingVertical: 8,
+    marginTop: 5,
+    borderWidth: 1,
+    borderColor: 'black',
+    alignSelf: 'flex-start',
+  },
+  useCurrentLocationText: {
+    color: 'white',
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginHorizontal: 15,
+ },
+ directionsButtonActive: {
+  backgroundColor: 'white', 
+  borderRadius: 10,
+  paddingVertical: 8,
+  paddingHorizontal: 15,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderWidth: 1,
+  borderColor: 'black',
+  marginTop: 5,
+  flexDirection: 'row',
+  width: 'auto',
+ }
 });
 
 export default styles;
