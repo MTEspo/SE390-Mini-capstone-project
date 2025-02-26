@@ -52,6 +52,18 @@ const TempMap = ({route}) =>{
         console.log("Tapped Coordinates:", latitude, longitude);
     };
 
+    const PathOverlay = () => (
+        <>
+          <Polyline
+            coordinates={[startPoint, node1, node2, node3, node4, endPoint]}
+            strokeColor="black"
+            strokeWidth={3}
+            lineDashPattern={[5, 5]}
+          />
+          <Marker coordinate={startPoint} pinColor={'green'} />
+          <Marker coordinate={endPoint} pinColor={'black'} />
+        </>
+    );
     
     const handleReturn = () => {
       setCurrentScreen("Map");
@@ -545,14 +557,7 @@ const TempMap = ({route}) =>{
                 />
                 
               )}
-              <Polyline
-                coordinates={[startPoint, node1, node2, node3, node4, endPoint]}
-                strokeColor="black"
-                strokeWidth={2}
-                lineDashPattern={[5, 5]}
-              />
-              <Marker coordinate={startPoint} pinColor={'green'} />
-              <Marker coordinate={endPoint} pinColor={'black'} />
+              <PathOverlay />
               
 
               </>
