@@ -60,8 +60,8 @@ const TempMap = ({route}) =>{
             strokeWidth={3}
             lineDashPattern={[5, 5]}
           />
-          <Marker coordinate={startPoint} pinColor={'green'} />
-          <Marker coordinate={endPoint} pinColor={'black'} />
+          <Marker key={'start-marker'} coordinate={startPoint} pinColor={'green'} />
+          <Marker key={'end-marker'} coordinate={endPoint} pinColor={'black'} />
         </>
     );
     
