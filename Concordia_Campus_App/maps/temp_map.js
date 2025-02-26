@@ -520,50 +520,48 @@ const TempMap = ({route}) =>{
           }}
         >
   
-          <Marker coordinate={campusLocations['SGW']} title={campusLocations['SGW'].title} description={campusLocations['SGW'].description} />
-          <Marker coordinate={campusLocations['Loyola']} title={campusLocations['Loyola'].title} description={campusLocations['Loyola'].description} />
+          <Marker key={"sgw"} coordinate={campusLocations['SGW']} title={campusLocations['SGW'].title} description={campusLocations['SGW'].description} />
+          <Marker key={"loy"} coordinate={campusLocations['Loyola']} title={campusLocations['Loyola'].title} description={campusLocations['Loyola'].description} />
   
            
           {buildingsData.buildings.map((building, index) => {
-            const polygonFillColor = building.fillColor;
-  
-  
-            return (
-                <>
-              <Polygon
-                key={index}
-                coordinates={building.coordinates}
-                fillColor={polygonFillColor}
-                strokeColor={building.strokeColor}
-                strokeWidth={2}
-                onPress={() => handlePolygonPress(building)} 
-                testID={`polygon-${index}`}
-              />
-              
-              {building.name == 'Henry F.Hall Building' && (
-                <Overlay
-                    bounds={[
-                        [
-                        Math.min(...building.coordinates.map(coord => coord.latitude)),
-                        Math.min(...building.coordinates.map(coord => coord.longitude))
-                        ],
-                        [
-                        Math.max(...building.coordinates.map(coord => coord.latitude)),
-                        Math.max(...building.coordinates.map(coord => coord.longitude))
-                        ]
-                    ]}
-                    image={require('../assets/floor_plans/Hall-8.png')}
-                    opacity={0.8}
-                />
-                
-              )}
-              <PathOverlay />
-              
+  const polygonFillColor = building.fillColor;
 
-              </>
-              
-            );
-          })}
+  return (
+    <React.Fragment key={index}> 
+      <Polygon
+        key={`polygon-${index}`}
+        coordinates={building.coordinates}
+        fillColor={polygonFillColor}
+        strokeColor={building.strokeColor}
+        strokeWidth={2}
+        onPress={() => handlePolygonPress(building)}
+        testID={`polygon-${index}`}
+      />
+
+      {building.name === 'Henry F.Hall Building' && (
+        <Overlay
+          key={`overlay-${index}`}
+          bounds={[
+            [
+              Math.min(...building.coordinates.map(coord => coord.latitude)),
+              Math.min(...building.coordinates.map(coord => coord.longitude))
+            ],
+            [
+              Math.max(...building.coordinates.map(coord => coord.latitude)),
+              Math.max(...building.coordinates.map(coord => coord.longitude))
+            ]
+          ]}
+          image={require('../assets/floor_plans/Hall-8.png')}
+          opacity={0.8}
+        />
+      )}
+      
+      <PathOverlay key={`pathOverlay-${index}`} />
+    </React.Fragment>
+  );
+})}
+
           
         </MapView>
             
