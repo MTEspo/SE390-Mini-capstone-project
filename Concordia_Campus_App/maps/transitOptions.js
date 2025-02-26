@@ -24,15 +24,17 @@ const TransitScreen = ({showDirections, campus, routeData}) => {
   };
 
   // Current campus location
-  const location = campusLocations[campus];
-  const destinationLocation = campus === 'SGW' ? campusLocations.Loyola : campusLocations.SGW;
+  const location =  campusLocations[campus];
+  const destinationLocation = (campus === 'SGW') ? campusLocations.Loyola : campusLocations.SGW;
 
   const handleDirections = (result) => {
     routeData(result.duration, result.distance);
   };
 
   return (
-    <View style={styles.container}>
+    <>
+    {showDirections && (
+      <View style={styles.container}>
       {showDirections && (
         <>
           {/* For driving mode (always blue) */}
@@ -100,6 +102,8 @@ const TransitScreen = ({showDirections, campus, routeData}) => {
         </View>
       )}
     </View>
+    )}
+    </>
   );
 };
 export default TransitScreen;

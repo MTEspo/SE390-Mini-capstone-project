@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import 'react-native-get-random-values';
-import { View, Text, TouchableOpacity, Image, StyleSheet, FlatList, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList, TextInput, Alert} from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; 
 import buildingsData from './buildingCoordinates.js';
@@ -43,16 +43,17 @@ const MapScreen = ({route}) => {
   const [centerOnUserLocation, setCenterOnUserLocation] = useState(true);
   const [isUserLocationFetched, setIsUserLocationFetched] = useState(false);
   const [activeButton, setActiveButton] = useState('user');
+  const [activeCampusDirections, setActiveCampusDirections] = useState(false);
   const {destinationLoc} = route.params || {};
   const {destinationCoords} = route.params || {};
   const [destinationActive, setDestinationActive] = useState(false);
-  const [mode, setMode] = useState('DRIVING');
 
   const handleReturn = () => {
     setCurrentScreen("Map");
     setShowBuildingDirections(false);
     setSelectedStart(null);
     setSelectedEnd(null);
+    setActiveCampusDirections(false);
   };
   
   const campusLocations = {
@@ -195,23 +196,26 @@ const MapScreen = ({route}) => {
   }
 
   const handlePolygonPress = (building) => {
-    if(!selectedStart){
-      setSelectedStart(building.markerCoord);
-      setShowBuildingDirections(false);
-    } else if (!selectedEnd) {
-      setSelectedEnd(building.markerCoord);
-      setShowBuildingDirections(false);
-    } else {
-      setSelectedStart(building.markerCoord);
-      setSelectedEnd(null);
+    if(currentScreen === "Building Map Directions"){
+      if(!selectedStart){
+        setSelectedStart(building.markerCoord);
+        setShowBuildingDirections(false);
+      } else if (!selectedEnd) {
+        setSelectedEnd(building.markerCoord);
+        setShowBuildingDirections(false);
+      } else {
+        setSelectedStart(building.markerCoord);
+        setSelectedEnd(null);
+        setShowBuildingDirections(false);
+      }
+    }else{
+      setSelectedBuilding(building);
+      setSelectedMarker({
+        latitude: building.markerCoord.latitude,
+        longitude: building.markerCoord.longitude
+      });
       setShowBuildingDirections(false);
     }
-    setSelectedBuilding(building);
-    setSelectedMarker({
-      latitude: building.markerCoord.latitude,
-      longitude: building.markerCoord.longitude
-    });
-    setShowBuildingDirections(false);
   };
 
   const handleClosePopup = () => {
@@ -225,6 +229,7 @@ const MapScreen = ({route}) => {
     setDistance(result.distance);
   };
 
+  // Gets direction data from the TransitOptions component and returns it to the map screen.
   const handleDirectionsToMap = (eta, distance) => {
     setEta(eta);
     setDistance(distance);
@@ -254,6 +259,7 @@ const MapScreen = ({route}) => {
       setActiveButton('SGW');
       setDestinationActive(false);
       setToggleMapDirections(false);
+      setActiveCampusDirections(false);
     }
   };
   
@@ -281,6 +287,7 @@ const MapScreen = ({route}) => {
       setActiveButton('Loyola');
       setDestinationActive(false);
       setToggleMapDirections(false);
+      setActiveCampusDirections(false);
     }
   };
 
@@ -314,6 +321,7 @@ const handleUserLocation = () => {
   setSelectedBuilding(null);
   setSelectedMarker(null);
   setActiveButton('user');
+  setActiveCampusDirections(false);
   setEta(null);
   setDistance(null);
 };
@@ -324,6 +332,14 @@ const handleUserLocation = () => {
     setSelectedStart(null);
     setSelectedEnd(null);
     setShowBuildingDirections(false);
+    setActiveCampusDirections(true);
+
+    if(activeCampusDirections){
+      setShowDirections(false);
+      setEta(null);
+      setDistance(null);
+      setActiveCampusDirections(false);
+    }
   };
 
   const handleBuildingDirections = async () => {
@@ -332,6 +348,8 @@ const handleUserLocation = () => {
       setCurrentScreen("Building Map Directions");
       setSelectedStartBuilding(null);
       setSelectedDestination(null);
+      setEta(null);
+      setDistance(null);
       let closestCampus = null;
       let minDistance = Infinity;
       for(const loc in campusLocations){
@@ -361,14 +379,15 @@ const handleUserLocation = () => {
     }
   };
 
- useEffect(() => {
-    return () => {
-      setShowBuildingDirections(false);
-      setShowDirections(false);
-      setEta(null);
-      setDistance(null);
-    };
-  }, []);
+  useEffect(() => {
+      return () => {
+        setShowBuildingDirections(false);
+        setShowDirections(false);
+        setEta(null);
+        setDistance(null);
+      };
+    }, []);
+
 
   const fetchUserLocation = async () => {
     const location = await getLocation();
@@ -472,8 +491,6 @@ const handleUserLocation = () => {
       }
     }
   }, [destinationCoords]);
-  
-  
 
   return (
     <View style={styles.container}>
@@ -481,7 +498,7 @@ const handleUserLocation = () => {
         <View style={styles.searchBarContainer}>
           <GooglePlacesAutocomplete
             fetchDetails={true}
-            placeholder="Search Building or Class..."
+            placeholder="Search for Point of Interest..."
             styles={{
               textInput: styles.searchBar,
             }}
@@ -520,7 +537,7 @@ const handleUserLocation = () => {
             <TextInput
               style={[
                 styles.searchBar,
-                { backgroundColor: '#800000', color: '#FFFFFF', width: '100%' },
+                { backgroundColor: '#800000', color: '#FFFFFF', width: '100%', borderColor: 'black' },
               ]}
               placeholder="Select Start Building..."
               placeholderTextColor="#FFFFFF"
@@ -530,10 +547,13 @@ const handleUserLocation = () => {
             />
             {filteredStartBuildings.length > 0 && (
               <FlatList
+                style={styles.flatListResult}
                 data={filteredStartBuildings}
                 keyExtractor={(item) => item.name}
-                renderItem={({ item }) => (
+                renderItem={({ item, index }) => (
                   <TouchableOpacity
+                    style={(index === filteredStartBuildings.length - 1 ) ? styles.searchResultItemNoBorder : styles.searchResultItem}
+                    activeOpacity={0.6}
                     onPress={() => {
                       setSelectedStartBuilding(item);
                       setSelectedStart(item.markerCoord);
@@ -541,13 +561,13 @@ const handleUserLocation = () => {
                       setFilteredStartBuildings([]);
                     }}
                   >
-                    <Text style={styles.searchResultItem}>{item.name}</Text>
+                    <Text>{item.name}</Text>
                   </TouchableOpacity>
                 )}
               />
             )}
-            <TouchableOpacity style={styles.useLocationButton} onPress={handleUseCurrentLocation}>
-              <Text style={styles.useLocationButtonText}>Use My Current Location</Text>
+            <TouchableOpacity style={styles.useCurrentLocationBtn} onPress={handleUseCurrentLocation}>
+              <Text style={styles.useCurrentLocationText}>Use My Current Location</Text>
             </TouchableOpacity>
             <TextInput
               style={[
@@ -557,6 +577,7 @@ const handleUserLocation = () => {
                   color: '#FFFFFF',
                   width: '100%',
                   marginTop: 10,
+                  borderColor: 'black'
                 },
               ]}
               placeholder="Select Destination Building..."
@@ -567,17 +588,21 @@ const handleUserLocation = () => {
             />
             {filteredDestinationBuildings.length > 0 && (
               <FlatList
+                style={styles.flatListResult}
                 data={filteredDestinationBuildings}
                 keyExtractor={(item) => item.name}
-                renderItem={({ item }) => (
+                renderItem={({ item, index }) => (
                   <TouchableOpacity
+                    style={(index === filteredDestinationBuildings.length - 1 ) ? styles.searchResultItemNoBorder : styles.searchResultItem}
+                    activeOpacity={0.6}
                     onPress={() => {
                       setSelectedDestination(item);
+                      setSelectedEnd(item.markerCoord);
                       setDestinationQuery(item.name);
                       setFilteredDestinationBuildings([]);
                     }}
                   >
-                    <Text style={styles.searchResultItem}>{item.name}</Text>
+                    <Text>{item.name}</Text>
                   </TouchableOpacity>
                 )}
               />
@@ -603,7 +628,7 @@ const handleUserLocation = () => {
               ]}
               onPress={handleReturn}
             >
-              <Text style={[styles.searchResultItem, { color: '#FFFFFF', textAlign: 'center' }]}>
+              <Text style={{ color: '#FFFFFF', textAlign: 'center' }}>
                 Return
               </Text>
             </TouchableOpacity>
@@ -614,41 +639,45 @@ const handleUserLocation = () => {
       <View style={styles.toggleButtonContainer}>
         {currentScreen === 'Map' ? (
           <>
-        <TouchableOpacity
-          style={activeButton === 'SGW' ? styles.sgwButtonActive : styles.sgwButton}
-          onPress={handleSelectSGW}
-          testID="sgwButton"
-        >
-          <Text style={activeButton === 'SGW' ? styles.highlightedText : styles.normalText}>SGW</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={activeButton === 'Loyola' ? styles.loyolaButtonActive : styles.loyolaButton}
-          onPress={handleSelectLoyola}
-          testID="loyolaButton"
-        >
-          <Text style={activeButton === 'Loyola' ? styles.highlightedText : styles.normalText}>LOY</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={activeButton === 'user' ? styles.userLocationButtonActive : styles.userLocationButton}
-          onPress={handleUserLocation}
-          testID="userLocationButton"
-        >
-          <Icon name="user" size={20} color={activeButton === 'user' ? 'blue' : 'white'} />
-        </TouchableOpacity>
-        {activeButton !== 'user' && (
-          <TouchableOpacity style={styles.directionsButton} onPress={handleCampusDirections} testID="directions-button">
-            <Text style={styles.directionsButtonText}>{directionsText}</Text>
-          </TouchableOpacity>
-        )}
-                    <TouchableOpacity style={styles.directionsButton} onPress={handleBuildingDirections}>
+            <TouchableOpacity
+              style={activeButton === 'SGW' ? styles.sgwButtonActive : styles.sgwButton}
+              onPress={handleSelectSGW}
+              testID="sgwButton"
+            >
+              <Text style={activeButton === 'SGW' ? styles.highlightedText : styles.normalText}>SGW</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={activeButton === 'Loyola' ? styles.loyolaButtonActive : styles.loyolaButton}
+              onPress={handleSelectLoyola}
+              testID="loyolaButton"
+            >
+              <Text style={activeButton === 'Loyola' ? styles.highlightedText : styles.normalText}>LOY</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={activeButton === 'user' ? styles.userLocationButtonActive : styles.userLocationButton}
+              onPress={handleUserLocation}
+              testID="userLocationButton"
+            >
+              <Icon name="user" size={20} color={activeButton === 'user' ? 'blue' : 'white'} />
+            </TouchableOpacity>
+            
+            {activeButton !== 'user' && (
+              <TouchableOpacity 
+                style={(!activeCampusDirections) ? styles.directionsButton : styles.directionsButtonActive} 
+                onPress={handleCampusDirections} 
+                testID="directions-button"
+              >
+                <Text style={(!activeCampusDirections) ? styles.directionsButtonText: styles.highlightedText}>{(!activeCampusDirections) ? directionsText : "Cancel Directions"}</Text>
+              </TouchableOpacity>
+            )}
+            
+            <TouchableOpacity style={styles.directionsButton} onPress={handleBuildingDirections}>
               <Text style={styles.directionsButtonText}>Building Directions</Text>
             </TouchableOpacity>
           </>
-        ) : (
-          <TouchableOpacity style={styles.returnButton} onPress={handleReturn}>
-            <Text style={styles.returnButtonText}>Return</Text>
-          </TouchableOpacity>
-         )}
+        ) : (null)}
       </View>
   
       <MapView
@@ -708,7 +737,6 @@ const handleUserLocation = () => {
           const isDestinationCoords = building.name === destinationCoords;
           const polygonFillColor = (isDestinationCoords || isDestinationLoc) && destinationActive ? 'orange' : building.fillColor; // Set to red if it's the destination building
 
-
           return (
             <Polygon
               key={index}
@@ -722,11 +750,8 @@ const handleUserLocation = () => {
           );
         })}
         
-        {showDirections && (
-          <TransitScreen showDirections={showDirections} campus={campus} routeData={handleDirectionsToMap}/>
-        )}
-        
-          
+        <TransitScreen showDirections={showDirections} campus={campus} routeData={handleDirectionsToMap} />
+
         {currentScreen === 'Building Map Directions' ? (
           <>
             {buildingsData.buildings.map((building) => {
@@ -754,12 +779,14 @@ const handleUserLocation = () => {
           </>
         ) : null}
       </MapView>
-          
-      <BuildingPopup
-        building={selectedBuilding}
-        onClose={handleClosePopup}
-        testID="building-popup" 
-      />
+      
+      {currentScreen === "Map" ? (
+        <BuildingPopup
+          building={selectedBuilding}
+          onClose={handleClosePopup}
+          testID="building-popup" 
+        />
+      ) : null}
       
       {currentScreen === 'Building Map Directions' ? (
         <TouchableOpacity
@@ -773,9 +800,7 @@ const handleUserLocation = () => {
         </TouchableOpacity>
       ) : null} 
 
-      {showDirections && (
-        <RouteInfoContainer eta={eta} distance={distance}/>
-      )}
+      <RouteInfoContainer eta={eta} distance={distance}/>
         
     </View>
   );
