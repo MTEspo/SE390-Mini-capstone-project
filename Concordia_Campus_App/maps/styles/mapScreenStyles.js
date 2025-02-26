@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 5,
-    marginBottom: 3,
+    marginBottom: 5,
     borderWidth: 1,
     borderColor: 'black',
   },
@@ -67,7 +67,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'black',
-    marginRight: 5
+    marginRight: 5,
+    marginBottom: 5,
   },
   loyolaButton: {
     backgroundColor: '#800000', 
@@ -79,7 +80,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 5,
     borderWidth: 1,
-    borderColor: 'black'
+    borderColor: 'black',
+    marginBottom: 5,
   },
   loyolaButtonActive: {
     backgroundColor: 'white', 
@@ -91,7 +93,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'black',
-    marginRight: 5
+    marginRight: 5,
+    marginBottom: 5,
   },
   userLocationButton: {
     backgroundColor: '#800000', 
