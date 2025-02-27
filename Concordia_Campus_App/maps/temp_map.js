@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, Component  } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Keyboard, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Keyboard, FlatList, Button } from 'react-native';
 import MapView, { Polygon, Marker, Overlay, Polyline } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; 
 import buildingsData from './buildingCoordinates.js';
@@ -51,19 +51,21 @@ const TempMap = () => {
 
     //full path example
 
-    useEffect(() => {
+
+    const onPressShowPath = () => {
         const floor8 = indoorFloorData.buildings[0]['floor-8'];
         const nodes = Object.keys(floor8).filter(key => key.startsWith('node_'));
-    
         const path = nodes.map(nodeKey => {
           const node = floor8[nodeKey];
           return { latitude: node.latitude, longitude: node.longitude };
         });
-        const timer = setTimeout(() => {
-          setFullPath(path);
-        }, 2000);
-        return () => clearTimeout(timer);
-    }, [full_path]);
+        setFullPath(path);
+    }
+
+    
+    const onPressClearPath = () => {
+        setFullPath('');
+    }
 
 
     //helper for node coordinates
@@ -280,6 +282,12 @@ const TempMap = () => {
                         />
                     )}
                     
+                    <TouchableOpacity onPress={onPressShowPath}>
+                        <Text>Show path</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={onPressClearPath}>
+                        <Text>Clear path</Text>
+                    </TouchableOpacity>
                 </View>
         
        
