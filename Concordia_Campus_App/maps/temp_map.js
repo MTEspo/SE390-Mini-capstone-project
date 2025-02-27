@@ -9,6 +9,7 @@ import { getLocation } from './locationUtils';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PathOverlay from './PathOverlay.js';
 import BuildingOverlay from './BuildingOverlay.js';
+import indoorFloorData from './indoorFloorCoordinates.js';
 
 class ErrorBoundary extends Component {
     
@@ -51,19 +52,19 @@ const TempMap = () => {
     //full path example
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-          setFullPath([
-            {latitude: 45.497246532696096, longitude: -73.57886038112717},
-            {latitude: 45.4972393725777, longitude: -73.5788538017577},
-            {latitude: 45.497203445409944, longitude: -73.57888318618875},
-            {latitude: 45.49734717344082, longitude: -73.57916302027736},
-            {latitude: 45.497184689150686, longitude: -73.57934491031155},
-            {latitude: 45.497189473812725, longitude: -73.57938018653913},
-        ]);
-        }, 2000);
+        const floor8 = indoorFloorData.buildings[0]['floor-8'];
+        const nodes = Object.keys(floor8).filter(key => key.startsWith('node_'));
     
+        const path = nodes.map(nodeKey => {
+          const node = floor8[nodeKey];
+          return { latitude: node.latitude, longitude: node.longitude };
+        });
+        const timer = setTimeout(() => {
+          setFullPath(path);
+        }, 2000);
         return () => clearTimeout(timer);
-      }, [full_path]);
+    }, [full_path]);
+
 
     //helper for node coordinates
     const handleMapPress = (event) => {
@@ -190,9 +191,9 @@ const TempMap = () => {
       }
     };
     
-    useEffect(() => {
-      fetchUserLocation();
-    }, []);
+    // useEffect(() => {
+    //   fetchUserLocation();
+    // }, []);
   
     // useEffect(() => {
     //   mapRef.current.animateToRegion({

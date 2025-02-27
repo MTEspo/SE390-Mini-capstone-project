@@ -1,4 +1,4 @@
-const buildingsData = {
+const indoorFloorData = {
 "buildings": [
     {
         "name": "Hall Building",
@@ -47,3 +47,5 @@ const buildingsData = {
     },
 ]
 }
+
+export default indoorFloorData;
