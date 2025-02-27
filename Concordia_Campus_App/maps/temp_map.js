@@ -42,6 +42,7 @@ const TempMap = () => {
     const [startLocation, setStartLocation] = useState('');
     const [destinationLocation, setDestinationLocation] = useState('');
     const [full_path, setFullPath] = useState('');
+    const [showPath, setShowPath] = useState(false);    
 
     const buildings = [
         {
@@ -54,28 +55,43 @@ const TempMap = () => {
 
 
     const onPressShowPath = () => {
-      const floor8 = indoorFloorData.buildings[0]['floor-8'];
-      const shortestPath = findShortestPath("esclator_up", "831", floor8);
-      console.log("Shortest Path:", shortestPath);
-      
-      const pathWithCoordinates = shortestPath.map(nodeKey => {
+      setShowPath(true);
+      const intervalTime = 2000;
+    
+      const updatePath = () => {
+        const floor8 = indoorFloorData.buildings[0]['floor-8'];
+        const shortestPath = findShortestPath("esclator_up", "831", floor8);
+        console.log("Shortest Path:", shortestPath);
+    
+        const pathWithCoordinates = shortestPath.map(nodeKey => {
           const node = floor8[nodeKey];
           if (node) {
-              return {
-                  latitude: node.latitude,
-                  longitude: node.longitude
-              };
+            return {
+              latitude: node.latitude,
+              longitude: node.longitude
+            };
           }
           return null;
-      }).filter(node => node !== null); 
-      console.log(pathWithCoordinates)
-      setFullPath(pathWithCoordinates);
-  }
+        }).filter(node => node !== null); 
+        console.log(pathWithCoordinates);
+    
+        setFullPath(pathWithCoordinates);
+      };
+    
+      const pathUpdateInterval = setInterval(() => {
+        updatePath();
+      }, intervalTime);
+    
+      setTimeout(() => {
+        clearInterval(pathUpdateInterval);
+      }, 5000);
+    };
   
 
     
     const onPressClearPath = () => {
         setFullPath('');
+        setShowPath(false);
     }
 
 
@@ -377,13 +393,15 @@ const TempMap = () => {
                     testID={`polygon-${index}`}
                 />
 
-                {full_path && building.name === 'Henry F.Hall Building' && (
-                    <BuildingOverlay
-                    coordinates={building.coordinates}
-                    image={require('../assets/floor_plans/Hall-8.png')}
-                    />
+              {building.name === 'Henry F.Hall Building' && showPath && (
+                      <BuildingOverlay
+                        coordinates={building.coordinates}
+                        image={require('../assets/floor_plans/Hall-1.png')}
+                      />)}
+
+                {full_path && showPath && (
+                  <PathOverlay path={full_path} />
                 )}
-                {building.name === 'Henry F.Hall Building' && full_path && <PathOverlay path={full_path} />}
                 
                 </React.Fragment>
             );
