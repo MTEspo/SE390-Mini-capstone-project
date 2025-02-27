@@ -35,8 +35,6 @@ const TransitScreen = ({showDirections, campus, routeData}) => {
     <>
     {showDirections && (
       <View style={styles.container}>
-      {showDirections && (
-        <>
           {/* For driving mode (always blue) */}
           {mode === 'DRIVING' && (
             <MapViewDirections
@@ -75,9 +73,7 @@ const TransitScreen = ({showDirections, campus, routeData}) => {
               onReady={handleDirections}
             />
           )}
-        </>
-      )}
-      {showDirections && (
+
         <View style={styles.modeContainer}>
           <TouchableOpacity 
             testID="driving-button"
@@ -100,7 +96,6 @@ const TransitScreen = ({showDirections, campus, routeData}) => {
             <Text style={styles.modeText}>Transit</Text>
           </TouchableOpacity>
         </View>
-      )}
     </View>
     )}
     </>
