@@ -5,8 +5,8 @@ const indoorFloorData = {
         
         "floor-2":{
             "classCoordinates": {
-                "831": { "latitude": 45.495359016476655, "longitude": -73.57936484536624, "last_connecting_node":10 },
-                "820": { "latitude": 45.495359016476655, "longitude": -73.57936484536624, "last_connecting_node":10},
+                "831": { "latitude": 45.495359016476655, "longitude": -73.57936484536624, "connected_nodes":[] },
+                "820": { "latitude": 45.495359016476655, "longitude": -73.57936484536624, "connected_nodes":[]},
             },
             "node_1":{ "latitude": 45.49724031377742, "longitude": -73.57936484536624, "connected_nodes":[]},
             "node_2":{ "latitude": 45.495359016476655, "longitude": -73.57936484536624, "connected_nodes":[]},
@@ -15,16 +15,14 @@ const indoorFloorData = {
                 { "latitude": 45.495359016476655, "longitude": -73.57936484536624 },
                 { "latitude": 45.495359016476655, "longitude": -73.57936484536624 }
             ],
-            "esclator_up": { "latitude": 45.495359016476655, "longitude": -73.57936484536624, "last_connecting_node":10 },
-            "esclator_down":{ "latitude": 45.495359016476655, "longitude": -73.57936484536624, "last_connecting_node":10 },
-            "elevator": { "latitude": 45.495359016476655, "longitude": -73.57936484536624, "last_connecting_node":10 },
+            "esclator_up": { "latitude": 45.495359016476655, "longitude": -73.57936484536624, "connected_nodes":[] },
+            "esclator_down":{ "latitude": 45.495359016476655, "longitude": -73.57936484536624, "connected_nodes":[] },
+            "elevator": { "latitude": 45.495359016476655, "longitude": -73.57936484536624, "connected_nodes":[] },
             "floorImage": "",
         },
         "floor-8":{
-            "classCoordinates": {
-                "831": { "latitude": 45.49718353071313, "longitude": -73.57942766173308, "last_connecting_node":["node_9"]},
-                "820": { "latitude": 45.49715481967915, "longitude": -73.57899370470575, "last_connecting_node":["node_11","node_13"]},
-            },
+            "831": { "latitude": 45.49718353071313, "longitude": -73.57942766173308, "last_connecting_node":["node_9"]},
+            "820": { "latitude": 45.49715481967915, "longitude": -73.57899370470575, "last_connecting_node":["node_11","node_13"]},
             "node_1":{ "latitude": 45.49724031377742, "longitude": -73.57885075811465, "connected_nodes":["node_2","node_3"]},
             "node_2":{ "latitude": 45.49720449198724, "longitude": -73.57888448670585, "connected_nodes":["node_1","node_4","node_5"]},
             "node_3":{ "latitude": 45.49731475495636, "longitude":  -73.57878055204614, "connected_nodes":["node_1"]},

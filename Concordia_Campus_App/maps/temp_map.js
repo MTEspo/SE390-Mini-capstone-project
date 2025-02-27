@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import PathOverlay from './PathOverlay.js';
 import BuildingOverlay from './BuildingOverlay.js';
 import indoorFloorData from './indoorFloorCoordinates.js';
+import {findShortestPath} from './IndoorFloorShortestPathAlgo.js'
 
 class ErrorBoundary extends Component {
     
@@ -53,14 +54,27 @@ const TempMap = () => {
 
 
     const onPressShowPath = () => {
-        const floor8 = indoorFloorData.buildings[0]['floor-8'];
-        const nodes = Object.keys(floor8).filter(key => key.startsWith('node_'));
-        const path = nodes.map(nodeKey => {
+      const floor8 = indoorFloorData.buildings[0]['floor-8'];
+      const shortestPath = findShortestPath("esclator_up", "831", floor8);
+      console.log("Shortest Path:", shortestPath);
+      
+      const pathWithCoordinates = shortestPath.map(nodeKey => {
           const node = floor8[nodeKey];
-          return { latitude: node.latitude, longitude: node.longitude };
-        });
-        setFullPath(path);
-    }
+          console.log(node.latitude)
+          if (node) {
+              return {
+                  
+                      latitude: node.latitude,
+                      longitude: node.longitude
+                  
+              };
+          }
+          return null;
+      }).filter(node => node !== null); 
+      console.log(pathWithCoordinates)
+      setFullPath(pathWithCoordinates);
+  }
+  
 
     
     const onPressClearPath = () => {
