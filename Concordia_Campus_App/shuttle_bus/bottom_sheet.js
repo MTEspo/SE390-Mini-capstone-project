@@ -65,11 +65,11 @@ const BottomSheetComponent = ({ selectedStop, bottomSheetIndex, onSheetChanges, 
                     <>
                         <Text style={{fontSize:20, fontWeight: 'bold', textAlign:'center'}}>{selectedStop.title}</Text>
                         <View style={styles.buttonContainer}>
-                            <TouchableOpacity style={showSchedule ? styles.button_active : styles.button} onPress={() => displaySchedule(selectedStop)}>
+                            <TouchableOpacity testID="shuttle-schedule-test" style={showSchedule ? styles.button_active : styles.button} onPress={() => displaySchedule(selectedStop)}>
                                 <Icon name="clock-o" size={20} style={showSchedule ? styles.icon_active : styles.icon}/>
                                 <Text style={showSchedule ? styles.text_active : styles.buttonText}>Next Arrival</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={showDirections ? styles.button_active : styles.button} onPress={() => displayDirections(selectedStop)}>
+                            <TouchableOpacity testID="shuttle-directions-test" style={showDirections ? styles.button_active : styles.button} onPress={() => displayDirections(selectedStop)}>
                                 <Icon name="location-arrow" size={20} style={showDirections ? styles.icon_active : styles.icon}/>
                                 <Text style={showDirections ? styles.text_active : styles.buttonText}>Directions</Text>
                             </TouchableOpacity>
