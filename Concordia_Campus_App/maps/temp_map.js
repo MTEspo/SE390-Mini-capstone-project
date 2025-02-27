@@ -60,13 +60,10 @@ const TempMap = () => {
       
       const pathWithCoordinates = shortestPath.map(nodeKey => {
           const node = floor8[nodeKey];
-          console.log(node.latitude)
           if (node) {
               return {
-                  
-                      latitude: node.latitude,
-                      longitude: node.longitude
-                  
+                  latitude: node.latitude,
+                  longitude: node.longitude
               };
           }
           return null;

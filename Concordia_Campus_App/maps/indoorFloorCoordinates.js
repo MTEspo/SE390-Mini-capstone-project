@@ -31,7 +31,7 @@ const indoorFloorData = {
             "node_6":{ "latitude": 45.49733040509946, "longitude":  -73.57902603190709, "connected_nodes":["node_5"]},
             "node_7":{ "latitude": 45.49734563796144, "longitude":  -73.57915295924258, "connected_nodes":["node_5","node_8"]},
             "node_8":{ "latitude": 45.49720740822167, "longitude":  -73.57930441205546, "connected_nodes":["node_7","node_9","node_10"]},
-            "node_9":{ "latitude": 45.49734563796144, "longitude":  -73.57915295924258, "connected_nodes":["node_8"]},
+            "node_9":{ "latitude": 45.49718465692337, "longitude":  -73.5793455476141, "connected_nodes":["node_8"]},
             "node_10":{ "latitude": 45.49709715658615, "longitude":  -73.57909762017272, "connected_nodes":["node_8","node_11","node_12"]},
             "node_11":{ "latitude": 45.497125710848046, "longitude":  -73.5790843684466, "connected_nodes":["node_10"]},
             "node_12":{ "latitude": 45.49706000164386, "longitude":  -73.57901663740206, "connected_nodes":["node_10","node_13","node_14"]},
