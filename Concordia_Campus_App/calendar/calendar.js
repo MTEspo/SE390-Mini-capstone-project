@@ -50,7 +50,7 @@ export default function Calendar() {
 
     if (data?.url) {
       const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUri);
-
+      console.log(result.type);
       if (result.type === "success" && result.url) {
         const { access_token, refresh_token, provider_token } = extractTokens(result.url);
         console.log("Extracted tokens:", { access_token, refresh_token, provider_token });
@@ -198,6 +198,7 @@ export default function Calendar() {
           <>
             <View style={styles.header}>
               <Menu
+                testID="test-menu-close"
                 visible={menuVisibleState}
                 onDismiss={() => {
                   console.log("Menu dismissed");
@@ -217,6 +218,7 @@ export default function Calendar() {
               >
                 {calendars.map((calendar) => (
                   <Menu.Item
+                    testID={"test"+calendar.id}
                     key={calendar.id}
                     onPress={() => {
                       console.log("Calendar selected:", calendar.summary);

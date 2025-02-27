@@ -1,26 +1,27 @@
-import React from "react";
+import React, { use } from "react";
 import { render, fireEvent, act } from "@testing-library/react-native";
 import Calendar from "../calendar/calendar";
 import { extractTokens } from "../calendar/calendarUtils";
 import * as axios from "axios";
 
-jest.mock("axios");
+const mockedNavigate = jest.fn();
 
-jest.mock("@react-navigation/native", () => ({
+jest.mock('@react-navigation/native', () => {
+  const actualNav = jest.requireActual('@react-navigation/native');
+  return {
+    ...actualNav,
     useNavigation: () => ({
-      addListener: jest.fn(),
+      navigate: mockedNavigate,
+      addListener: jest.fn()
     }),
-  }));
+  };
+});
+
+jest.mock("axios");
 
 jest.mock("expo-linking", () => ({
     createURL: jest.fn(() => "exp://localhost:8081"),
     openURL: jest.fn(),
-}));
-
-jest.mock("@react-navigation/native", () => ({
-    useNavigation: () => ({
-      addListener: jest.fn(),
-    }),
 }));
   
 jest.mock("expo-web-browser", () => ({
@@ -191,5 +192,90 @@ describe("Calendar Tests That Should Pass", () => {
     expect(findByText("Event 1")).toBeTruthy();
     expect(findByText("2025-02-14, 12:45:00 a.m.")).toBeTruthy();
     expect(findByText("2025-02-14, 1:45:00 a.m.")).toBeTruthy();
+
+  });
+
+  test("getting calendar event location", async () => {
+    const { findByText } = render(<Calendar />);
+    
+    axios.get
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{
+                       id: "mock-id1", 
+                       summary: "Schedule 1"
+                      },
+                      {
+                        id: "mock-id2",
+                        summary: "schedule 2"
+                      }
+                     ], 
+                       nextPageToken: null}}
+    ))
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "Event 1",
+                       description: "H123",
+                       start: {dateTime: "2025-02-14T05:45:00.00Z"}, 
+                       end: {dateTime: "2025-02-14T06:45:00.00Z"} }]}}
+    ));
+
+    await act(async () => {
+      fireEvent.press(await findByText("Sign in with Google"));
+      
+      const calendarButton = await findByText("Schedule 1");
+      expect(findByText("Schedule 1")).toBeTruthy();
+      const event1 = await findByText("Event 1");
+      
+      fireEvent.press(event1);
+      
+      expect(await findByText("Location")).toBeTruthy();
+      expect(await findByText("Directions")).toBeTruthy();
+
+      fireEvent.press(await findByText("Location"));
+    })
+
+    expect(mockedNavigate).toHaveBeenCalled();
+  });
+
+  test("getting calendar event directions", async () => {
+    const { findByText } = render(<Calendar />);
+    
+    axios.get
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{
+                       id: "mock-id1", 
+                       summary: "Schedule 1"
+                      },
+                      {
+                        id: "mock-id2",
+                        summary: "schedule 2"
+                      }
+                     ], 
+                       nextPageToken: null}}
+    ))
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "Event 1",
+                       description: "H123",
+                       start: {dateTime: "2025-02-14T05:45:00.00Z"}, 
+                       end: {dateTime: "2025-02-14T06:45:00.00Z"} }]}}
+    ));
+
+    await act(async () => {
+      fireEvent.press(await findByText("Sign in with Google"));
+      
+      const calendarButton = await findByText("Schedule 1");
+      expect(findByText("Schedule 1")).toBeTruthy();
+      const event1 = await findByText("Event 1");
+      
+      fireEvent.press(event1);
+      
+      expect(await findByText("Location")).toBeTruthy();
+      expect(await findByText("Directions")).toBeTruthy();
+
+      fireEvent.press(await findByText("Directions"));
+    })
+
+    expect(mockedNavigate).toHaveBeenCalled();
   });
 });
