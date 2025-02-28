@@ -3,6 +3,23 @@ const indoorFloorData = {
     {
         "name": "Hall Building",
         "abbreviation" : "H",
+        "floor-1":{
+                "110": { "latitude": 45.497108735151485, "longitude": -73.57893689860926, "last_connecting_node":["node_4"]},
+                "node_1":{ "latitude": 45.49704709346159, "longitude": -73.57870881910416, "connected_nodes":["node_3","node_5"]},
+                "node_3":{ "latitude": 45.497083347532964, "longitude":  -73.57874286468316, "connected_nodes":["node_1","node_4","node_5"]},
+                "node_4":{ "latitude":45.49709762269207, "longitude":  -73.57878851166575, "connected_nodes":["node_3","node_5","node_8"]},
+                "node_5":{ "latitude": 45.49713273628391, "longitude":  -73.57869698361705, "connected_nodes":["node_3","node_4","node_8","node_6"]},
+                "node_6":{ "latitude": 45.49717408497438, "longitude":  -73.57864782532806, "connected_nodes":["node_5","node_7","node_8"]},
+                "node_7":{ "latitude": 45.49719065725346, "longitude":  -73.57861435087062, "connected_nodes":["node_6"]},
+                "node_8":{ "latitude": 45.49721182383456, "longitude":  -73.57871196519791, "connected_nodes":["node_9","node_6","node_5","node_4"]},
+                "node_9":{ "latitude": 45.49723479529576, "longitude":  -73.57876557113804, "connected_nodes":["node_8","node_10"]},
+                "node_10":{ "latitude": 45.49729731046027, "longitude":  -73.57870915615288, "connected_nodes":["node_9"]},
+                "esclator_up": { "latitude": 45.497212132955724, "longitude": -73.57864730686212, "last_connecting_node": ["node_7"] },
+                "esclator_down":{ "latitude": 45.497212132955724, "longitude": -73.57864730686212, "last_connecting_node":[ "node_7"] },
+                "elevator": { "latitude": 45.49727891671142, "longitude": -73.5786661115211, "last_connecting_node": ["node_10"] },
+                "entrance":{ "latitude": 45.49702056858536, "longitude": -73.57868700557368, "last_connecting_node": ["node_1"] },
+                "floorImage": "",
+        },
         "floor-2":{
             "classCoordinates": {
                 "831": { "latitude": 45.495359016476655, "longitude": -73.57936484536624, "connected_nodes":[] },
