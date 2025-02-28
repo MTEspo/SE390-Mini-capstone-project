@@ -18,6 +18,7 @@ const indoorFloorData = {
                 "escalator_down":{ "latitude": 45.497212132955724, "longitude": -73.57864730686212, "last_connecting_node":[ "node_7"] },
                 "elevator": { "latitude": 45.49727891671142, "longitude": -73.5786661115211, "last_connecting_node": ["node_10"] },
                 "entrance":{ "latitude": 45.49702056858536, "longitude": -73.57868700557368, "last_connecting_node": ["node_1"] },
+                "exit":{ "latitude": 45.49702056858536, "longitude": -73.57868700557368, "last_connecting_node": ["node_1"] },
                 "floorImage": "",
         },
         "floor-2":{
@@ -52,6 +53,8 @@ const indoorFloorData = {
             "escalator_up": { "latitude": 45.4972717500672, "longitude": -73.5789019818176, "last_connecting_node": ["node_1"] },
             "escalator_down":{ "latitude": 45.497302657035235, "longitude": -73.57896357181264, "last_connecting_node":[ "node_6"] },
             "elevator": { "latitude": 45.49729026677937, "longitude": -73.57875190045378, "last_connecting_node": ["node_3"] },
+            "entrance": { "latitude": 45.4972717500672, "longitude": -73.5789019818176, "last_connecting_node": ["node_1"] }, // same as escalator up
+            "exit":{ "latitude": 45.497302657035235, "longitude": -73.57896357181264, "last_connecting_node":[ "node_6"] },// same as escalator down
             "floorImage": "",
         },
         "floor-9":{
@@ -74,6 +77,8 @@ const indoorFloorData = {
             "esclator_down":{ "latitude": 45.497302657035235, "longitude": -73.57896357181264, "last_connecting_node":[ "node_1","node_8"] },
             "elevator": { "latitude": 45.49729026677937, "longitude": -73.57875190045378, "last_connecting_node": ["node_4"] },
             "floorImage": "",
+            "entrance": { "latitude": 45.497312211471396, "longitude": -73.57897960517127, "last_connecting_node": ["node_9"] },// same as escalator up
+            "exit":{ "latitude": 45.497302657035235, "longitude": -73.57896357181264, "last_connecting_node":[ "node_1","node_8"] },// same as escalator down
         },
     },
 ]
