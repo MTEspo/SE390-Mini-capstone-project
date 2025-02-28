@@ -10,6 +10,7 @@ import PathOverlay from './PathOverlay.js';
 import BuildingOverlay from './BuildingOverlay.js';
 import indoorFloorData from './indoorFloorCoordinates.js';
 import {findShortestPath} from './IndoorFloorShortestPathAlgo.js';
+import FloorButtons from './FloorButtons.js';
 
 class ErrorBoundary extends Component {
     constructor(props) {
@@ -45,6 +46,15 @@ const TempMap = () => {
     const [full_path, setFullPath] = useState('');
     const [showPath, setShowPath] = useState(false);
     const pathUpdateInterval = useRef(null);
+
+
+    const [selectedFloor, setSelectedFloor] = useState(null);
+    const floorImages = {
+      1: require('../assets/floor_plans/Hall-1.png'),
+      2: require('../assets/floor_plans/Hall-2.png'),
+      8: require('../assets/floor_plans/Hall-8.png'),
+      9: require('../assets/floor_plans/Hall-9.png'),
+    };
 
     const [isSelectingStart, setIsSelectingStart] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
@@ -87,10 +97,10 @@ const TempMap = () => {
     };
 
     const onPressShowPath = () => {
-      if (!startLocation || !destinationLocation) {
-          console.warn("Both starting location and destination must be selected");
-          return;
-      }
+      // if (!startLocation || !destinationLocation) {
+      //     console.warn("Both starting location and destination must be selected");
+      //     return;
+      // }
       
       setShowPath(true);
       
@@ -105,7 +115,7 @@ const TempMap = () => {
       // Then wait 1 second before drawing the path (to prevent any inconsistencies where the image overlay would overlap the polyline)
       setTimeout(() => {
           const floor8 = indoorFloorData.buildings[0]['floor-8'];
-          const shortestPath = findShortestPath("esclator_up", "831", floor8);
+          const shortestPath = findShortestPath("820", "831", floor8);
           
           const pathWithCoordinates = shortestPath.map(nodeKey => {
               const node = floor8[nodeKey];
@@ -338,6 +348,8 @@ const TempMap = () => {
                     <TouchableOpacity style={[style.pathButton, {backgroundColor: '#e74c3c'}]} onPress={onPressClearPath}>
                         <Text style={style.pathButtonText}>Clear Directions</Text>
                     </TouchableOpacity>
+
+                    <FloorButtons onFloorSelect={(floor) => setSelectedFloor(floor)} />
                 </View>
         
                 <MapView
@@ -386,10 +398,17 @@ const TempMap = () => {
                                     testID={`polygon-${index}`}
                                 />
 
-                                {building.name === 'Henry F.Hall Building' && showPath && (
+                                {/* {building.name === 'Henry F.Hall Building' && showPath && (
                                     <BuildingOverlay
                                         coordinates={building.coordinates}
-                                        image={require('../assets/floor_plans/Hall-1.png')}
+                                        image={require('../assets/floor_plans/Hall-8.png')}
+                                    />
+                                )} */}
+
+                                {building.name === 'Henry F.Hall Building' && (
+                                    <BuildingOverlay
+                                        coordinates={building.coordinates}
+                                        image={floorImages[selectedFloor]}
                                     />
                                 )}
 
