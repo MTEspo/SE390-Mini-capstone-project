@@ -1,7 +1,6 @@
-import React, { useState, useRef, useEffect, Component  } from 'react';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Keyboard, FlatList, Button } from 'react-native';
-import MapView, { Polygon, Marker, Overlay, Polyline } from 'react-native-maps';
+import React, { useState, useRef, useEffect, Component } from 'react';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Keyboard, FlatList } from 'react-native';
+import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; 
 import buildingsData from './buildingCoordinates.js';
 import { API_KEY } from '@env';
@@ -10,18 +9,20 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import PathOverlay from './PathOverlay.js';
 import BuildingOverlay from './BuildingOverlay.js';
 import indoorFloorData from './indoorFloorCoordinates.js';
-import {findShortestPath} from './IndoorFloorShortestPathAlgo.js'
+import {findShortestPath} from './IndoorFloorShortestPathAlgo.js';
 
 class ErrorBoundary extends Component {
-    
     constructor(props) {
         super(props);
         this.state = { hasError: false };
     }
-
+    componentDidCatch(error, errorInfo) {
+        this.setState({ hasError: true });
+        console.log(error, errorInfo);
+    }
     render() { 
         if (this.state.hasError) {
-            console.log(error);
+            return <Text style={styles.errorText}>Something went wrong.</Text>;
         }
         return this.props.children;
     }
@@ -42,378 +43,369 @@ const TempMap = () => {
     const [startLocation, setStartLocation] = useState('');
     const [destinationLocation, setDestinationLocation] = useState('');
     const [full_path, setFullPath] = useState('');
-    const [showPath, setShowPath] = useState(false);    
+    const [showPath, setShowPath] = useState(false);
+    const pathUpdateInterval = useRef(null);
+
+    const [isSelectingStart, setIsSelectingStart] = useState(true);
+    const [isSearching, setIsSearching] = useState(false);
 
     const buildings = [
         {
-        names: ['Hall Building'], 
-        rooms: ['H-831', 'H-820']
+            names: ['Hall Building'], 
+            rooms: ['H-831', 'H-820', 'H-833', 'H-843']
         },
-    ]
+    ];
 
-    //full path example
+    const handleStartingSearch = (text) => {
+      setSearchStartingText(text);
+      if (text) {
+          setIsSearching(true);
+          const filtered = buildings.filter(building =>
+              building.names.some(name => name.toLowerCase().includes(text.toLowerCase())) ||
+              building.rooms.some(room => room.toLowerCase().includes(text.toLowerCase()))
+          );
+          setFilteredBuildings(filtered);
+      } else {
+          setIsSearching(false);
+          setFilteredBuildings([]);
+      }
+    };
 
+    const handleDestinationSearch = (text) => {
+      setSearchDestinationText(text);
+      if (text) {
+          setIsSearching(true);
+          const filtered = buildings.filter(building =>
+              building.names.some(name => name.toLowerCase().includes(text.toLowerCase())) ||
+              building.rooms.some(room => room.toLowerCase().includes(text.toLowerCase()))
+          );
+          setFilteredBuildings(filtered);
+      } else {
+          setIsSearching(false);
+          setFilteredBuildings([]);
+      }
+    };
 
     const onPressShowPath = () => {
+      if (!startLocation || !destinationLocation) {
+          console.warn("Both starting location and destination must be selected");
+          return;
+      }
+      
       setShowPath(true);
-      const intervalTime = 2000;
-    
-      const updatePath = () => {
-        const floor8 = indoorFloorData.buildings[0]['floor-8'];
-        const shortestPath = findShortestPath("esclator_up", "831", floor8);
-        console.log("Shortest Path:", shortestPath);
-    
-        const pathWithCoordinates = shortestPath.map(nodeKey => {
-          const node = floor8[nodeKey];
-          if (node) {
-            return {
-              latitude: node.latitude,
-              longitude: node.longitude
-            };
-          }
-          return null;
-        }).filter(node => node !== null); 
-        console.log(pathWithCoordinates);
-    
-        setFullPath(pathWithCoordinates);
-      };
-    
-      const pathUpdateInterval = setInterval(() => {
-        updatePath();
-      }, intervalTime);
-    
-      setTimeout(() => {
-        clearInterval(pathUpdateInterval);
-      }, 5000);
-    };
+      
+      // Clear the previous interval if it exists
+      if (pathUpdateInterval.current) {
+          clearInterval(pathUpdateInterval.current);
+      }
   
-
+      // First show the overlay without the path
+      setFullPath([]);
+      
+      // Then wait 1 second before drawing the path (to prevent any inconsistencies where the image overlay would overlap the polyline)
+      setTimeout(() => {
+          const floor8 = indoorFloorData.buildings[0]['floor-8'];
+          const shortestPath = findShortestPath("esclator_up", "831", floor8);
+          
+          const pathWithCoordinates = shortestPath.map(nodeKey => {
+              const node = floor8[nodeKey];
+              if (node) {
+                  return {
+                      latitude: node.latitude,
+                      longitude: node.longitude
+                  };
+              }
+              return null;
+          }).filter(node => node !== null);
+          
+          setFullPath(pathWithCoordinates);
+      }, 1000);
+  };
     
+    // useEffect(() => {
+    //     fetchUserLocation();
+    // }, []);
+
+    useEffect(() => {
+        if (mapRef.current && campus) {
+            mapRef.current.animateToRegion({
+                latitude: campusLocations[campus].latitude,
+                longitude: campusLocations[campus].longitude,
+                latitudeDelta: zoomLevel,
+                longitudeDelta: zoomLevel,
+            }, 1000);
+        }
+    }, [campus, zoomLevel]);
+
+    useEffect(() => {
+        return () => {
+            if (pathUpdateInterval.current) {
+                clearInterval(pathUpdateInterval.current);
+            }
+        };
+    }, []);
+
     const onPressClearPath = () => {
         setFullPath('');
+        if (pathUpdateInterval.current) {
+            clearInterval(pathUpdateInterval.current);
+        }
         setShowPath(false);
-    }
+    };
 
-
-    //helper for node coordinates
+    //helper for node coordinates (used when setting up path config file)
     const handleMapPress = (event) => {
         Keyboard.dismiss();
-            
+        setIsSearching(false);
         if (event && event.nativeEvent && event.nativeEvent.coordinate) {
             const { latitude, longitude } = event.nativeEvent.coordinate;
             console.log("Tapped Coordinates:", latitude, longitude);
         }
     };
 
-    const handleStartingSearch = (text) => {
-        setSearchStartingText(text);
-        if (text) {
-            const filtered = buildings.filter(building =>
-                building.names.some(name => name.toLowerCase().includes(text.toLowerCase())) ||
-                building.rooms.some(room => room.toLowerCase().includes(text.toLowerCase()))
-            );
-            setFilteredBuildings(filtered);
-        } else {
-            setFilteredBuildings([]);
-        }
+    const handleStartingSelection = (item) => {
+      setSearchStartingText(item.room);
+      setStartLocation(item.building);
+      setFilteredBuildings([]);
     };
 
-    const handleDestinationSearch = (text) => {
-        setSearchDestinationText(text);
-        if (text) {
-            const filtered = buildings.filter(building =>
-                building.names.some(name => name.toLowerCase().includes(text.toLowerCase())) ||
-                building.rooms.some(room => room.toLowerCase().includes(text.toLowerCase()))
-            );
-            setFilteredBuildings(filtered);
-        } else {
-            setFilteredBuildings([]);
-        }
+    const handleDestinationSelection = (item) => {
+      setSearchDestinationText(item.room);
+      setDestinationLocation(item.building);
+      setFilteredBuildings([]);
     };
-    
     
     const campusLocations = {
-      SGW: {
-        latitude: 45.49532997441208,
-        longitude: -73.57859533082366,
-        title: 'SGW Campus',
-        description: 'A well-known university located in Montreal, Canada',
-      },
-      Loyola: {
-        latitude: 45.458161998720556,
-        longitude: -73.63905090035233,
-        title: 'Loyola Campus',
-        description: 'Loyola Campus of Concordia University',
-      }, 
+        SGW: {
+            latitude: 45.49532997441208,
+            longitude: -73.57859533082366,
+            title: 'SGW Campus',
+            description: 'A well-known university located in Montreal, Canada',
+        },
+        Loyola: {
+            latitude: 45.458161998720556,
+            longitude: -73.63905090035233,
+            title: 'Loyola Campus',
+            description: 'Loyola Campus of Concordia University',
+        }, 
     };
-  
+    
     const location = campusLocations[campus];
-  
-    const isPointInPolygon = (point, polygon) => {
-      let x = point.longitude, y = point.latitude;
-      let is_inside = false;
-      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-        let xi = polygon[i].longitude, yi = polygon[i].latitude;
-        let xj = polygon[j].longitude, yj = polygon[j].latitude;
-        let intersect = ((yi > y) !== (yj > y)) && 
-                        (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-        if (intersect) inside = !inside;
-      }
-      return is_inside;
-    };
-  
-  
+    
     const handleSelectSGW = () => {
-      if (activeButton === 'SGW') {
-        // If already on SGW view, reset the map to SGW center
-        mapRef.current.animateToRegion({
-          latitude: campusLocations['SGW'].latitude,
-          longitude: campusLocations['SGW'].longitude,
-          latitudeDelta: zoomLevel,
-          longitudeDelta: zoomLevel,
-        }, 1000);
-      } else {
-        // If not on SGW view, switch to SGW view
-        setCampus('SGW');
-        setCenterOnUserLocation(false);
-        setActiveButton('SGW');
-      }
+        if (activeButton === 'SGW') {
+            // If already on SGW view, reset the map to SGW center
+            mapRef.current.animateToRegion({
+                latitude: campusLocations['SGW'].latitude,
+                longitude: campusLocations['SGW'].longitude,
+                latitudeDelta: zoomLevel,
+                longitudeDelta: zoomLevel,
+            }, 1000);
+        } else {
+            // If not on SGW view, switch to SGW view
+            setCampus('SGW');
+            setCenterOnUserLocation(false);
+            setActiveButton('SGW');
+        }
     };
     
     const handleSelectLoyola = () => {
-      if (activeButton === 'Loyola') {
-        // If already on LOY view, reset the map to LOY center
-        mapRef.current.animateToRegion({
-          latitude: campusLocations['Loyola'].latitude,
-          longitude: campusLocations['Loyola'].longitude,
-          latitudeDelta: zoomLevel,
-          longitudeDelta: zoomLevel,
-        }, 1000);
-      } else {
-        // If not on LOY view, switch to LOY view
-        setCampus('Loyola');
-        setCenterOnUserLocation(false);
-        setActiveButton('Loyola');
-      }
-    };
-  
-    const handleUserLocation = () => {
-        if (centerOnUserLocation) {
-        mapRef.current.animateToRegion({
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
-            latitudeDelta: zoomLevel,
-            longitudeDelta: zoomLevel,
-        }, 1000);
+        if (activeButton === 'Loyola') {
+            // If already on LOY view, reset the map to LOY center
+            mapRef.current.animateToRegion({
+                latitude: campusLocations['Loyola'].latitude,
+                longitude: campusLocations['Loyola'].longitude,
+                latitudeDelta: zoomLevel,
+                longitudeDelta: zoomLevel,
+            }, 1000);
         } else {
-        setCenterOnUserLocation(true);
+            // If not on LOY view, switch to LOY view
+            setCampus('Loyola');
+            setCenterOnUserLocation(false);
+            setActiveButton('Loyola');
+        }
+    };
+    
+    const handleUserLocation = () => {
+        if (!userLocation) {
+            fetchUserLocation();
+            return;
+        }
+        
+        if (centerOnUserLocation) {
+            mapRef.current.animateToRegion({
+                latitude: userLocation.latitude,
+                longitude: userLocation.longitude,
+                latitudeDelta: zoomLevel,
+                longitudeDelta: zoomLevel,
+            }, 1000);
+        } else {
+            setCenterOnUserLocation(true);
         }
         setActiveButton('user');
     };
-  
-    const fetchUserLocation = async () => {
-      const location = await getLocation();
-      if(location){
-        setUserLocation(location);
-        setCenterOnUserLocation(true);
-        setIsUserLocationFetched(true);
-      }
-    };
     
-    // useEffect(() => {
-    //   fetchUserLocation();
-    // }, []);
-  
-    // useEffect(() => {
-    //   mapRef.current.animateToRegion({
-    //     latitude: campusLocations[campus].latitude,
-    //     longitude: campusLocations[campus].longitude,
-    //     latitudeDelta: zoomLevel,
-    //     longitudeDelta: zoomLevel,
-    //   }, 1000);
-    // }, [campus, zoomLevel]);
-  
-    // useEffect(() => {
-    //   const addInitialMarkers = async () => {
-    //     if (mapRef.current) {
-    //       mapRef.current.animateToRegion({
-    //         latitude: campusLocations['SGW'].latitude,
-    //         longitude: campusLocations['SGW'].longitude,
-    //         latitudeDelta: zoomLevel,
-    //         longitudeDelta: zoomLevel,
-    //       }, 0);
-    //       mapRef.current.animateToRegion({
-    //         latitude: campusLocations['Loyola'].latitude,
-    //         longitude: campusLocations['Loyola'].longitude,
-    //         latitudeDelta: zoomLevel,
-    //         longitudeDelta: zoomLevel,
-    //       }, 0);
-    //       const userLocation = await getLocation();
-    //       if (userLocation) {
-    //         mapRef.current.animateToRegion({
-    //           latitude: userLocation.latitude,
-    //           longitude: userLocation.longitude,
-    //           latitudeDelta: zoomLevel,
-    //           longitudeDelta: zoomLevel,
-    //         }, 0);
-    //       }
-    //     }
-    //   };
-    //   addInitialMarkers();
-    // }, []);
+    const fetchUserLocation = async () => {
+        try {
+            const location = await getLocation();
+            if(location){
+                setUserLocation(location);
+                setCenterOnUserLocation(true);
+                setIsUserLocationFetched(true);
+            }
+        } catch (error) {
+            console.error("Error fetching location:", error);
+            // Maybe show a user-friendly error message
+        }
+    };
 
     const Item = ({ rooms }) => (
-        <View style={styles.item}>
+        <View style={[style.item, { backgroundColor: 'white' }]}>
             {rooms.map((room, index) => (
-                <Text key={index} style={styles.title}>{room}</Text>
+                <Text key={index} style={style.title}>{room}</Text>
             ))}
         </View>
     );
 
     return (
-      <View>
-        <ErrorBoundary>
-
+        <View>
+            <ErrorBoundary>
                 <View style={style.inputContainer}>
-                    <View style={style.inputRow}>
-                        <View style={style.iconContainer}>
-                            <View style={style.iconDot} />
-                            <View style={style.iconDots} />
-                        </View>
-                        <TextInput
-                            style={style.input}
-                            placeholder="Choose starting class"
-                            value={searchStartingText}
-                            onChangeText={handleStartingSearch}
-                        />
-                        
+                <View style={style.inputRow}>
+                  <View style={style.iconContainer}>
+                      <View style={style.iconDot} />
+                      <View style={style.iconDots} />
+                  </View>
+                  <View style={style.textInputWrapper}>
+                      <TextInput
+                          style={style.input}
+                          placeholder="Choose starting class"
+                          value={searchStartingText}
+                          onFocus={() => setIsSelectingStart(true)}
+                          onChangeText={handleStartingSearch}
+                      />
+                      {searchStartingText.length > 0 && (
+                          <TouchableOpacity onPress={() => setSearchStartingText('')}>
+                              <Icon name="times-circle" size={18} color="gray" />
+                          </TouchableOpacity>
+                      )}
+                  </View>
+                </View>
+
+                <View style={style.inputRow}>
+                    <View style={style.iconContainer}>
+                        <Icon name="map-marker" size={20} color="red" />
                     </View>
-                    <View style={style.inputRow}>
-                        <View style={style.iconContainer}>
-                            <Icon name="map-marker" size={20} color="red" />
-                        </View>
+                    <View style={style.textInputWrapper}>
                         <TextInput
                             style={style.input}
                             placeholder="Choose destination"
                             value={searchDestinationText}
+                            onFocus={() => setIsSelectingStart(false)}
                             onChangeText={handleDestinationSearch}
                         />
+                        {searchDestinationText.length > 0 && (
+                            <TouchableOpacity onPress={() => setSearchDestinationText('')}>
+                                <Icon name="times-circle" size={18} color="gray" />
+                            </TouchableOpacity>
+                        )}
                     </View>
+                </View>
 
-                    {filteredBuildings.length > 0 && (
-                        <FlatList
-                            style={{ marginTop: 5, width: '100%' }}
-                            data={filteredBuildings}
-                            renderItem={({ item }) => <Item rooms={item.rooms} />}
-                            keyExtractor={(item, index) => index.toString()}
-                        />
-                    )}
+                    {isSearching && filteredBuildings.length > 0 && (
+                          <FlatList
+                              style={{ marginTop: 5, width: '100%', backgroundColor: 'white', borderRadius: 8 }}
+                              data={filteredBuildings.flatMap(building => 
+                                  building.rooms.map(room => ({ room, building }))
+                              )}
+                              renderItem={({ item }) => (
+                                <TouchableOpacity 
+                                onPress={() => isSelectingStart ? handleStartingSelection(item) : handleDestinationSelection(item)}>
+                                      <View style={style.item}>
+                                          <Text style={style.title}>{item.room}</Text>
+                                      </View>
+                                      <View style={style.separator} />
+                                  </TouchableOpacity>
+                              )}
+                              keyExtractor={(item, index) => `${item.building.names[0]}-${index}`}
+                              maxHeight={115}
+                          />
+                      )}
                     
-                    <TouchableOpacity onPress={onPressShowPath}>
-                        <Text>Show path</Text>
+                    <TouchableOpacity style={style.pathButton} onPress={onPressShowPath}>
+                        <Text style={style.pathButtonText}>Show Directions</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={onPressClearPath}>
-                        <Text>Clear path</Text>
+                    <TouchableOpacity style={[style.pathButton, {backgroundColor: '#e74c3c'}]} onPress={onPressClearPath}>
+                        <Text style={style.pathButtonText}>Clear Directions</Text>
                     </TouchableOpacity>
                 </View>
         
-       
-        {/* <View style={styles.toggleButtonContainer}>
-          
-            <>
-          <TouchableOpacity
-            style={activeButton === 'SGW' ? styles.sgwButtonActive : styles.sgwButton}
-            onPress={handleSelectSGW}
-            testID="sgwButton"
-          >
-            <Text style={activeButton === 'SGW' ? styles.highlightedText : styles.normalText}>SGW</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={activeButton === 'Loyola' ? styles.loyolaButtonActive : styles.loyolaButton}
-            onPress={handleSelectLoyola}
-            testID="loyolaButton"
-          >
-            <Text style={activeButton === 'Loyola' ? styles.highlightedText : styles.normalText}>LOY</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={activeButton === 'user' ? styles.userLocationButtonActive : styles.userLocationButton}
-            onPress={handleUserLocation}
-            testID="userLocationButton"
-          >
-            <Icon name="user" size={20} color={activeButton === 'user' ? 'blue' : 'white'} />
-          </TouchableOpacity>
-            </>
-        </View> */}
-    
-        <MapView
-          ref={mapRef}
-          style={styles.map}
-          showsPointsOfInterest={false}
-          onPress={handleMapPress}
-          initialRegion={{
-            latitude: isUserLocationFetched ? userLocation.latitude : location.latitude,
-            longitude: isUserLocationFetched ? userLocation.longitude : location.longitude,
-            latitudeDelta: zoomLevel,
-            longitudeDelta: zoomLevel,
-          }}
-          region={{
-            latitude: centerOnUserLocation ? (isUserLocationFetched ? userLocation.latitude : location.latitude) : location.latitude,
-            longitude: centerOnUserLocation ? (isUserLocationFetched ? userLocation.longitude : location.longitude) : location.longitude,
-            latitudeDelta: zoomLevel,
-            longitudeDelta: zoomLevel,
-          }}
-        >
-  
-          <Marker key={"sgw"} coordinate={campusLocations['SGW']} title={campusLocations['SGW'].title} description={campusLocations['SGW'].description} />
-          <Marker key={"loy"} coordinate={campusLocations['Loyola']} title={campusLocations['Loyola'].title} description={campusLocations['Loyola'].description} />
-  
-          {isUserLocationFetched && (
-                    <Marker
-                      coordinate={{
-                        latitude: userLocation.latitude,
-                        longitude: userLocation.longitude,
-                      }}
-                      pinColor="green"
-                      title="Your Location"
-                    />
-                  )}
-           
-          {buildingsData.buildings.map((building, index) => {
-            const polygonFillColor = building.fillColor;
-
-            return (
-                <React.Fragment key={index}> 
-                <Polygon
-                    key={`polygon-${index}`}
-                    coordinates={building.coordinates}
-                    fillColor={polygonFillColor}
-                    strokeColor={building.strokeColor}
-                    strokeWidth={2}
-                    //onPress={() => handlePolygonPress(building)}
-                    testID={`polygon-${index}`}
-                />
-
-              {building.name === 'Henry F.Hall Building' && showPath && (
-                      <BuildingOverlay
-                        coordinates={building.coordinates}
-                        image={require('../assets/floor_plans/Hall-1.png')}
-                      />)}
-
-                {full_path && showPath && (
-                  <PathOverlay path={full_path} />
-                )}
+                <MapView
+                    ref={mapRef}
+                    style={styles.map}
+                    showsPointsOfInterest={false}
+                    onPress={handleMapPress}
+                    initialRegion={{
+                        latitude: isUserLocationFetched ? userLocation.latitude : location.latitude,
+                        longitude: isUserLocationFetched ? userLocation.longitude : location.longitude,
+                        latitudeDelta: zoomLevel,
+                        longitudeDelta: zoomLevel,
+                    }}
+                    region={{
+                        latitude: centerOnUserLocation ? (isUserLocationFetched ? userLocation.latitude : location.latitude) : location.latitude,
+                        longitude: centerOnUserLocation ? (isUserLocationFetched ? userLocation.longitude : location.longitude) : location.longitude,
+                        latitudeDelta: zoomLevel,
+                        longitudeDelta: zoomLevel,
+                    }}
+                >
+                    <Marker key={"sgw"} coordinate={campusLocations['SGW']} title={campusLocations['SGW'].title} description={campusLocations['SGW'].description} />
+                    <Marker key={"loy"} coordinate={campusLocations['Loyola']} title={campusLocations['Loyola'].title} description={campusLocations['Loyola'].description} />
+            
+                    {isUserLocationFetched && userLocation && (
+                        <Marker
+                            coordinate={{
+                                latitude: userLocation.latitude,
+                                longitude: userLocation.longitude,
+                            }}
+                            pinColor="green"
+                            title="Your Location"
+                        />
+                    )}
                 
-                </React.Fragment>
-            );
-            })}
-        </MapView>
-        </ErrorBoundary>
-      </View>
+                    {buildingsData.buildings.map((building, index) => {
+                        const polygonFillColor = building.fillColor;
+
+                        return (
+                            <React.Fragment key={index}> 
+                                <Polygon
+                                    key={`polygon-${index}`}
+                                    coordinates={building.coordinates}
+                                    fillColor={polygonFillColor}
+                                    strokeColor={building.strokeColor}
+                                    strokeWidth={2}
+                                    testID={`polygon-${index}`}
+                                />
+
+                                {building.name === 'Henry F.Hall Building' && showPath && (
+                                    <BuildingOverlay
+                                        coordinates={building.coordinates}
+                                        image={require('../assets/floor_plans/Hall-1.png')}
+                                    />
+                                )}
+
+                                {full_path && showPath && (
+                                    <PathOverlay path={full_path} />
+                                )}
+                            </React.Fragment>
+                        );
+                    })}
+                </MapView>
+            </ErrorBoundary>
+        </View>
     );
-}
+};
 
 const style = StyleSheet.create({
-    
     inputContainer: {
         position: 'absolute',
         top: 20,
@@ -456,7 +448,36 @@ const style = StyleSheet.create({
         flex: 1,
         height: 30,
         paddingHorizontal: 10,
+      },
+      textInputWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
     },
-  });
+    pathButton: {
+        backgroundColor: '#3498db',
+        padding: 10,
+        borderRadius: 8,
+        marginTop: 8,
+        alignItems: 'center',
+    },
+    pathButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    title: {
+      fontSize: 10,
+      fontWeight: '500',
+    },
+    item: {
+      padding: 15,
+      paddingBottom: 15,
+    },
+    separator: {
+      height: 1,
+      backgroundColor: 'black',
+      marginHorizontal: 10,
+    },
+});
 
 export default TempMap;

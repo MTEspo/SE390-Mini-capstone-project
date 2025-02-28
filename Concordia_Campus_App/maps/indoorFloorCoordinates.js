@@ -2,7 +2,7 @@ const indoorFloorData = {
 "buildings": [
     {
         "name": "Hall Building",
-        
+        "abbreviation" : "H",
         "floor-2":{
             "classCoordinates": {
                 "831": { "latitude": 45.495359016476655, "longitude": -73.57936484536624, "connected_nodes":[] },
