@@ -96,40 +96,61 @@ const TempMap = () => {
       }
     };
 
-    const onPressShowPath = () => {
-      // if (!startLocation || !destinationLocation) {
-      //     console.warn("Both starting location and destination must be selected");
-      //     return;
-      // }
-      
-      setShowPath(true);
-      
-      // Clear the previous interval if it exists
-      if (pathUpdateInterval.current) {
-          clearInterval(pathUpdateInterval.current);
+   
+const onPressShowPath = () => {
+    setShowPath(true);
+  
+    // Clear the previous interval if it exists
+    if (pathUpdateInterval.current) {
+      clearInterval(pathUpdateInterval.current);
+    }
+  
+    setFullPath([]);
+  
+    setTimeout(() => {
+      const startFloor = "floor-8";
+      const endFloor = "floor-9";
+      const floors = Object.keys(indoorFloorData.buildings[0]).sort();
+  
+      const filteredFloors = floors.filter(floor => {
+        return floor >= startFloor && floor <= endFloor;
+      });
+  
+      let paths = [];
+  
+      for (let i = 0; i < filteredFloors.length; i++) {
+        const floor = indoorFloorData.buildings[0][filteredFloors[i]];
+        let startNode = "820";
+        let endNode = "escalator_up";
+  
+        if (i === filteredFloors.length - 1) {
+            startNode = "entrance"
+          endNode = "937";
+        }
+
+        const shortestPath = findShortestPath(startNode, endNode, floor);
+  
+        const pathWithCoordinates = shortestPath.map(nodeKey => {
+          const node = floor[nodeKey];
+          if (node) {
+            return {
+              node: nodeKey,
+              latitude: node.latitude,
+              longitude: node.longitude
+            };
+          }
+          return null;
+        }).filter(node => node !== null);
+  
+        paths.push(pathWithCoordinates);
+  
+        console.log(`Path for floor ${filteredFloors[i]}:`);
+        console.log(pathWithCoordinates.map(node => `${node.node} - (${node.latitude}, ${node.longitude})`).join('\n'));
+        console.log();
       }
   
-      // First show the overlay without the path
-      setFullPath([]);
-      
-      // Then wait 1 second before drawing the path (to prevent any inconsistencies where the image overlay would overlap the polyline)
-      setTimeout(() => {
-          const floor8 = indoorFloorData.buildings[0]['floor-8'];
-          const shortestPath = findShortestPath("820", "831", floor8);
-          
-          const pathWithCoordinates = shortestPath.map(nodeKey => {
-              const node = floor8[nodeKey];
-              if (node) {
-                  return {
-                      latitude: node.latitude,
-                      longitude: node.longitude
-                  };
-              }
-              return null;
-          }).filter(node => node !== null);
-          
-          setFullPath(pathWithCoordinates);
-      }, 1000);
+      setFullPath(paths);
+    }, 1000);
   };
     
     // useEffect(() => {
