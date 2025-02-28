@@ -24,17 +24,17 @@ const TransitScreen = ({showDirections, campus, routeData}) => {
   };
 
   // Current campus location
-  const location = campusLocations[campus];
-  const destinationLocation = campus === 'SGW' ? campusLocations.Loyola : campusLocations.SGW;
+  const location =  campusLocations[campus];
+  const destinationLocation = (campus === 'SGW') ? campusLocations.Loyola : campusLocations.SGW;
 
   const handleDirections = (result) => {
     routeData(result.duration, result.distance);
   };
 
   return (
-    <View style={styles.container}>
-      {showDirections && (
-        <>
+    <>
+    {showDirections && (
+      <View style={styles.container}>
           {/* For driving mode (always blue) */}
           {mode === 'DRIVING' && (
             <MapViewDirections
@@ -73,9 +73,7 @@ const TransitScreen = ({showDirections, campus, routeData}) => {
               onReady={handleDirections}
             />
           )}
-        </>
-      )}
-      {showDirections && (
+
         <View style={styles.modeContainer}>
           <TouchableOpacity 
             testID="driving-button"
@@ -98,8 +96,9 @@ const TransitScreen = ({showDirections, campus, routeData}) => {
             <Text style={styles.modeText}>Transit</Text>
           </TouchableOpacity>
         </View>
-      )}
     </View>
+    )}
+    </>
   );
 };
 export default TransitScreen;

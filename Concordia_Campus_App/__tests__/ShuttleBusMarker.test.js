@@ -163,5 +163,4 @@ describe('ShuttleBusMarker', () => {
 
     expect(mockSetShuttleStop).toHaveBeenCalledWith(null);
   });
-
 });
