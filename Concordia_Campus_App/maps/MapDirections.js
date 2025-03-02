@@ -31,7 +31,7 @@ const MapDirections = ({userLocation, destinationLocation}) => {
                 }}
                 apikey={API_KEY}
                 strokeWidth={4}
-                strokeColor="orange" />
+                strokeColor="blue" />
         </>
     );
 
