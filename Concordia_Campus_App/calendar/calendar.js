@@ -8,6 +8,8 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { extractTokens, convertDateTime } from "./calendarUtils";
 import mapData from "./mapData";
+import { getLocation } from "./locationUtils";
+
 
 WebBrowser.maybeCompleteAuthSession();
 const SUPABASE_URL = "https://mmzllysbkfjeypyuodqr.supabase.co";
@@ -266,17 +268,39 @@ export default function Calendar() {
                             Location
                           </Button>
                           <Button
-                            style={{ marginTop: 10 }}
-                            mode="contained"
-                            onPress={() => {
-                              const buildingCode = event.description;
-                              const code = buildingCode.match(/^[^\d\s]+/);
-                              const building = mapData.buildings.find((building) => building.code === code[0]);
-                              navigation.navigate("Map", { destinationCoords: building.name });
-                            }}
-                          >
-                            Directions
-                          </Button>
+  style={{ marginTop: 10 }}
+  mode="contained"
+  onPress={async () => {
+    try {
+      const location = await getLocation(); // Fetch user's current location
+      if (!location) {
+        Alert.alert("Error", "Could not retrieve current location.");
+        return;
+      }
+
+      const buildingCode = event.description;
+      const code = buildingCode.match(/^[^\d\s]+/);
+      const building = mapData.buildings.find((b) => b.code === code[0]);
+
+      if (!building) {
+        Alert.alert("Error", "Building not found in map data.");
+        return;
+      }
+
+      navigation.navigate("Map", {
+        startCoords: location,
+        destinationCoords: building.name,
+      });
+    } catch (error) {
+      console.error("Error retrieving user location:", error);
+      Alert.alert("Error", "Could not retrieve current location.");
+    }
+  }}
+>
+  Directions
+</Button>
+
+
                         </View>
                       </View>
                     )}
