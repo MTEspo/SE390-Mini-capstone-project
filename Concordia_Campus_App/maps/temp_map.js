@@ -41,8 +41,12 @@ const TempMap = () => {
     const [searchStartingText, setSearchStartingText] = useState('');
     const [searchDestinationText, setSearchDestinationText] = useState('');
     const [filteredBuildings, setFilteredBuildings] = useState([]);
+
     const [startLocation, setStartLocation] = useState('');
     const [destinationLocation, setDestinationLocation] = useState('');
+    const [startingRoom, setStartingRoom] = useState('');
+    const [destinationRoom, setDestinationRoom] = useState('');
+
     const [full_path, setFullPath] = useState('');
     const [showPath, setShowPath] = useState(false);
     const pathUpdateInterval = useRef(null);
@@ -59,103 +63,164 @@ const TempMap = () => {
     const [isSelectingStart, setIsSelectingStart] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
 
-    const buildings = [
-        {
-            names: ['Hall Building'], 
-            rooms: ['H-831', 'H-820', 'H-833', 'H-843']
-        },
-    ];
+    const buildings = indoorFloorData.buildings.map(building => {
+      const rooms = [];   
+      Object.keys(building).forEach(key => {
+          if (key.startsWith('floor-')) {
+              Object.keys(building[key]).forEach(roomKey => {
+                  if (!roomKey.startsWith('node_') && 
+                      !['escalator_up', 'escalator_down', 'elevator', 'entrance', 'exit', 'floorImage'].includes(roomKey)) {
+                      rooms.push(`${roomKey}`);
+                  }
+              });
+          }
+      });
+      return {
+          names: [building.name],
+          rooms: rooms
+      };
+    });
 
-    const handleStartingSearch = (text) => {
-      setSearchStartingText(text);
-      if (text) {
-          setIsSearching(true);
-          const filtered = buildings.filter(building =>
-              building.names.some(name => name.toLowerCase().includes(text.toLowerCase())) ||
-              building.rooms.some(room => room.toLowerCase().includes(text.toLowerCase()))
-          );
-          setFilteredBuildings(filtered);
+    const handleSearch = (text, isStarting) => {
+      if (isStarting) {
+        setSearchStartingText(text);
       } else {
-          setIsSearching(false);
-          setFilteredBuildings([]);
+        setSearchDestinationText(text);
       }
-    };
-
-    const handleDestinationSearch = (text) => {
-      setSearchDestinationText(text);
+      
       if (text) {
-          setIsSearching(true);
-          const filtered = buildings.filter(building =>
-              building.names.some(name => name.toLowerCase().includes(text.toLowerCase())) ||
-              building.rooms.some(room => room.toLowerCase().includes(text.toLowerCase()))
+        setIsSearching(true);
+        const filteredResults = [];
+        
+        buildings.forEach(building => {
+          const matchingRooms = building.rooms.filter(room => 
+            room.toLowerCase().includes(text.toLowerCase())
           );
-          setFilteredBuildings(filtered);
+          
+          if (matchingRooms.length > 0) {
+            filteredResults.push({
+              ...building,
+              rooms: matchingRooms
+            });
+          }
+        });
+        
+        buildings.forEach(building => {
+          if (building.names.some(name => name.toLowerCase().includes(text.toLowerCase()))) {
+            if (!filteredResults.some(result => result.names[0] === building.names[0])) {
+              filteredResults.push(building);
+            }
+          }
+        });
+        
+        setFilteredBuildings(filteredResults);
       } else {
-          setIsSearching(false);
-          setFilteredBuildings([]);
+        setIsSearching(false);
+        setFilteredBuildings([]);
       }
     };
 
    
-const onPressShowPath = () => {
-    setShowPath(true);
-  
-    // Clear the previous interval if it exists
-    if (pathUpdateInterval.current) {
-      clearInterval(pathUpdateInterval.current);
-    }
-  
-    setFullPath([]);
-  
-    setTimeout(() => {
-      const startFloor = "floor-8";
-      const endFloor = "floor-9";
-      const floors = Object.keys(indoorFloorData.buildings[0]).sort();
-  
-      const filteredFloors = floors.filter(floor => {
-        return floor >= startFloor && floor <= endFloor;
-      });
-  
-      let paths = [];
-  
-      for (let i = 0; i < filteredFloors.length; i++) {
-        const floor = indoorFloorData.buildings[0][filteredFloors[i]];
-        let startNode = "820";
-        let endNode = "escalator_up";
-  
-        if (i === filteredFloors.length - 1) {
-            startNode = "entrance"
-          endNode = "937";
-        }
-
-        const shortestPath = findShortestPath(startNode, endNode, floor);
-  
-        const pathWithCoordinates = shortestPath.map(nodeKey => {
-          const node = floor[nodeKey];
-          if (node) {
-            return {
-              node: nodeKey,
-              latitude: node.latitude,
-              longitude: node.longitude
-            };
-          }
-          return null;
-        }).filter(node => node !== null);
-  
-        paths.push(pathWithCoordinates);
-  
-        console.log(`Path for floor ${filteredFloors[i]}:`);
-        console.log(pathWithCoordinates.map(node => `${node.node} - (${node.latitude}, ${node.longitude})`).join('\n'));
-        console.log();
-      }
-  
-      setFullPath(paths);
-    }, 1000);
-  };
+    const onPressShowPath = () => {
+      setShowPath(true);
     
-    // useEffect(() => {
-    //     fetchUserLocation();
-    // }, []);
+      // Clear the previous interval if it exists
+      if (pathUpdateInterval.current) {
+        clearInterval(pathUpdateInterval.current);
+      }
+    
+      setFullPath([]);
+    
+      setTimeout(() => {
+        const startFloor = "floor-9";
+        const endFloor = "floor-1";
+        const floors = Object.keys(indoorFloorData.buildings[0]).sort();
+
+        const getNumericFloor = (floor) => {
+          const match = floor.match(/floor-(\d+)/);
+          return match ? parseInt(match[1], 10) : NaN;
+        };
+
+        const startFloorNumber = getNumericFloor(startFloor);
+        const endFloorNumber = getNumericFloor(endFloor);
+    
+        const filteredFloors = floors.filter(floor => {
+          const floorNumber = getNumericFloor(floor);
+          
+          if (startFloorNumber < endFloorNumber) {
+            return floorNumber >= startFloorNumber && floorNumber <= endFloorNumber;
+          } else {
+            return floorNumber <= startFloorNumber && floorNumber >= endFloorNumber;
+          }
+        }).sort((a, b) => {
+          const floorANumber = getNumericFloor(a);
+          const floorBNumber = getNumericFloor(b);
+          
+          if (startFloorNumber < endFloorNumber) {
+            return floorANumber - floorBNumber;
+          } else {
+            return floorBNumber - floorANumber;
+          }
+        });
+
+        console.log(filteredFloors)
+
+        let paths = [];
+    
+        for (let i = 0; i < filteredFloors.length; i++) {
+          const floorNumber = filteredFloors[i];
+          const floor = indoorFloorData.buildings[0][floorNumber];
+          
+          let startNode, endNode;
+          
+          if (filteredFloors.length === 1) {
+            // Classes on same floor
+            startNode = startingRoom;
+            endNode = destinationRoom;
+          } else if (i === 0) {
+            // First floor in multi-floor path
+            startNode = startingRoom;
+            endNode = startFloorNumber > endFloorNumber ? "escalator_down" : "escalator_up";
+          } else if (i === filteredFloors.length - 1) {
+            // Last floor in multi-floor path
+            startNode = startFloorNumber > endFloorNumber ? "exit" : "entrance";
+            endNode = destinationRoom;
+          } else {
+            // Middle floors in multi-floor path
+            startNode = startFloorNumber > endFloorNumber ? "exit" : "entrance";
+            endNode = startFloorNumber > endFloorNumber ? "escalator_down" : "escalator_up";
+          }
+        
+          const shortestPath = findShortestPath(startNode, endNode, floor);
+        
+          const pathWithCoordinates = shortestPath
+            .map(nodeKey => {
+              const node = floor[nodeKey];
+              if (node) {
+                return {
+                  node: nodeKey,
+                  latitude: node.latitude,
+                  longitude: node.longitude,
+                };
+              }
+              return null;
+            })
+            .filter(node => node !== null);
+        
+            paths.push({
+              floor: floorNumber,
+              coordinates: pathWithCoordinates
+            });
+        }
+    
+        console.log(JSON.stringify(paths, null, 1));
+        //setFullPath(paths);
+      }, 1000);
+    };
+      
+      // useEffect(() => {
+      //     fetchUserLocation();
+      // }, []);
 
     useEffect(() => {
         if (mapRef.current && campus) {
@@ -196,13 +261,15 @@ const onPressShowPath = () => {
 
     const handleStartingSelection = (item) => {
       setSearchStartingText(item.room);
-      setStartLocation(item.building);
+      setStartingRoom(item.room);
+      setStartLocation(item.building.names[0]);
       setFilteredBuildings([]);
     };
-
+    
     const handleDestinationSelection = (item) => {
       setSearchDestinationText(item.room);
-      setDestinationLocation(item.building);
+      setDestinationRoom(item.room);
+      setDestinationLocation(item.building.names[0]);
       setFilteredBuildings([]);
     };
     
@@ -313,10 +380,10 @@ const onPressShowPath = () => {
                           placeholder="Choose starting class"
                           value={searchStartingText}
                           onFocus={() => setIsSelectingStart(true)}
-                          onChangeText={handleStartingSearch}
+                          onChangeText={(text) => handleSearch(text, true)}
                       />
                       {searchStartingText.length > 0 && (
-                          <TouchableOpacity onPress={() => setSearchStartingText('')}>
+                          <TouchableOpacity onPress={() => {setSearchStartingText(''), setStartLocation('')}}>
                               <Icon name="times-circle" size={18} color="gray" />
                           </TouchableOpacity>
                       )}
@@ -333,44 +400,54 @@ const onPressShowPath = () => {
                             placeholder="Choose destination"
                             value={searchDestinationText}
                             onFocus={() => setIsSelectingStart(false)}
-                            onChangeText={handleDestinationSearch}
+                            onChangeText={(text) => handleSearch(text, false)}
                         />
                         {searchDestinationText.length > 0 && (
-                            <TouchableOpacity onPress={() => setSearchDestinationText('')}>
+                            <TouchableOpacity onPress={() => {setSearchDestinationText(''), setDestinationLocation('')}}>
                                 <Icon name="times-circle" size={18} color="gray" />
                             </TouchableOpacity>
                         )}
                     </View>
                 </View>
 
-                    {isSearching && filteredBuildings.length > 0 && (
-                          <FlatList
-                              style={{ marginTop: 5, width: '100%', backgroundColor: 'white', borderRadius: 8 }}
-                              data={filteredBuildings.flatMap(building => 
-                                  building.rooms.map(room => ({ room, building }))
-                              )}
-                              renderItem={({ item }) => (
-                                <TouchableOpacity 
-                                onPress={() => isSelectingStart ? handleStartingSelection(item) : handleDestinationSelection(item)}>
-                                      <View style={style.item}>
-                                          <Text style={style.title}>{item.room}</Text>
-                                      </View>
-                                      <View style={style.separator} />
-                                  </TouchableOpacity>
-                              )}
-                              keyExtractor={(item, index) => `${item.building.names[0]}-${index}`}
-                              maxHeight={115}
-                          />
-                      )}
+                {isSearching && filteredBuildings.length > 0 && (
+                  <FlatList
+                    style={{ marginTop: 5, width: '100%', backgroundColor: 'white', borderRadius: 8 }}
+                    data={filteredBuildings.flatMap(building => 
+                      building.rooms.map(room => ({ room, building }))
+                    )}
+                    renderItem={({ item, index, separators }) => {
+                      const totalItems = filteredBuildings.flatMap(building => 
+                        building.rooms.map(room => ({ room, building }))
+                      ).length;
+                      
+                      const showSeparator = totalItems > 1 && index < totalItems - 1;
+                      
+                      return (
+                        <TouchableOpacity 
+                          onPress={() => isSelectingStart ? handleStartingSelection(item) : handleDestinationSelection(item)}>
+                          <View style={style.item}>
+                            <Text style={style.title}>{item.room}</Text>
+                          </View>
+                          {showSeparator && <View style={style.separator} />}
+                        </TouchableOpacity>
+                      );
+                    }}
+                    keyExtractor={(item, index) => `${item.building.names[0]}-${index}`}
+                    maxHeight={115}
+                  />
+                )}
                     
-                    <TouchableOpacity style={style.pathButton} onPress={onPressShowPath}>
-                        <Text style={style.pathButtonText}>Show Directions</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[style.pathButton, {backgroundColor: '#e74c3c'}]} onPress={onPressClearPath}>
+                    {startLocation && destinationLocation && (
+                      <TouchableOpacity style={style.pathButton} onPress={onPressShowPath}>
+                      <Text style={style.pathButtonText}>Show Directions</Text>
+                      </TouchableOpacity>)
+                    }
+                    {/* <TouchableOpacity style={[style.pathButton, {backgroundColor: '#e74c3c'}]} onPress={onPressClearPath}>
                         <Text style={style.pathButtonText}>Clear Directions</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
-                    <FloorButtons onFloorSelect={(floor) => setSelectedFloor(floor)} />
+                    
                 </View>
         
                 <MapView
@@ -440,6 +517,7 @@ const onPressShowPath = () => {
                         );
                     })}
                 </MapView>
+                <FloorButtons onFloorSelect={(floor) => setSelectedFloor(floor)} />
             </ErrorBoundary>
         </View>
     );
