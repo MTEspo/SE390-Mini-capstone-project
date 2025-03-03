@@ -2,26 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { Polyline, Marker } from 'react-native-maps';
 
 const PathOverlay = ({ path }) => {
+  const [delayedPath, setDelayedPath] = useState(null);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDelayedPath(path);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [path]);
+
+  if (!delayedPath) return null;
 
   return (
     <>
       <Polyline
-        coordinates={path}
-        strokeColor="black"
+        coordinates={delayedPath}
+        strokeColor="blue"
         strokeWidth={3}
         lineDashPattern={[5, 5]}
       />
       
-      <Marker coordinate={path[0]} pinColor={'green'} />
-      <Marker coordinate={path[path.length - 1]} pinColor={'black'} />
-      {/* {path.map((coordinate, index) => (
-        <Marker
-          key={index}
-          coordinate={coordinate}
-          pinColor={'orange'}
-        />
-      ))} */}
+      <Marker coordinate={delayedPath[0]} pinColor={'green'} />
+      <Marker coordinate={delayedPath[delayedPath.length - 1]} pinColor={'black'} />
     </>
   );
 };

@@ -135,6 +135,7 @@ const TempMap = () => {
 
    
     const onPressShowPath = () => {
+      console.log(selectedFloor)
 
       setShowPath(true);
     
@@ -226,8 +227,8 @@ const TempMap = () => {
             });
         }
     
-        console.log(JSON.stringify(paths, null, 1));
-        //setFullPath(paths);
+        //console.log(JSON.stringify(paths, null, 1));
+        setFullPath(paths);
       }, 1000);
     };
       
@@ -513,18 +514,18 @@ const TempMap = () => {
                                 {building.name === 'Henry F.Hall Building' && (
                                     <BuildingOverlay
                                         coordinates={building.coordinates}
-                                        image={floorImages[selectedFloor]}
+                                        image={selectedFloor ? floorImages[selectedFloor.replace('floor-', '')] : undefined}
                                     />
                                 )}
 
                                 {full_path && showPath && (
-                                    <PathOverlay path={full_path} />
+                                    <PathOverlay path={full_path.find(floorData => floorData.floor === selectedFloor)?.coordinates || []} />
                                 )}
                             </React.Fragment>
                         );
                     })}
                 </MapView>
-                <FloorButtons onFloorSelect={(floor) => setSelectedFloor(floor)} />
+                <FloorButtons onFloorSelect={(floor) => setSelectedFloor('floor-' + floor)} />
             </ErrorBoundary>
         </View>
     );

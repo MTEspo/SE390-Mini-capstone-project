@@ -25,7 +25,7 @@ const indoorFloorData = {
                 "node_2":{ "latitude": 45.49733135820939, "longitude":-73.57885815532305, "connected_nodes":["node_1","node_3"]},
                 "node_3":{ "latitude": 45.497311379081786, "longitude":  -73.57893464394255, "connected_nodes":["node_2"]},
                 "node_4":{ "latitude":45.49721695047203, "longitude":  -73.57878353632223, "connected_nodes":["node_1"]},
-                "escalator_up": { "latitude": 45.497277567143094, "longitude": -73.5788663407201, "last_connecting_node": ["node_3"] },
+                "escalator_up": { "latitude": 45.497291680773145, "longitude": -73.5789156351803, "last_connecting_node": ["node_3"] },
                 "escalator_down":{ "latitude": 45.49721831262093, "longitude": -73.57880257754711, "last_connecting_node":[ "node_4"] },
                 "elevator": { "latitude": 45.497291520968666, "longitude": -73.57868839449006, "last_connecting_node": ["node_1"] },
                 "entrance":{ "latitude": 45.49733234330694, "longitude": -73.57866423077638, "last_connecting_node": ["node_1"] },
@@ -73,11 +73,11 @@ const indoorFloorData = {
             "node_12":{ "latitude": 45.49727816614321, "longitude": -73.57918830476792 , "connected_nodes":["node_11","node_13"]},
             "node_13":{ "latitude": 45.49729244125229, "longitude": -73.57916840736969 , "connected_nodes":["node_12"]},
             "escalator_up": { "latitude": 45.497312211471396, "longitude": -73.57897960517127, "last_connecting_node": ["node_9"] },
-            "escalator_down":{ "latitude": 45.497302657035235, "longitude": -73.57896357181264, "last_connecting_node":[ "node_1","node_8"] },
+            "escalator_down":{ "latitude": 45.497265437958, "longitude": -73.57887387390885, "last_connecting_node":[ "node_1","node_8"] },
             "elevator": { "latitude": 45.49729026677937, "longitude": -73.57875190045378, "last_connecting_node": ["node_4"] },
             "floorImage": "",
             "entrance": { "latitude": 45.497312211471396, "longitude": -73.57897960517127, "last_connecting_node": ["node_9"] },// same as escalator up
-            "exit":{ "latitude": 45.497302657035235, "longitude": -73.57896357181264, "last_connecting_node":[ "node_1","node_8"] },// same as escalator down
+            "exit":{ "latitude": 45.497265437958, "longitude": -73.57887387390885, "last_connecting_node":[ "node_1","node_8"] },// same as escalator down
         },
     },
     {
