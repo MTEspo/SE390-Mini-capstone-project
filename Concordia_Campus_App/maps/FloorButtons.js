@@ -2,9 +2,14 @@ import React from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import indoorFloorData from "./indoorFloorCoordinates";
 
-const FloorButtons = ({ selectedFloor, onFloorSelect }) => {
-    const hallBuilding = indoorFloorData.buildings[0];
-    const floors = Object.keys(hallBuilding).filter(key => key.startsWith("floor-"));
+const FloorButtons = ({ selectedFloor, onFloorSelect, startLocation }) => {
+
+    const getBuildingByName = (name) => {
+        return indoorFloorData.buildings.find(building => building.name === name);
+    };
+
+    const building = getBuildingByName(startLocation);
+    const floors = Object.keys(building).filter(key => key.startsWith("floor-"));
 
     return (
         <View style={styles.wrapper}>

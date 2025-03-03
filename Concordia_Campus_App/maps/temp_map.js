@@ -462,6 +462,8 @@ const TempMap = () => {
                     style={styles.map}
                     showsPointsOfInterest={false}
                     onPress={handleMapPress}
+                    mapType="standard"
+                    showsBuildings={false}
                     initialRegion={{
                         latitude: isUserLocationFetched ? userLocation.latitude : location.latitude,
                         longitude: isUserLocationFetched ? userLocation.longitude : location.longitude,
@@ -526,7 +528,8 @@ const TempMap = () => {
                 {full_path && showPath && (
                     <FloorButtons 
                         selectedFloor={selectedFloor} 
-                        onFloorSelect={(floor) => setSelectedFloor('floor-' + floor)} 
+                        onFloorSelect={(floor) => setSelectedFloor('floor-' + floor)}
+                        startLocation={startLocation}
                     />
                 )}
             </ErrorBoundary>
