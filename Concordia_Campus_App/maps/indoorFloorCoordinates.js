@@ -16,8 +16,8 @@ const indoorFloorData = {
                 "escalator_up": { "latitude": 45.497212132955724, "longitude": -73.57864730686212, "last_connecting_node": ["node_7"] },
                 "escalator_down":{ "latitude": 45.497212132955724, "longitude": -73.57864730686212, "last_connecting_node":[ "node_7"] },
                 "elevator": { "latitude": 45.49727891671142, "longitude": -73.5786661115211, "last_connecting_node": ["node_10"] },
-                "entrance":{ "latitude": 45.49702056858536, "longitude": -73.57868700557368, "last_connecting_node": ["node_1"] },
-                "exit":{ "latitude": 45.49702056858536, "longitude": -73.57868700557368, "last_connecting_node": ["node_1"] },
+                "entrance": { "latitude": 45.497212132955724, "longitude": -73.57864730686212, "last_connecting_node": ["node_7"] },
+                "exit":{ "latitude": 45.497212132955724, "longitude": -73.57864730686212, "last_connecting_node":[ "node_7"] },
                 "floorImage": "",
         },
         "floor-2":{
