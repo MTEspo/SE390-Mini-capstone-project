@@ -44,6 +44,8 @@ const TempMap = () => {
 
     const [startLocation, setStartLocation] = useState('');
     const [destinationLocation, setDestinationLocation] = useState('');
+    const [startingFloor, setStartingFloor] = useState('');
+    const [destinationFloor, setDestinationFloor] = useState('');
     const [startingRoom, setStartingRoom] = useState('');
     const [destinationRoom, setDestinationRoom] = useState('');
 
@@ -120,8 +122,20 @@ const TempMap = () => {
       }
     };
 
+    const getFloorByRoom = (roomNumber) => {
+      for (const building of indoorFloorData.buildings) {
+          for (const [floor, rooms] of Object.entries(building)) {
+              if (floor.startsWith("floor-") && roomNumber in rooms) {
+                  return floor;
+              }
+          }
+      }
+      return null;
+    };
+
    
     const onPressShowPath = () => {
+
       setShowPath(true);
     
       // Clear the previous interval if it exists
@@ -132,8 +146,8 @@ const TempMap = () => {
       setFullPath([]);
     
       setTimeout(() => {
-        const startFloor = "floor-9";
-        const endFloor = "floor-1";
+        const startFloor = startingFloor;
+        const endFloor = destinationFloor;
         const floors = Object.keys(indoorFloorData.buildings[0]).sort();
 
         const getNumericFloor = (floor) => {
@@ -163,7 +177,6 @@ const TempMap = () => {
           }
         });
 
-        console.log(filteredFloors)
 
         let paths = [];
     
@@ -262,6 +275,7 @@ const TempMap = () => {
     const handleStartingSelection = (item) => {
       setSearchStartingText(item.room);
       setStartingRoom(item.room);
+      setStartingFloor(getFloorByRoom(item.room))
       setStartLocation(item.building.names[0]);
       setFilteredBuildings([]);
     };
@@ -269,6 +283,7 @@ const TempMap = () => {
     const handleDestinationSelection = (item) => {
       setSearchDestinationText(item.room);
       setDestinationRoom(item.room);
+      setDestinationFloor(getFloorByRoom(item.room))
       setDestinationLocation(item.building.names[0]);
       setFilteredBuildings([]);
     };
@@ -356,14 +371,6 @@ const TempMap = () => {
             // Maybe show a user-friendly error message
         }
     };
-
-    const Item = ({ rooms }) => (
-        <View style={[style.item, { backgroundColor: 'white' }]}>
-            {rooms.map((room, index) => (
-                <Text key={index} style={style.title}>{room}</Text>
-            ))}
-        </View>
-    );
 
     return (
         <View>
