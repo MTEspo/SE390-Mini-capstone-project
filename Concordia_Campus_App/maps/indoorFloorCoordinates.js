@@ -1,7 +1,7 @@
 const indoorFloorData = {
 "buildings": [
     {
-        "name": "Hall Building",
+        "name": "Henry F.Hall Building",
         "floor-1":{
                 "H-110": { "latitude": 45.497108735151485, "longitude": -73.57893689860926, "last_connecting_node":["node_4"]},
                 "node_1":{ "latitude": 45.49704709346159, "longitude": -73.57870881910416, "connected_nodes":["node_3","node_5"]},
@@ -41,7 +41,7 @@ const indoorFloorData = {
             "node_4":{ "latitude": 45.497142326175315, "longitude":  -73.57874341241356, "connected_nodes":["node_2","node_14"]},
             "node_5":{ "latitude": 45.49729464097251, "longitude":  -73.5790534330916, "connected_nodes":["node_2","node_6","node_7"]},
             "node_6":{ "latitude": 45.49733040509946, "longitude":  -73.57902603190709, "connected_nodes":["node_5"]},
-            "node_7":{ "latitude": 45.49734563796144, "longitude":  -73.57915295924258, "connected_nodes":["node_5","node_8"]},
+            "node_7":{ "latitude": 45.4973426750073, "longitude":  -73.57916528995467, "connected_nodes":["node_5","node_8"]},
             "node_8":{ "latitude": 45.49720740822167, "longitude":  -73.57930441205546, "connected_nodes":["node_7","node_9","node_10"]},
             "node_9":{ "latitude": 45.49718465692337, "longitude":  -73.5793455476141, "connected_nodes":["node_8"]},
             "node_10":{ "latitude": 45.49709715658615, "longitude":  -73.57909762017272, "connected_nodes":["node_8","node_11","node_12"]},

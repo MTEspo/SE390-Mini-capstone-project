@@ -7,7 +7,7 @@ const PathOverlay = ({ path }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDelayedPath(path);
-    }, 300);
+    }, 400);
 
     return () => clearTimeout(timer);
   }, [path]);
@@ -19,7 +19,7 @@ const PathOverlay = ({ path }) => {
       <Polyline
         coordinates={delayedPath}
         strokeColor="blue"
-        strokeWidth={3}
+        strokeWidth={1}
         lineDashPattern={[5, 5]}
       />
       

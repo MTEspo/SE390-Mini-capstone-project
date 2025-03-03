@@ -157,6 +157,7 @@ const TempMap = () => {
         };
 
         const startFloorNumber = getNumericFloor(startFloor);
+        setSelectedFloor(startFloor)
         const endFloorNumber = getNumericFloor(endFloor);
     
         const filteredFloors = floors.filter(floor => {
@@ -248,6 +249,7 @@ const TempMap = () => {
     }, [campus, zoomLevel]);
 
     useEffect(() => {
+      console.log(startLocation)
         return () => {
             if (pathUpdateInterval.current) {
                 clearInterval(pathUpdateInterval.current);
@@ -391,7 +393,7 @@ const TempMap = () => {
                           onChangeText={(text) => handleSearch(text, true)}
                       />
                       {searchStartingText.length > 0 && (
-                          <TouchableOpacity onPress={() => {setSearchStartingText(''), setStartLocation('')}}>
+                          <TouchableOpacity onPress={() => {setSearchStartingText(''), setStartLocation(''), onPressClearPath()}}>
                               <Icon name="times-circle" size={18} color="gray" />
                           </TouchableOpacity>
                       )}
@@ -411,7 +413,7 @@ const TempMap = () => {
                             onChangeText={(text) => handleSearch(text, false)}
                         />
                         {searchDestinationText.length > 0 && (
-                            <TouchableOpacity onPress={() => {setSearchDestinationText(''), setDestinationLocation('')}}>
+                            <TouchableOpacity onPress={() => {setSearchDestinationText(''), setDestinationLocation(''), onPressClearPath()}}>
                                 <Icon name="times-circle" size={18} color="gray" />
                             </TouchableOpacity>
                         )}
@@ -451,9 +453,6 @@ const TempMap = () => {
                       <Text style={style.pathButtonText}>Show Directions</Text>
                       </TouchableOpacity>)
                     }
-                    {/* <TouchableOpacity style={[style.pathButton, {backgroundColor: '#e74c3c'}]} onPress={onPressClearPath}>
-                        <Text style={style.pathButtonText}>Clear Directions</Text>
-                    </TouchableOpacity> */}
 
                     
                 </View>
@@ -504,19 +503,17 @@ const TempMap = () => {
                                     testID={`polygon-${index}`}
                                 />
 
-                                {/* {building.name === 'Henry F.Hall Building' && showPath && (
-                                    <BuildingOverlay
-                                        coordinates={building.coordinates}
-                                        image={require('../assets/floor_plans/Hall-8.png')}
-                                    />
-                                )} */}
-
-                                {building.name === 'Henry F.Hall Building' && (
+                                {building.name === startLocation && showPath && (
                                     <BuildingOverlay
                                         coordinates={building.coordinates}
                                         image={selectedFloor ? floorImages[selectedFloor.replace('floor-', '')] : undefined}
                                     />
                                 )}
+
+                                    {/* <BuildingOverlay
+                                        coordinates={building.coordinates}
+                                        image={require('../assets/floor_plans/Hall-8.png')}
+                                    /> */}
 
                                 {full_path && showPath && (
                                     <PathOverlay path={full_path.find(floorData => floorData.floor === selectedFloor)?.coordinates || []} />
@@ -525,7 +522,12 @@ const TempMap = () => {
                         );
                     })}
                 </MapView>
-                <FloorButtons onFloorSelect={(floor) => setSelectedFloor('floor-' + floor)} />
+                {full_path && showPath && (
+                    <FloorButtons 
+                        selectedFloor={selectedFloor} 
+                        onFloorSelect={(floor) => setSelectedFloor('floor-' + floor)} 
+                    />
+                )}
             </ErrorBoundary>
         </View>
     );

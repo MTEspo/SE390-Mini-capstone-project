@@ -2,23 +2,30 @@ import React from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import indoorFloorData from "./indoorFloorCoordinates";
 
-const FloorButtons = ({ onFloorSelect }) => {
+const FloorButtons = ({ selectedFloor, onFloorSelect }) => {
     const hallBuilding = indoorFloorData.buildings[0];
     const floors = Object.keys(hallBuilding).filter(key => key.startsWith("floor-"));
-  
+
     return (
         <View style={styles.wrapper}>
             <View style={styles.buttonContainer}>
-                {floors.map((floor, index) => (
-                <TouchableOpacity key={index} style={styles.button} onPress={() => onFloorSelect(parseInt(floor.replace("floor-", "")))}>
-                    <Text style={styles.buttonText}>{floor.replace("floor-", " ")}</Text>
-                </TouchableOpacity>
-                ))}
+                {floors.map((floor, index) => {
+                    const isSelected = selectedFloor === floor;
+                    
+                    return (
+                        <TouchableOpacity 
+                            key={index} 
+                            style={[styles.button, isSelected && styles.selectedButton]} 
+                            onPress={() => onFloorSelect(parseInt(floor.replace("floor-", "")))}
+                        >
+                            <Text style={styles.buttonText}>{floor.replace("floor-", " ")}</Text>
+                        </TouchableOpacity>
+                    );
+                })}
             </View>
         </View>
     );
-  };
-  
+};
 
 const styles = StyleSheet.create({
     wrapper: {
@@ -40,8 +47,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#115dad",
         padding: 15,
         borderRadius: 10,
-        marginRight: 5,
         marginHorizontal: 5
+    },
+    selectedButton: {
+        backgroundColor: "black",
     },
     buttonText: {
         color: "white",
