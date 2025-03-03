@@ -732,23 +732,39 @@ const handleUserLocation = () => {
               />
          )}
          
-        {buildingsData.buildings.map((building, index) => {
-          const isDestinationLoc = building.name === destinationLoc;
-          const isDestinationCoords = building.name === destinationCoords;
-          const polygonFillColor = (isDestinationCoords || isDestinationLoc) && destinationActive ? 'orange' : building.fillColor; // Set to red if it's the destination building
+         {buildingsData.buildings.map((building, index) => {
+            const isDestinationLoc = building.name === destinationLoc;
+            const isDestinationCoords = building.name === destinationCoords;
+            const polygonFillColor =
+              (isDestinationCoords || isDestinationLoc) && destinationActive
+                ? "orange"
+                : building.fillColor;
 
-          return (
-            <Polygon
-              key={index}
-              coordinates={building.coordinates}
-              fillColor={polygonFillColor}
-              strokeColor={building.strokeColor}
-              strokeWidth={2}
-              onPress={() => handlePolygonPress(building)} 
-              testID={`polygon-${index}`}
-            />
-          );
-        })}
+            return (
+              <View key={index}>
+                <Polygon
+                  key={building.name}
+                  coordinates={building.coordinates}
+                  fillColor={polygonFillColor}
+                  strokeColor={building.strokeColor}
+                  strokeWidth={2}
+                  tappable
+                  geodesic
+                  onPress={() => handlePolygonPress(building)} 
+                  testID={`polygon-${index}`}
+                />
+                <Marker
+                  testID={`polygon-marker-${index}`}
+                  zIndex={10}
+                  coordinate={building.markerCoord}
+                  onPress={() => {handlePolygonPress(building)}} 
+                >
+                  <Text note style={{ color: "#800000", fontSize: 10 }}>
+                  </Text>
+                </Marker>
+              </View>
+            );
+          })}
         
         <TransitScreen showDirections={showDirections} campus={campus} routeData={handleDirectionsToMap} />
 
