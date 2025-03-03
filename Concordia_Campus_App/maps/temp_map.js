@@ -71,7 +71,7 @@ const TempMap = () => {
           if (key.startsWith('floor-')) {
               Object.keys(building[key]).forEach(roomKey => {
                   if (!roomKey.startsWith('node_') && 
-                      !['escalator_up', 'escalator_down', 'elevator', 'entrance', 'exit', 'floorImage'].includes(roomKey)) {
+                      !['escalator_up', 'escalator_down', 'elevator', 'entrance', 'exit', 'floorImage', 'building_entrance'].includes(roomKey)) {
                       rooms.push(`${roomKey}`);
                   }
               });
@@ -497,8 +497,8 @@ const TempMap = () => {
                                 <Polygon
                                     key={`polygon-${index}`}
                                     coordinates={building.coordinates}
-                                    fillColor={polygonFillColor}
-                                    strokeColor={building.strokeColor}
+                                    fillColor={showPath ? 'transparent' : polygonFillColor}
+                                    strokeColor={showPath ? 'transparent' : building.strokeColor}
                                     strokeWidth={2}
                                     testID={`polygon-${index}`}
                                 />
@@ -510,10 +510,11 @@ const TempMap = () => {
                                     />
                                 )}
 
-                                    {/* <BuildingOverlay
-                                        coordinates={building.coordinates}
-                                        image={require('../assets/floor_plans/Hall-8.png')}
-                                    /> */}
+                                {building.name === "John Molson School of Business" && (
+                                  <BuildingOverlay
+                                  coordinates={building.coordinates}
+                                  image={require('../assets/floor_plans/MB-1.png')}
+                                />)}
 
                                 {full_path && showPath && (
                                     <PathOverlay path={full_path.find(floorData => floorData.floor === selectedFloor)?.coordinates || []} />
