@@ -537,9 +537,9 @@ const TempMap = () => {
                             </React.Fragment>
                         );
                     })}
-                    <DirectionsTransitScreen showDirections={true}
+                    {showPath && (<DirectionsTransitScreen showDirections={true}
                               location={{"latitude": 45.49704153785414, "longitude": -73.57871974639625}} 
-                              destinationLocation={{"latitude": 45.49549607659399, "longitude": -73.57921570098344}}/>
+                              destinationLocation={{"latitude": 45.49549607659399, "longitude": -73.57921570098344}}/>)}
                 </MapView>
                 {full_path && showPath && (
                     <FloorButtons 
@@ -548,6 +548,7 @@ const TempMap = () => {
                         startLocation={startLocation}
                     />
                 )}
+
                 
             </ErrorBoundary>
         </View>

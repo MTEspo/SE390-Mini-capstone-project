@@ -6,9 +6,7 @@ import styles from './styles/mapScreenStyles';
 
 
 const DirectionsTransitScreen = ({showDirections,location ,destinationLocation}) => {
-  const [mode, setMode] = useState('DRIVING');
-
-
+  const [mode, setMode] = useState('WALKING');
   return (
     <View style={styles.container}>
       {showDirections && (
@@ -29,10 +27,10 @@ const DirectionsTransitScreen = ({showDirections,location ,destinationLocation})
               origin={location}
               destination={destinationLocation}
               apikey={API_KEY}
-              strokeWidth={5}
+              strokeWidth={1}
               strokeColor="blue"
               mode={mode}
-              lineDashPattern={[2, 10]}  // Small dots (short lines with large gaps)
+              lineDashPattern={[5, 5]}  // Small dots (short lines with large gaps)
           />
         )}
           {/* Transit Mode */}
