@@ -7,7 +7,7 @@ const PathOverlay = ({ path }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDelayedPath(path);
-    }, 400);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [path]);
