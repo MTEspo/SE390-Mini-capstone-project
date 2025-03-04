@@ -23,8 +23,10 @@ const TransitScreen = ({showDirections, campus, routeData, origin, destination})
     },
   };
 
-  // Current campus location
+  // If there origin location is null set the location to the current campus
   const location =  (origin == null) ? campusLocations[campus]: origin;
+
+  // If there destination location is null set the destinatio to the other campus
   const destinationLocation = (destination == null) ? ((campus === 'SGW') ? campusLocations.Loyola : campusLocations.SGW) : destination;
 
   const handleDirections = (result) => {

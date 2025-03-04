@@ -701,7 +701,7 @@ const handleUserLocation = () => {
         <Marker coordinate={location} title={location.title} description={location.description} />
         <Marker coordinate={destinationLocation} title={destinationLocation.title} description={destinationLocation.description} />
   
-        {!showDirections && (
+        {!showDirections && (currentScreen === "Map") &&(
           <ShuttleBusMarker setToggleMapDirections={setToggleMapDirections} setShuttleStop={setShuttleStop} />
         )}  
 
@@ -709,11 +709,6 @@ const handleUserLocation = () => {
           <MapDirections userLocation={userLocation} destinationLocation={shuttleStop} />
         )}
 
-
-
-
-
-         
         {buildingsData.buildings.map((building, index) => {
           const isDestinationLoc = building.name === destinationLoc;
           const isDestinationCoords = building.name === destinationCoords;
