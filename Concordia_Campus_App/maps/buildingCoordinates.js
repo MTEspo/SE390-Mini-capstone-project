@@ -3,15 +3,11 @@ const buildingsData = {
     {
       "name": "John Molson School of Business",
       "coordinates": [
-        { "latitude": 45.495359016476655, "longitude": -73.57936484536624 },
-        { "latitude": 45.495517888088095, "longitude": -73.57920123061729 },
-        { "latitude": 45.49518698339788, "longitude": -73.57852665505398 },
-        { "latitude": 45.49500554903502, "longitude": -73.57873452625142 },
-        { "latitude": 45.495037511607705, "longitude": -73.57878951153589 },
-        { "latitude": 45.49500836926276, "longitude": -73.5788216980439 },
-        { "latitude": 45.49516630179018, "longitude": -73.57916904410929 },
-        { "latitude": 45.49522082601229, "longitude": -73.57911539992931 },
-        { "latitude": 45.495359016476655, "longitude": -73.57936618647074 }
+        { "latitude":  45.49527954386114, "longitude": -73.57949167923474 },
+        { "latitude": 45.49498333158708  , "longitude": -73.57877435264534  },
+        { "latitude": 45.49518374386017  , "longitude": -73.57851570127877  },
+        { "latitude": 45.495528705363796  , "longitude": -73.57925141294227  },
+
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
