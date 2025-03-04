@@ -57,6 +57,9 @@ const MapScreen = ({route}) => {
     setSelectedStart(null);
     setSelectedEnd(null);
     setActiveCampusDirections(false);
+    setShowDirections(false);
+    setEta(null);
+    setDistance(null);
   };
   
   const campusLocations = {
@@ -98,30 +101,6 @@ const MapScreen = ({route}) => {
       b.name.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredDestinationBuildings(results);
-  };
-
-  const handleSelectBuilding = (building) => {
-    Alert.alert(
-      `Select Building`,
-      `Do you want to set "${building.name}" as Start or Destination?`,
-      [
-        {
-          text: "Start",
-          onPress: () => {
-            setSelectedStartBuilding(building);
-            setStartQuery(building.name);
-          },
-        },
-        {
-          text: "Destination",
-          onPress: () => {
-            setSelectedDestination(building);
-            setDestinationQuery(building.name);
-          },
-        },
-        { text: "Cancel", style: "cancel" },
-      ]
-    );
   };
 
   const isPointInPolygon = (point, polygon) => {
@@ -169,6 +148,7 @@ const MapScreen = ({route}) => {
       Alert.alert("Error", "Could not retrieve current location.");
     }
   };
+
   useEffect(() => {
     let interval;
     const fetchUserLocation = async () => {
@@ -199,19 +179,7 @@ const MapScreen = ({route}) => {
   }
 
   const handlePolygonPress = (building) => {
-    if(currentScreen === "Building Map Directions"){
-      if(!selectedStart){
-        setSelectedStart(building.markerCoord);
-        setShowBuildingDirections(false);
-      } else if (!selectedEnd) {
-        setSelectedEnd(building.markerCoord);
-        setShowBuildingDirections(false);
-      } else {
-        setSelectedStart(building.markerCoord);
-        setSelectedEnd(null);
-        setShowBuildingDirections(false);
-      }
-    }else{
+    if(currentScreen !== "Building Map Directions"){
       setSelectedBuilding(building);
       setSelectedMarker({
         latitude: building.markerCoord.latitude,
@@ -226,11 +194,6 @@ const MapScreen = ({route}) => {
   };
   const destinationLocation = campus === 'SGW' ? campusLocations.Loyola : campusLocations.SGW;
   const directionsText = campus === 'SGW' ? 'Directions To LOY' : 'Directions To SGW';
-
-  const handleDirections = (result) => {
-    setEta(result.duration);
-    setDistance(result.distance);
-  };
 
   // Gets direction data from the TransitOptions component and returns it to the map screen.
   const handleDirectionsToMap = (eta, distance) => {
@@ -738,7 +701,7 @@ const handleUserLocation = () => {
         <Marker coordinate={location} title={location.title} description={location.description} />
         <Marker coordinate={destinationLocation} title={destinationLocation.title} description={destinationLocation.description} />
   
-        {!showDirections && (
+        {!showDirections && (currentScreen === "Map") &&(
           <ShuttleBusMarker setToggleMapDirections={setToggleMapDirections} setShuttleStop={setShuttleStop} />
         )}  
 
@@ -746,25 +709,6 @@ const handleUserLocation = () => {
           <MapDirections userLocation={userLocation} destinationLocation={shuttleStop} />
         )}
 
-{selectedStart && selectedEnd && showBuildingDirections && (
-  <MapViewDirections
-    key={routeKey} //  Forces React to re-render the component
-    origin={selectedStart}
-    destination={selectedEnd}
-    apikey={API_KEY}
-    strokeWidth={5}
-    strokeColor="blue"
-    onReady={(result) => {
-      console.log(" Route Found! Distance:", result.distance, "km", "Duration:", result.duration, "mins");
-      handleDirections(result);
-    }}
-    onError={(error) => console.log(" MapViewDirections Error:", error)}
-  />
-)}
-
-
-
-         
         {buildingsData.buildings.map((building, index) => {
           const isDestinationLoc = building.name === destinationLoc;
           const isDestinationCoords = building.name === destinationCoords;
@@ -783,7 +727,7 @@ const handleUserLocation = () => {
           );
         })}
         
-        <TransitScreen showDirections={showDirections} campus={campus} routeData={handleDirectionsToMap} />
+        <TransitScreen showDirections={(showDirections) ? showDirections : showBuildingDirections} campus={campus} routeData={handleDirectionsToMap} origin={selectedStart} destination={selectedEnd} />
 
         {currentScreen === 'Building Map Directions' ? (
           <>
@@ -798,7 +742,6 @@ const handleUserLocation = () => {
                   fillColor={fillColor}
                   strokeColor={building.strokeColor}
                   strokeWidth={2}
-                  onPress={() => handleSelectBuilding(building)}
                   testID={"test-"+building.name}
                 />
               );
