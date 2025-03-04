@@ -13,6 +13,7 @@ import {findShortestPath} from './IndoorFloorShortestPathAlgo.js';
 import FloorButtons from './FloorButtons.js';
 import MapDirections from './MapDirections.js';
 import TransitScreen from './transitOptions.js'
+import DirectionsTransitScreen from './DirectionsTransitScreen.js';
 
 class ErrorBoundary extends Component {
     constructor(props) {
@@ -382,6 +383,7 @@ const TempMap = () => {
     return (
         <View>
             <ErrorBoundary>
+              
                 <View style={style.inputContainer}>
                 <View style={style.inputRow}>
                   <View style={style.iconContainer}>
@@ -481,6 +483,8 @@ const TempMap = () => {
                         longitudeDelta: zoomLevel,
                     }}
                 >
+
+                  
                     <Marker key={"sgw"} coordinate={campusLocations['SGW']} title={campusLocations['SGW'].title} description={campusLocations['SGW'].description} />
                     <Marker key={"loy"} coordinate={campusLocations['Loyola']} title={campusLocations['Loyola'].title} description={campusLocations['Loyola'].description} />
             
@@ -529,14 +533,13 @@ const TempMap = () => {
                               {/* <MapDirections userLocation={{"latitude": 45.49704153785414, "longitude": -73.57871974639625}}
                               destinationLocation={{"latitude": 45.49549607659399, "longitude": -73.57921570098344}} /> */}
 
-                              <TransitScreen showDirections={true}
-                              location={{"latitude": 45.49704153785414, "longitude": -73.57871974639625}} 
-                              destinationLocation={{"latitude": 45.49549607659399, "longitude": -73.57921570098344}}>
-
-                              </TransitScreen>
+                              
                             </React.Fragment>
                         );
                     })}
+                    <DirectionsTransitScreen showDirections={true}
+                              location={{"latitude": 45.49704153785414, "longitude": -73.57871974639625}} 
+                              destinationLocation={{"latitude": 45.49549607659399, "longitude": -73.57921570098344}}/>
                 </MapView>
                 {full_path && showPath && (
                     <FloorButtons 
@@ -545,6 +548,7 @@ const TempMap = () => {
                         startLocation={startLocation}
                     />
                 )}
+                
             </ErrorBoundary>
         </View>
     );
