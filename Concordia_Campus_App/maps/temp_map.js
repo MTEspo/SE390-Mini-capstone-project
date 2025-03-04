@@ -11,6 +11,7 @@ import BuildingOverlay from './BuildingOverlay.js';
 import indoorFloorData from './indoorFloorCoordinates.js';
 import {findShortestPath} from './IndoorFloorShortestPathAlgo.js';
 import FloorButtons from './FloorButtons.js';
+import MapDirections from './MapDirections.js';
 
 class ErrorBoundary extends Component {
     constructor(props) {
@@ -523,6 +524,9 @@ const TempMap = () => {
                                 {full_path && showPath && (
                                     <PathOverlay path={full_path.find(floorData => floorData.floor === selectedFloor)?.coordinates || []} />
                                 )}
+
+                              <MapDirections userLocation={{"latitude": 45.49704153785414, "longitude": -73.57871974639625}}
+                              destinationLocation={{"latitude": 45.49549607659399, "longitude": -73.57921570098344}} />
                             </React.Fragment>
                         );
                     })}
