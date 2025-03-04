@@ -5,7 +5,7 @@ import { API_KEY } from '@env';
 import styles from './styles/mapScreenStyles'; 
 
 
-const TransitScreen = ({showDirections, campus, routeData}) => {
+const TransitScreen = ({showDirections, campus, routeData, origin, destination}) => {
   const [mode, setMode] = useState('DRIVING');
 
   const campusLocations = {
@@ -24,8 +24,8 @@ const TransitScreen = ({showDirections, campus, routeData}) => {
   };
 
   // Current campus location
-  const location =  campusLocations[campus];
-  const destinationLocation = (campus === 'SGW') ? campusLocations.Loyola : campusLocations.SGW;
+  const location =  (origin == null) ? campusLocations[campus]: origin;
+  const destinationLocation = (destination == null) ? ((campus === 'SGW') ? campusLocations.Loyola : campusLocations.SGW) : destination;
 
   const handleDirections = (result) => {
     routeData(result.duration, result.distance);
