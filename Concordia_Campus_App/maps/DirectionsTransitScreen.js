@@ -5,7 +5,7 @@ import { API_KEY } from '@env';
 import styles from './styles/mapScreenStyles'; 
 
 
-const DirectionsTransitScreen = ({location ,destinationLocation}) => {
+const DirectionsTransitScreen = ({showDirections,location ,destinationLocation}) => {
   const [mode, setMode] = useState('DRIVING');
 
 
@@ -21,7 +21,6 @@ const DirectionsTransitScreen = ({location ,destinationLocation}) => {
               strokeWidth={5}
               strokeColor="blue"  // Driving mode is always blue
               mode={mode}
-              onReady={handleDirections}
             />
           )}
 
@@ -33,7 +32,6 @@ const DirectionsTransitScreen = ({location ,destinationLocation}) => {
               strokeWidth={5}
               strokeColor="blue"
               mode={mode}
-              onReady={handleDirections}
               lineDashPattern={[2, 10]}  // Small dots (short lines with large gaps)
           />
         )}
@@ -46,7 +44,6 @@ const DirectionsTransitScreen = ({location ,destinationLocation}) => {
               strokeWidth={5}
               strokeColor="green"  // Change color for transit mode
               mode="TRANSIT"
-              onReady={handleDirections}
             />
           )}
         </>
