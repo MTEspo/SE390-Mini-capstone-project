@@ -56,11 +56,11 @@ const TempMap = () => {
 
     const [selectedFloor, setSelectedFloor] = useState(null);
     const floorImages = {
-      // 1: require('../assets/floor_plans/Hall-1.png'),
-      // 2: require('../assets/floor_plans/Hall-2.png'),
-      // 8: require('../assets/floor_plans/Hall-8.png'),
-      // 9: require('../assets/floor_plans/Hall-9.png'),
-      1: require('../assets/floor_plans/MB-1.png'),
+      1: require('../assets/floor_plans/Hall-1.png'),
+      2: require('../assets/floor_plans/Hall-2.png'),
+      8: require('../assets/floor_plans/Hall-8.png'),
+      9: require('../assets/floor_plans/Hall-9.png'),
+      // 1: require('../assets/floor_plans/MB-1.png'),
     };
 
     const [isSelectingStart, setIsSelectingStart] = useState(true);
