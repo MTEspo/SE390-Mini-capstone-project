@@ -56,10 +56,11 @@ const TempMap = () => {
 
     const [selectedFloor, setSelectedFloor] = useState(null);
     const floorImages = {
-      1: require('../assets/floor_plans/Hall-1.png'),
-      2: require('../assets/floor_plans/Hall-2.png'),
-      8: require('../assets/floor_plans/Hall-8.png'),
-      9: require('../assets/floor_plans/Hall-9.png'),
+      // 1: require('../assets/floor_plans/Hall-1.png'),
+      // 2: require('../assets/floor_plans/Hall-2.png'),
+      // 8: require('../assets/floor_plans/Hall-8.png'),
+      // 9: require('../assets/floor_plans/Hall-9.png'),
+      1: require('../assets/floor_plans/MB-1.png'),
     };
 
     const [isSelectingStart, setIsSelectingStart] = useState(true);
@@ -135,7 +136,6 @@ const TempMap = () => {
 
    
     const onPressShowPath = () => {
-      console.log(selectedFloor)
 
       setShowPath(true);
     
@@ -149,7 +149,8 @@ const TempMap = () => {
       setTimeout(() => {
         const startFloor = startingFloor;
         const endFloor = destinationFloor;
-        const floors = Object.keys(indoorFloorData.buildings[0]).sort();
+        const floors = Object.keys(indoorFloorData.buildings.find(building => building.name === startLocation)).sort();
+        
 
         const getNumericFloor = (floor) => {
           const match = floor.match(/floor-(\d+)/);
@@ -159,6 +160,7 @@ const TempMap = () => {
         const startFloorNumber = getNumericFloor(startFloor);
         setSelectedFloor(startFloor)
         const endFloorNumber = getNumericFloor(endFloor);
+
     
         const filteredFloors = floors.filter(floor => {
           const floorNumber = getNumericFloor(floor);
@@ -184,7 +186,7 @@ const TempMap = () => {
     
         for (let i = 0; i < filteredFloors.length; i++) {
           const floorNumber = filteredFloors[i];
-          const floor = indoorFloorData.buildings[0][floorNumber];
+          const floor = indoorFloorData.buildings.find(building => building.name === startLocation)[floorNumber];
           
           let startNode, endNode;
           
@@ -229,6 +231,7 @@ const TempMap = () => {
         }
     
         //console.log(JSON.stringify(paths, null, 1));
+        console.log(paths)
         setFullPath(paths);
       }, 1000);
     };
@@ -249,7 +252,6 @@ const TempMap = () => {
     }, [campus, zoomLevel]);
 
     useEffect(() => {
-      console.log(startLocation)
         return () => {
             if (pathUpdateInterval.current) {
                 clearInterval(pathUpdateInterval.current);
@@ -512,7 +514,7 @@ const TempMap = () => {
                                     />
                                 )}
 
-                                {building.name === "John Molson School of Business" && (
+                                {building.name === "John Molson School of Business" && showPath && (
                                   <BuildingOverlay
                                   coordinates={building.coordinates}
                                   image={require('../assets/floor_plans/MB-1.png')}

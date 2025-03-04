@@ -83,8 +83,8 @@ const indoorFloorData = {
     {
         "name": "John Molson School of Business",
         "floor-1":{
-                "MB-1.210": { "latitude": 45.495255445952, "longitude": -73.57889029229129, "last_connecting_node":["node_6"]},
-                "MB-1.301": { "latitude": 45.49526392732338, "longitude": -73.57916898427824, "last_connecting_node":["node_9"]},
+                "MB-1210": { "latitude": 45.495255445952, "longitude": -73.57889029229129, "last_connecting_node":["node_6"]},
+                "MB-1301": { "latitude": 45.49526392732338, "longitude": -73.57916898427824, "last_connecting_node":["node_9"]},
                 "node_1":{ "latitude": 45.495458095730825, "longitude": -73.57924119031567, "connected_nodes":["node_2"]},
                 "node_2":{ "latitude":45.495427399896336 , "longitude":-73.5791545664648, "connected_nodes":["node_1","node_3","node_4"]},
                 "node_3":{ "latitude": 45.49545767483711, "longitude":  -73.57912561167194, "connected_nodes":["node_2"]},
