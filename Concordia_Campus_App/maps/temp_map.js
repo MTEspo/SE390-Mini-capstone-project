@@ -78,20 +78,13 @@ const TempMap = () => {
           const matchingRooms = building.rooms.filter(room => 
             room.toLowerCase().includes(text.toLowerCase())
           );
+
           
           if (matchingRooms.length > 0) {
             filteredResults.push({
               ...building,
               rooms: matchingRooms
             });
-          }
-        });
-        
-        buildings.forEach(building => {
-          if (building.names.some(name => name.toLowerCase().includes(text.toLowerCase()))) {
-            if (!filteredResults.some(result => result.names[0] === building.names[0])) {
-              filteredResults.push(building);
-            }
           }
         });
         
