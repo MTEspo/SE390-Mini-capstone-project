@@ -603,6 +603,10 @@ const handleUserLocation = () => {
                   paddingVertical: 10,
                   paddingHorizontal: 20,
                   alignSelf: 'flex-start',
+                  borderColor: 'black',
+                  flexDirection: 'row',
+                  top: 40,
+                  left: 13
                 },
               ]}
               onPress={handleReturn}
@@ -610,6 +614,20 @@ const handleUserLocation = () => {
               <Text style={{ color: '#FFFFFF', textAlign: 'center' }}>
                 Return
               </Text>
+            </TouchableOpacity>
+            <TouchableOpacity               
+            style={[
+                styles.searchBar,
+                {
+                  backgroundColor: '#800000',
+                  paddingVertical: 10,
+                  paddingHorizontal: 20,
+                  borderColor: 'black',
+                  flexDirection: 'row',
+                  left: 270,
+                },
+              ]}>
+              <Text style={{ color: '#FFFFFF', textAlign: 'center' }} >Get Directions</Text>
             </TouchableOpacity>
           </View>
         </>
