@@ -50,7 +50,7 @@ const TempMap = () => {
           if (key.startsWith('floor-')) {
               Object.keys(building[key]).forEach(roomKey => {
                   if (!roomKey.startsWith('node_') && 
-                      !['escalator_up', 'escalator_down', 'elevator', 'entrance', 'exit', 'building_entrance'].includes(roomKey)) {
+                      !['escalator_up', 'escalator_down', 'elevator', 'entrance', 'exit', 'building_entrance', 'imageFloorPath'].includes(roomKey)) {
                       rooms.push(`${roomKey}`);
                   }
               });
