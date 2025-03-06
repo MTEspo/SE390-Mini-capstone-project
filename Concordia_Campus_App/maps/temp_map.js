@@ -497,8 +497,7 @@ const TempMap = () => {
                     style={styles.map}
                     showsPointsOfInterest={false}
                     onPress={handleMapPress}
-                    mapType="standard"
-                    showsBuildings={false}
+                    pitchEnabled={false}
                     initialRegion={{
                         latitude: isUserLocationFetched ? userLocation.latitude : location.latitude,
                         longitude: isUserLocationFetched ? userLocation.longitude : location.longitude,
@@ -562,10 +561,10 @@ const TempMap = () => {
 
                                     />
                                 )}
-                                {/* {building.name === "John Molson School of Business" && showPath && (
+                                {building.name === "Vanier Library Building"  && (
                                   <BuildingOverlay
                                   coordinates={building.coordinates}
-                                  image={require('../assets/floor_plans/MB-1.png')}/>)} */}
+                                  image={require('../assets/floor_plans/VL-1.png')}/>)}
 
                                 {full_path && showPath && (
                                     <PathOverlay path={full_path.find(floorData => floorData.floor === selectedFloor)?.coordinates || []} />

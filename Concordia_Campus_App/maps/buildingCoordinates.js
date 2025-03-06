@@ -460,14 +460,15 @@ const buildingsData = {
     {
       "name": "Vanier Library Building",
       "coordinates": [
-      { "latitude": 45.45931293414405, "longitude": -73.6386657538376 },
-      { "latitude": 45.459158663793566, "longitude": -73.63878645323659 },
-      { "latitude": 45.45919629074723, "longitude": -73.6388883771735 },
-      { "latitude": 45.45909093521367, "longitude": -73.63896884343949 },
-      { "latitude": 45.459049545485925, "longitude": -73.63886691950258 },
-      { "latitude": 45.45885764726021, "longitude": -73.63901712319908 },
-      { "latitude": 45.45872783338428, "longitude": -73.63871671580607 },
-      { "latitude": 45.45920946017509, "longitude": -73.63839485074212 }
+        { latitude: 45.45892959207609, longitude: -73.63892943784158 },
+      { latitude: 45.45871968918475, longitude: -73.63837353009328 },
+      { latitude: 45.458866404017456, longitude: -73.63824268504662 },
+      { latitude: 45.4588992444746, longitude: -73.63797926342369 },
+      { latitude: 45.45908372381156, longitude: -73.63784711558233 },
+      { latitude: 45.45919933924507, longitude: -73.63813577179297 },
+      { latitude: 45.45914278579167, longitude: -73.6381960251453 },
+      { latitude: 45.459291749810085, longitude: -73.6386241072904 },
+      { latitude: 45.458930633676275, longitude: -73.63891725960285 },
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
@@ -477,14 +478,10 @@ const buildingsData = {
       {
         "name": "Vanier Extension",
         "coordinates": [
-        { "latitude": 45.45872783338428, "longitude": -73.63871671580607 },
-        { "latitude": 45.45920946017509, "longitude": -73.63839485074212 },
-        { "latitude": 45.45913232491104, "longitude": -73.63819636728603 },
-        { "latitude": 45.4592132228682, "longitude": -73.63813199427322 },
-        { "latitude": 45.45910034196574, "longitude": -73.63785036234228 },
-        { "latitude": 45.458904681199485, "longitude": -73.63800056603878 },
-        { "latitude": 45.45895359645469, "longitude": -73.63819904949489 },
-        { "latitude": 45.45863188380562, "longitude": -73.63846995259037 }
+          { latitude: 45.458934357795, longitude: -73.63895569145663 },
+          { latitude: 45.458854870455035, longitude: -73.63901738226397 },
+          { latitude: 45.45863663244851, longitude: -73.63845344781859 },
+          { latitude: 45.458716590436936, longitude: -73.63839041590674 },
         ],
         "fillColor": "#800000",
         "strokeColor": "#000000",
