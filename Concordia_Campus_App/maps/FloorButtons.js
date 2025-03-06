@@ -36,27 +36,29 @@ const FloorButtons = ({ selectedFloor, onFloorSelect, startLocation }) => {
 const styles = StyleSheet.create({
     wrapper: {
         position: "absolute",
-        bottom: 0,
+        bottom: 10,
         width: "100%",
-        backgroundColor: "transparent",
-        paddingVertical: 20,
+        backgroundColor: "#1f1f1f",
         alignItems: "center",
+        opacity:'.9',
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
     },
     buttonContainer: {
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
-        padding: 10
+        padding: 1
     },
     button: {
-        backgroundColor: "#115dad",
-        padding: 15,
-        borderRadius: 10,
-        marginHorizontal: 5
+        backgroundColor: "#708090",
+        padding: 12,
+        borderRadius: 5,
+        marginHorizontal: 5,
     },
     selectedButton: {
-        backgroundColor: "black",
+        backgroundColor: "green",
     },
     buttonText: {
         color: "white",

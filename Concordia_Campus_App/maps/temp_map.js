@@ -404,6 +404,17 @@ const TempMap = () => {
                   </View>
                 </View>
 
+                {full_path && showPath && (
+                  <View style={style.inputRowFloorButtons}>
+                        <FloorButtons 
+                            selectedFloor={selectedFloor} 
+                            onFloorSelect={(floor) => setSelectedFloor('floor-' + floor)}
+                            startLocation={startLocation}
+                        />
+                  </View>
+                  
+                )}
+
                 <View style={style.inputRow}>
                     <View style={style.iconContainer}>
                         <Icon name="map-marker" size={20} color="red" />
@@ -423,6 +434,17 @@ const TempMap = () => {
                         )}
                     </View>
                 </View>
+                
+                {full_path && showPath && startLocation != destinationLocation &&(
+                <View style={style.inputRowFloorButtons2}>
+                  {startLocation != destinationLocation && secondPath != [] && showPath && (
+                      <FloorButtons 
+                          selectedFloor={selectedFloor2} 
+                          onFloorSelect={(floor) => setSelectedFloor2('floor-' + floor)}
+                          startLocation={destinationLocation}
+                      />
+                  )} 
+                </View>)}
 
                 {isSearching && filteredBuildings.length > 0 && (
                   <FlatList
@@ -452,7 +474,7 @@ const TempMap = () => {
                   />
                 )}
                     
-                    {startLocation && destinationLocation && (
+                    {startLocation && destinationLocation && !showPath && (
                       <TouchableOpacity style={style.pathButton} onPress={onPressShowPath}>
                       <Text style={style.pathButtonText}>Show Directions</Text>
                       </TouchableOpacity>)
@@ -566,29 +588,24 @@ const TempMap = () => {
                               location={indoorFloorData.buildings.find(building => building.name == startLocation )["floor-1"]["building_entrance"]} 
                               destinationLocation={indoorFloorData.buildings.find(building => building.name == destinationLocation )["floor-1"]["building_entrance"]}/>
                     )}
-                </MapView>
-                {full_path && showPath && (
-                    <FloorButtons 
-                        selectedFloor={selectedFloor} 
-                        onFloorSelect={(floor) => setSelectedFloor('floor-' + floor)}
-                        startLocation={startLocation}
-                    />
-                )}   
-                {startLocation != destinationLocation && secondPath != [] && showPath && (
-                    <FloorButtons 
-                        selectedFloor={selectedFloor2} 
-                        onFloorSelect={(floor) => setSelectedFloor2('floor-' + floor)}
-                        startLocation={destinationLocation}
-                    />
-                )}            
+                </MapView>        
         </View>
     );
 };
 
 const style = StyleSheet.create({
+
+  inputRowFloorButtons: {
+    flexDirection: 'row',
+    marginTop: 44,
+  },
+  inputRowFloorButtons2: {
+    flexDirection: 'row',
+    marginTop: 44,
+  },
     inputContainer: {
         position: 'absolute',
-        top: 20,
+        top: 10,
         left: 50,
         right: 50,
         zIndex: 1000,
@@ -598,14 +615,13 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: 'white',
-        borderRadius: 8,
+        borderRadius: 1,
         padding: 10,
         marginBottom: 8,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        elevation: 5,
     },
     iconContainer: {
         marginRight: 10,
@@ -626,7 +642,7 @@ const style = StyleSheet.create({
     },
     input: {
         flex: 1,
-        height: 30,
+        height: 25,
         paddingHorizontal: 10,
       },
       textInputWrapper: {

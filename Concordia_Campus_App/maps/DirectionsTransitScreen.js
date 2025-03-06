@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import MapViewDirections from 'react-native-maps-directions';
 import { API_KEY } from '@env';
-import styles from './styles/mapScreenStyles'; 
+import styles from './styles/mapScreenStyles';
 
 
 const DirectionsTransitScreen = ({showDirections,location ,destinationLocation}) => {
@@ -47,7 +47,7 @@ const DirectionsTransitScreen = ({showDirections,location ,destinationLocation})
         </>
       )}
       {showDirections && (
-        <View style={styles.modeContainer}>
+        <View style={style.modeContainer}>
           <TouchableOpacity 
             testID="driving-button"
             onPress={() => setMode('DRIVING')} 
@@ -72,5 +72,27 @@ const DirectionsTransitScreen = ({showDirections,location ,destinationLocation})
       )}
     </View>
   );
+
+  
 };
+
+
+const style = StyleSheet.create({
+  modeContainer: {
+    position: 'absolute',
+    bottom: 5, // Places it right above the directions button
+    left: '50%',
+    transform: [{ translateX: -110 }], // Centers the container
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    //backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent background
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    width: 220, // Adjust the width of the container
+    marginBottom: 30
+  },
+});
+
 export default DirectionsTransitScreen;
