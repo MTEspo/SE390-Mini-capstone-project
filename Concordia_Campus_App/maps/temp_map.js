@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect, Component } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, Keyboard, FlatList } from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; 
 import buildingsData from './buildingCoordinates.js';
-import { API_KEY } from '@env';
 import { getLocation } from './locationUtils';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PathOverlay from './PathOverlay.js';
@@ -11,26 +10,7 @@ import BuildingOverlay from './BuildingOverlay.js';
 import indoorFloorData from './indoorFloorCoordinates.js';
 import {findShortestPath} from './IndoorFloorShortestPathAlgo.js';
 import FloorButtons from './FloorButtons.js';
-import MapDirections from './MapDirections.js';
-import TransitScreen from './transitOptions.js'
 import DirectionsTransitScreen from './DirectionsTransitScreen.js';
-
-class ErrorBoundary extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { hasError: false };
-    }
-    componentDidCatch(error, errorInfo) {
-        this.setState({ hasError: true });
-        console.log(error, errorInfo);
-    }
-    render() { 
-        if (this.state.hasError) {
-            return <Text style={styles.errorText}>Something went wrong.</Text>;
-        }
-        return this.props.children;
-    }
-}
 
 const TempMap = () => {
     const [campus, setCampus] = useState('SGW');
@@ -39,7 +19,7 @@ const TempMap = () => {
     const [userLocation, setUserLocation] = useState(null);
     const [centerOnUserLocation, setCenterOnUserLocation] = useState(true);
     const [isUserLocationFetched, setIsUserLocationFetched] = useState(false);
-    const [activeButton, setActiveButton] = useState('user');
+    const [activeButton, setActiveButton] = useState('SGW');
 
     const [searchStartingText, setSearchStartingText] = useState('');
     const [searchDestinationText, setSearchDestinationText] = useState('');
@@ -58,16 +38,11 @@ const TempMap = () => {
 
 
     const [selectedFloor, setSelectedFloor] = useState(null);
-    const floorImages = {
-      1: require('../assets/floor_plans/Hall-1.png'),
-      2: require('../assets/floor_plans/Hall-2.png'),
-      8: require('../assets/floor_plans/Hall-8.png'),
-      9: require('../assets/floor_plans/Hall-9.png'),
-      // 1: require('../assets/floor_plans/MB-1.png'),
-    };
 
     const [isSelectingStart, setIsSelectingStart] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
+
+    
 
     const buildings = indoorFloorData.buildings.map(building => {
       const rooms = [];   
@@ -75,7 +50,7 @@ const TempMap = () => {
           if (key.startsWith('floor-')) {
               Object.keys(building[key]).forEach(roomKey => {
                   if (!roomKey.startsWith('node_') && 
-                      !['escalator_up', 'escalator_down', 'elevator', 'entrance', 'exit', 'floorImage', 'building_entrance'].includes(roomKey)) {
+                      !['escalator_up', 'escalator_down', 'elevator', 'entrance', 'exit', 'building_entrance'].includes(roomKey)) {
                       rooms.push(`${roomKey}`);
                   }
               });
@@ -234,7 +209,8 @@ const TempMap = () => {
         }
     
         //console.log(JSON.stringify(paths, null, 1));
-        console.log(paths)
+        
+        //console.log(paths)
         setFullPath(paths);
       }, 1000);
     };
@@ -381,9 +357,7 @@ const TempMap = () => {
     };
 
     return (
-        <View>
-            <ErrorBoundary>
-              
+        <View>             
                 <View style={style.inputContainer}>
                 <View style={style.inputRow}>
                   <View style={style.iconContainer}>
@@ -460,7 +434,23 @@ const TempMap = () => {
                       </TouchableOpacity>)
                     }
 
-                    
+                  <View style={style.toggleButtonContainer}>
+                                    <TouchableOpacity
+                                    style={activeButton === 'SGW' ? styles.sgwButtonActive : styles.sgwButton}
+                                    onPress={handleSelectSGW}
+                                    testID="sgwButton"
+                                  >
+                                    <Text style={activeButton === 'SGW' ? styles.highlightedText : styles.normalText}>SGW</Text>
+                                  </TouchableOpacity>
+                                  <TouchableOpacity
+                            style={activeButton === 'Loyola' ? styles.loyolaButtonActive : styles.loyolaButton}
+                            onPress={handleSelectLoyola}
+                            testID="loyolaButton"
+                          >
+                            <Text style={activeButton === 'Loyola' ? styles.highlightedText : styles.normalText}>LOY</Text>
+                          </TouchableOpacity>
+
+                  </View>
                 </View>
         
                 <MapView
@@ -484,9 +474,6 @@ const TempMap = () => {
                     }}
                 >
 
-                  
-                    <Marker key={"sgw"} coordinate={campusLocations['SGW']} title={campusLocations['SGW'].title} description={campusLocations['SGW'].description} />
-                    <Marker key={"loy"} coordinate={campusLocations['Loyola']} title={campusLocations['Loyola'].title} description={campusLocations['Loyola'].description} />
             
                     {isUserLocationFetched && userLocation && (
                         <Marker
@@ -513,33 +500,29 @@ const TempMap = () => {
                                     testID={`polygon-${index}`}
                                 />
 
-                                {building.name === startLocation && showPath && (
+                                {startLocation === destinationLocation && building.name === startLocation && showPath && (
                                     <BuildingOverlay
                                         coordinates={building.coordinates}
-                                        image={selectedFloor ? floorImages[selectedFloor.replace('floor-', '')] : undefined}
+                                        image={startLocation && selectedFloor ? indoorFloorData.buildings.find(b => b.name === startLocation)?.[selectedFloor]?.imageFloorPath : undefined}
+
                                     />
                                 )}
-
-                                {building.name === "John Molson School of Business" && showPath && (
+                                {/* {building.name === "John Molson School of Business" && showPath && (
                                   <BuildingOverlay
                                   coordinates={building.coordinates}
-                                  image={require('../assets/floor_plans/MB-1.png')}
-                                />)}
+                                  image={require('../assets/floor_plans/MB-1.png')}/>)} */}
 
                                 {full_path && showPath && (
                                     <PathOverlay path={full_path.find(floorData => floorData.floor === selectedFloor)?.coordinates || []} />
-                                )}
-
-                              {/* <MapDirections userLocation={{"latitude": 45.49704153785414, "longitude": -73.57871974639625}}
-                              destinationLocation={{"latitude": 45.49549607659399, "longitude": -73.57921570098344}} /> */}
-
-                              
+                                )}                             
                             </React.Fragment>
                         );
                     })}
-                    {showPath && (<DirectionsTransitScreen showDirections={true}
+                    {showPath && startLocation != destinationLocation && (
+                      <DirectionsTransitScreen showDirections={true}
                               location={{"latitude": 45.49704153785414, "longitude": -73.57871974639625}} 
-                              destinationLocation={{"latitude": 45.49549607659399, "longitude": -73.57921570098344}}/>)}
+                              destinationLocation={{"latitude": 45.49549607659399, "longitude": -73.57921570098344}}/>
+                    )}
                 </MapView>
                 {full_path && showPath && (
                     <FloorButtons 
@@ -547,10 +530,7 @@ const TempMap = () => {
                         onFloorSelect={(floor) => setSelectedFloor('floor-' + floor)}
                         startLocation={startLocation}
                     />
-                )}
-
-                
-            </ErrorBoundary>
+                )}             
         </View>
     );
 };
@@ -627,6 +607,15 @@ const style = StyleSheet.create({
       height: 1,
       backgroundColor: 'black',
       marginHorizontal: 10,
+    },
+    toggleButtonContainer: {
+      top: 5,
+      zIndex: 1,
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      flexDirection: 'row',
+      width: 250,
+      flexWrap: 'wrap'
     },
 });
 

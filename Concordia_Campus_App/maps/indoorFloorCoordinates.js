@@ -18,7 +18,7 @@ const indoorFloorData = {
                 "elevator": { "latitude": 45.49727891671142, "longitude": -73.5786661115211, "last_connecting_node": ["node_10"] },
                 "building_entrance": { "latitude": 45.49704153785414, "longitude": -73.57871974639625, "last_connecting_node": ["node_7"] },
                 "exit":{ "latitude": 45.497212132955724, "longitude": -73.57864730686212, "last_connecting_node":[ "node_7"] },
-                "floorImage": "",
+                "imageFloorPath": require('../assets/floor_plans/Hall-1.png')
         },
         "floor-2":{
                 "node_1":{ "latitude": 45.497289106308045, "longitude":-73.57875773778838, "connected_nodes":["node_2","node_4"]},
@@ -30,7 +30,7 @@ const indoorFloorData = {
                 "elevator": { "latitude": 45.497291520968666, "longitude": -73.57868839449006, "last_connecting_node": ["node_1"] },
                 "entrance":{ "latitude": 45.49733234330694, "longitude": -73.57866423077638, "last_connecting_node": ["node_1"] },
                 "exit":{ "latitude": 45.49725785948051, "longitude": -73.57872848452577, "last_connecting_node": ["node_1","node_4"] },
-                "floorImage": "",
+                "imageFloorPath": require('../assets/floor_plans/Hall-2.png')
         },
         "floor-8":{
             "H-831": { "latitude": 45.49718353071313, "longitude": -73.57942766173308, "last_connecting_node":["node_9"]},
@@ -54,7 +54,7 @@ const indoorFloorData = {
             "elevator": { "latitude": 45.49729026677937, "longitude": -73.57875190045378, "last_connecting_node": ["node_3"] },
             "entrance": { "latitude": 45.4972717500672, "longitude": -73.5789019818176, "last_connecting_node": ["node_1"] }, // same as escalator up
             "exit":{ "latitude": 45.497302657035235, "longitude": -73.57896357181264, "last_connecting_node":[ "node_6"] },// same as escalator down
-            "floorImage": "",
+            "imageFloorPath": require('../assets/floor_plans/Hall-8.png')
         },
         "floor-9":{
             "H-937": { "latitude": 45.49734371711722 , "longitude":-73.57916179626424 , "last_connecting_node":["node_13"]},
@@ -75,9 +75,9 @@ const indoorFloorData = {
             "escalator_up": { "latitude": 45.497312211471396, "longitude": -73.57897960517127, "last_connecting_node": ["node_9"] },
             "escalator_down":{ "latitude": 45.497265437958, "longitude": -73.57887387390885, "last_connecting_node":[ "node_1","node_8"] },
             "elevator": { "latitude": 45.49729026677937, "longitude": -73.57875190045378, "last_connecting_node": ["node_4"] },
-            "floorImage": "",
             "entrance": { "latitude": 45.497312211471396, "longitude": -73.57897960517127, "last_connecting_node": ["node_9"] },// same as escalator up
             "exit":{ "latitude": 45.497265437958, "longitude": -73.57887387390885, "last_connecting_node":[ "node_1","node_8"] },// same as escalator down
+            "imageFloorPath": require('../assets/floor_plans/Hall-9.png')
         },
     },
     {
@@ -99,7 +99,7 @@ const indoorFloorData = {
                 "elevator": { "latitude": 45.49529020572514, "longitude": -73.57906292356449, "last_connecting_node": ["node_7"] },
                 "building_entrance":{ "latitude": 45.49549607659399, "longitude": -73.57921570098344, "last_connecting_node": ["node_1"] },
                 "exit":{ "latitude": 45.495420803406866, "longitude": -73.57905559002522, "last_connecting_node": ["node_3"] },
-                "floorImage": "",
+                "imageFloorPath": require('../assets/floor_plans/MB-1.png')
         },
         
     },
