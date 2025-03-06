@@ -39,13 +39,11 @@ const TempMap = () => {
 
 
     const [selectedFloor, setSelectedFloor] = useState(null);
+    const [selectedFloor2, setSelectedFloor2] = useState(null);
 
     const [isSelectingStart, setIsSelectingStart] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
-
-    const [oldDes, setOldDes]= useState('');
-    const [oldStart, setOldStart]= useState('');
-    
+  
 
     const buildings = indoorFloorData.buildings.map(building => {
       const rooms = [];   
@@ -117,19 +115,17 @@ const TempMap = () => {
 
    
     const handleSameBuildingPath =  (startBuilding, startFloor, endFloor, endpoint,counter) => {
+      let stRoom = startingRoom
+      let dstRoom = destinationRoom
       if(endpoint != null){
         if(counter == 1){
-          console.log('here')
-          setOldDes(destinationRoom)
-          setDestinationRoom(endpoint)
+          dstRoom = endpoint
         }
         else{
-          setOldStart(startingRoom)
-          setStartingRoom(endpoint)
+          stRoom = endpoint
         }
       }
 
-      console.log(startingRoom,destinationRoom)
 
       const floors = Object.keys(indoorFloorData.buildings.find(building => building.name === startBuilding)).sort();
       const getNumericFloor = (floor) => {
@@ -168,21 +164,22 @@ const TempMap = () => {
     
         if (filteredFloors.length === 1) {
           // Classes on same floor
-          startNode = startingRoom;
-          endNode = destinationRoom;
+          startNode = stRoom;
+          endNode = dstRoom;
         } else if (i === 0) {
           // First floor in multi-floor path
-          startNode = startingRoom;
+          startNode = stRoom;
           endNode = startFloorNumber > endFloorNumber ? "escalator_down" : "escalator_up";
         } else if (i === filteredFloors.length - 1) {
           // Last floor in multi-floor path
           startNode = startFloorNumber > endFloorNumber ? "exit" : "entrance";
-          endNode = destinationRoom;
+          endNode = dstRoom;
         } else {
           // Middle floors in multi-floor path
           startNode = startFloorNumber > endFloorNumber ? "exit" : "entrance";
           endNode = startFloorNumber > endFloorNumber ? "escalator_down" : "escalator_up";
         }
+
     
         const shortestPath = findShortestPath(startNode, endNode, floor);
     
@@ -205,15 +202,6 @@ const TempMap = () => {
           coordinates: pathWithCoordinates
         });
       }
-
-      if(endpoint != null){
-        if(counter == 1){
-          setDestinationRoom(oldDes)
-        }
-        else{
-          setStartingRoom(oldStart)
-        }
-      }
     
       return paths;
     };
@@ -235,18 +223,17 @@ const TempMap = () => {
       if (startBuilding === endBuilding) {
         setTimeout(() => {
           const paths =  handleSameBuildingPath(startBuilding, startingFloor, destinationFloor, null);
-          console.log(destinationFloor)
           setFullPath(paths);
         }, 1000);
       } else {
         setTimeout(() => {
           const paths1 = handleSameBuildingPath(startBuilding, startingFloor, "floor-1", "building_entrance",1);
-          setFullPath(paths1);
+          setFullPath(paths1);          
           
-          
-            const paths2 =  handleSameBuildingPath(endBuilding, "floor-1", destinationFloor,"building_entrance",2);
-            setSecondPath(paths2);
-
+          const paths2 =  handleSameBuildingPath(endBuilding, "floor-1", destinationFloor,"building_entrance",2);
+          setSecondPath(paths2);
+          setSelectedFloor(startingFloor)
+          setSelectedFloor2("floor-1")
         }, 1000);
       }
     };
@@ -555,7 +542,7 @@ const TempMap = () => {
                                 {startLocation != destinationLocation && building.name === destinationLocation && showPath && (
                                     <BuildingOverlay
                                         coordinates={building.coordinates}
-                                        image={startLocation && selectedFloor ? indoorFloorData.buildings.find(b => b.name === destinationLocation)?.[selectedFloor]?.imageFloorPath : undefined}
+                                        image={startLocation && selectedFloor2 ? indoorFloorData.buildings.find(b => b.name === destinationLocation)?.[selectedFloor2]?.imageFloorPath : undefined}
 
                                     />
                                 )}
@@ -566,14 +553,17 @@ const TempMap = () => {
 
                                 {full_path && showPath && (
                                     <PathOverlay path={full_path.find(floorData => floorData.floor === selectedFloor)?.coordinates || []} />
+                                )}  
+                                {secondPath && showPath && (
+                                    <PathOverlay path={secondPath.find(floorData => floorData.floor === selectedFloor2)?.coordinates || []} />
                                 )}                             
                             </React.Fragment>
                         );
                     })}
                     {showPath && startLocation != destinationLocation && (
                       <DirectionsTransitScreen showDirections={true}
-                              location={{"latitude": 45.49704153785414, "longitude": -73.57871974639625}} 
-                              destinationLocation={{"latitude": 45.49549607659399, "longitude": -73.57921570098344}}/>
+                              location={indoorFloorData.buildings.find(building => building.name == startLocation )["floor-1"]["building_entrance"]} 
+                              destinationLocation={indoorFloorData.buildings.find(building => building.name == destinationLocation )["floor-1"]["building_entrance"]}/>
                     )}
                 </MapView>
                 {full_path && showPath && (
@@ -582,7 +572,14 @@ const TempMap = () => {
                         onFloorSelect={(floor) => setSelectedFloor('floor-' + floor)}
                         startLocation={startLocation}
                     />
-                )}             
+                )}   
+                {secondPath && showPath && (
+                    <FloorButtons 
+                        selectedFloor={selectedFloor2} 
+                        onFloorSelect={(floor) => setSelectedFloor2('floor-' + floor)}
+                        startLocation={destinationLocation}
+                    />
+                )}            
         </View>
     );
 };

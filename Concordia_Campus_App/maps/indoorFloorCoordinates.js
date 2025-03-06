@@ -16,7 +16,7 @@ const indoorFloorData = {
                 "escalator_up": { "latitude": 45.49728029519156, "longitude": -73.57856168535761, "last_connecting_node": ["node_7"] },
                 "escalator_down":{ "latitude": 45.497212132955724, "longitude": -73.57864730686212, "last_connecting_node":[ "node_7"] },
                 "elevator": { "latitude": 45.49727891671142, "longitude": -73.5786661115211, "last_connecting_node": ["node_10"] },
-                "building_entrance": { "latitude": 45.49704153785414, "longitude": -73.57871974639625, "last_connecting_node": ["node_7"] },
+                "building_entrance": { "latitude": 45.49704153785414, "longitude": -73.57871974639625, "last_connecting_node": ["node_1"] },
                 "exit":{ "latitude": 45.497212132955724, "longitude": -73.57864730686212, "last_connecting_node":[ "node_7"] },
                 "imageFloorPath": require('../assets/floor_plans/Hall-1.png')
         },
