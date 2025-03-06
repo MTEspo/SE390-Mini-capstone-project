@@ -33,6 +33,7 @@ const TempMap = () => {
     const [destinationRoom, setDestinationRoom] = useState('');
 
     const [full_path, setFullPath] = useState('');
+    const [secondPath, setSecondPath] = useState('');
     const [showPath, setShowPath] = useState(false);
     const pathUpdateInterval = useRef(null);
 
@@ -42,6 +43,8 @@ const TempMap = () => {
     const [isSelectingStart, setIsSelectingStart] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
 
+    const [oldDes, setOldDes]= useState('');
+    const [oldStart, setOldStart]= useState('');
     
 
     const buildings = indoorFloorData.buildings.map(building => {
@@ -113,8 +116,109 @@ const TempMap = () => {
     };
 
    
-    const onPressShowPath = () => {
+    const handleSameBuildingPath =  (startBuilding, startFloor, endFloor, endpoint,counter) => {
+      if(endpoint != null){
+        if(counter == 1){
+          console.log('here')
+          setOldDes(destinationRoom)
+          setDestinationRoom(endpoint)
+        }
+        else{
+          setOldStart(startingRoom)
+          setStartingRoom(endpoint)
+        }
+      }
 
+      console.log(startingRoom,destinationRoom)
+
+      const floors = Object.keys(indoorFloorData.buildings.find(building => building.name === startBuilding)).sort();
+      const getNumericFloor = (floor) => {
+        const match = floor.match(/floor-(\d+)/);
+        return match ? parseInt(match[1], 10) : NaN;
+      };
+    
+      const startFloorNumber = getNumericFloor(startFloor);
+      setSelectedFloor(startFloor)
+      const endFloorNumber = getNumericFloor(endFloor);
+      const filteredFloors = floors.filter(floor => {
+        const floorNumber = getNumericFloor(floor);
+    
+        if (startFloorNumber < endFloorNumber) {
+          return floorNumber >= startFloorNumber && floorNumber <= endFloorNumber;
+        } else {
+          return floorNumber <= startFloorNumber && floorNumber >= endFloorNumber;
+        }
+      }).sort((a, b) => {
+        const floorANumber = getNumericFloor(a);
+        const floorBNumber = getNumericFloor(b);
+    
+        if (startFloorNumber < endFloorNumber) {
+          return floorANumber - floorBNumber;
+        } else {
+          return floorBNumber - floorANumber;
+        }
+      });
+      let paths = [];
+    
+      for (let i = 0; i < filteredFloors.length; i++) {
+        const floorNumber = filteredFloors[i];
+        const floor = indoorFloorData.buildings.find(building => building.name === startBuilding)[floorNumber];
+    
+        let startNode, endNode;
+    
+        if (filteredFloors.length === 1) {
+          // Classes on same floor
+          startNode = startingRoom;
+          endNode = destinationRoom;
+        } else if (i === 0) {
+          // First floor in multi-floor path
+          startNode = startingRoom;
+          endNode = startFloorNumber > endFloorNumber ? "escalator_down" : "escalator_up";
+        } else if (i === filteredFloors.length - 1) {
+          // Last floor in multi-floor path
+          startNode = startFloorNumber > endFloorNumber ? "exit" : "entrance";
+          endNode = destinationRoom;
+        } else {
+          // Middle floors in multi-floor path
+          startNode = startFloorNumber > endFloorNumber ? "exit" : "entrance";
+          endNode = startFloorNumber > endFloorNumber ? "escalator_down" : "escalator_up";
+        }
+    
+        const shortestPath = findShortestPath(startNode, endNode, floor);
+    
+        const pathWithCoordinates = shortestPath
+          .map(nodeKey => {
+            const node = floor[nodeKey];
+            if (node) {
+              return {
+                node: nodeKey,
+                latitude: node.latitude,
+                longitude: node.longitude,
+              };
+            }
+            return null;
+          })
+          .filter(node => node !== null);
+    
+        paths.push({
+          floor: floorNumber,
+          coordinates: pathWithCoordinates
+        });
+      }
+
+      if(endpoint != null){
+        if(counter == 1){
+          setDestinationRoom(oldDes)
+        }
+        else{
+          setStartingRoom(oldStart)
+        }
+      }
+    
+      return paths;
+    };
+    
+    const onPressShowPath = () => {
       setShowPath(true);
     
       // Clear the previous interval if it exists
@@ -123,96 +227,28 @@ const TempMap = () => {
       }
     
       setFullPath([]);
+      setSecondPath([]);
     
-      setTimeout(() => {
-        const startFloor = startingFloor;
-        const endFloor = destinationFloor;
-        const floors = Object.keys(indoorFloorData.buildings.find(building => building.name === startLocation)).sort();
-        
-
-        const getNumericFloor = (floor) => {
-          const match = floor.match(/floor-(\d+)/);
-          return match ? parseInt(match[1], 10) : NaN;
-        };
-
-        const startFloorNumber = getNumericFloor(startFloor);
-        setSelectedFloor(startFloor)
-        const endFloorNumber = getNumericFloor(endFloor);
-
+      const startBuilding = startLocation;
+      const endBuilding = destinationLocation;
     
-        const filteredFloors = floors.filter(floor => {
-          const floorNumber = getNumericFloor(floor);
+      if (startBuilding === endBuilding) {
+        setTimeout(() => {
+          const paths =  handleSameBuildingPath(startBuilding, startingFloor, destinationFloor, null);
+          console.log(destinationFloor)
+          setFullPath(paths);
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          const paths1 = handleSameBuildingPath(startBuilding, startingFloor, "floor-1", "building_entrance",1);
+          setFullPath(paths1);
           
-          if (startFloorNumber < endFloorNumber) {
-            return floorNumber >= startFloorNumber && floorNumber <= endFloorNumber;
-          } else {
-            return floorNumber <= startFloorNumber && floorNumber >= endFloorNumber;
-          }
-        }).sort((a, b) => {
-          const floorANumber = getNumericFloor(a);
-          const floorBNumber = getNumericFloor(b);
           
-          if (startFloorNumber < endFloorNumber) {
-            return floorANumber - floorBNumber;
-          } else {
-            return floorBNumber - floorANumber;
-          }
-        });
+            const paths2 =  handleSameBuildingPath(endBuilding, "floor-1", destinationFloor,"building_entrance",2);
+            setSecondPath(paths2);
 
-
-        let paths = [];
-    
-        for (let i = 0; i < filteredFloors.length; i++) {
-          const floorNumber = filteredFloors[i];
-          const floor = indoorFloorData.buildings.find(building => building.name === startLocation)[floorNumber];
-          
-          let startNode, endNode;
-          
-          if (filteredFloors.length === 1) {
-            // Classes on same floor
-            startNode = startingRoom;
-            endNode = destinationRoom;
-          } else if (i === 0) {
-            // First floor in multi-floor path
-            startNode = startingRoom;
-            endNode = startFloorNumber > endFloorNumber ? "escalator_down" : "escalator_up";
-          } else if (i === filteredFloors.length - 1) {
-            // Last floor in multi-floor path
-            startNode = startFloorNumber > endFloorNumber ? "exit" : "entrance";
-            endNode = destinationRoom;
-          } else {
-            // Middle floors in multi-floor path
-            startNode = startFloorNumber > endFloorNumber ? "exit" : "entrance";
-            endNode = startFloorNumber > endFloorNumber ? "escalator_down" : "escalator_up";
-          }
-        
-          const shortestPath = findShortestPath(startNode, endNode, floor);
-        
-          const pathWithCoordinates = shortestPath
-            .map(nodeKey => {
-              const node = floor[nodeKey];
-              if (node) {
-                return {
-                  node: nodeKey,
-                  latitude: node.latitude,
-                  longitude: node.longitude,
-                };
-              }
-              return null;
-            })
-            .filter(node => node !== null);
-        
-            paths.push({
-              floor: floorNumber,
-              coordinates: pathWithCoordinates
-            });
-        }
-    
-        //console.log(JSON.stringify(paths, null, 1));
-        
-        //console.log(paths)
-        setFullPath(paths);
-      }, 1000);
+        }, 1000);
+      }
     };
       
       // useEffect(() => {
@@ -500,10 +536,26 @@ const TempMap = () => {
                                     testID={`polygon-${index}`}
                                 />
 
-                                {startLocation === destinationLocation && building.name === startLocation && showPath && (
+                      {startLocation === destinationLocation && building.name === startLocation && showPath && (
                                     <BuildingOverlay
                                         coordinates={building.coordinates}
                                         image={startLocation && selectedFloor ? indoorFloorData.buildings.find(b => b.name === startLocation)?.[selectedFloor]?.imageFloorPath : undefined}
+
+                                    />
+                                )}
+
+                                {startLocation != destinationLocation && building.name === startLocation && showPath && (
+                                    <BuildingOverlay
+                                        coordinates={building.coordinates}
+                                        image={startLocation && selectedFloor ? indoorFloorData.buildings.find(b => b.name === startLocation)?.[selectedFloor]?.imageFloorPath : undefined}
+
+                                    />
+                                )}
+
+                                {startLocation != destinationLocation && building.name === destinationLocation && showPath && (
+                                    <BuildingOverlay
+                                        coordinates={building.coordinates}
+                                        image={startLocation && selectedFloor ? indoorFloorData.buildings.find(b => b.name === destinationLocation)?.[selectedFloor]?.imageFloorPath : undefined}
 
                                     />
                                 )}
