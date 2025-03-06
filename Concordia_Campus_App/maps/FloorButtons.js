@@ -4,6 +4,7 @@ import indoorFloorData from "./indoorFloorCoordinates";
 
 const FloorButtons = ({ selectedFloor, onFloorSelect, startLocation }) => {
 
+
     const getBuildingByName = (name) => {
         return indoorFloorData.buildings.find(building => building.name === name);
     };

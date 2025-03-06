@@ -224,6 +224,7 @@ const TempMap = () => {
         setTimeout(() => {
           const paths =  handleSameBuildingPath(startBuilding, startingFloor, destinationFloor, null);
           setFullPath(paths);
+          setSelectedFloor(startingFloor)
         }, 1000);
       } else {
         setTimeout(() => {
@@ -233,7 +234,7 @@ const TempMap = () => {
           const paths2 =  handleSameBuildingPath(endBuilding, "floor-1", destinationFloor,"building_entrance",2);
           setSecondPath(paths2);
           setSelectedFloor(startingFloor)
-          setSelectedFloor2("floor-1")
+          setSelectedFloor2(destinationFloor)
         }, 1000);
       }
     };
@@ -523,7 +524,7 @@ const TempMap = () => {
                                     testID={`polygon-${index}`}
                                 />
 
-                      {startLocation === destinationLocation && building.name === startLocation && showPath && (
+                                {startLocation === destinationLocation && building.name === startLocation && showPath && (
                                     <BuildingOverlay
                                         coordinates={building.coordinates}
                                         image={startLocation && selectedFloor ? indoorFloorData.buildings.find(b => b.name === startLocation)?.[selectedFloor]?.imageFloorPath : undefined}
@@ -573,7 +574,7 @@ const TempMap = () => {
                         startLocation={startLocation}
                     />
                 )}   
-                {secondPath && showPath && (
+                {startLocation != destinationLocation && secondPath != [] && showPath && (
                     <FloorButtons 
                         selectedFloor={selectedFloor2} 
                         onFloorSelect={(floor) => setSelectedFloor2('floor-' + floor)}
