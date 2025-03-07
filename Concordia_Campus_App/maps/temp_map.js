@@ -230,6 +230,13 @@ const TempMap = () => {
           setSelectedFloor2(destinationFloor)
         }, 1000);
       }
+
+      mapRef.current?.animateToRegion({
+        latitude: indoorFloorData.buildings.find(b => b.name === startLocation)?.["floor-1"]?.building_entrance.latitude,
+        longitude: indoorFloorData.buildings.find(b => b.name === startLocation)?.["floor-1"]?.building_entrance.longitude,
+        latitudeDelta: 0.002,
+        longitudeDelta: 0.002,
+      }, 1000);
     };
       
       // useEffect(() => {
