@@ -103,6 +103,36 @@ const indoorFloorData = {
         },
         
     },
+    {
+        "name": "Vanier Library Building",
+        "floor-1":{
+            "VL-122": { "latitude": 45.45897317757964, "longitude": -73.6384588390033, "last_connecting_node":["node_3"]},
+            "node_1":{ "latitude": 45.459064364787544, "longitude": -73.63858107542114, "connected_nodes":["node_2","node_3"]},
+            "node_2":{ "latitude":45.4590268776782 , "longitude":-73.6384611143011, "connected_nodes":["node_1","node_3","node_4"]},
+            "node_3":{ "latitude": 45.45898332647579, "longitude":  -73.63848796053296, "connected_nodes":["node_2","node_1"]},
+            "node_4":{ "latitude": 45.45895533374485, "longitude":  -73.63824950515938, "connected_nodes":["node_2","node_5"]},
+            "node_5":{ "latitude": 45.45893098200943, "longitude":  -73.63820173912639, "connected_nodes":["node_4"]},
+            "escalator_up": { "latitude": 45.458914311689526, "longitude": -73.63821898150404, "last_connecting_node": ["node_5"] },
+            "escalator_down":{ "latitude": 45.458914311689526, "longitude": -73.63821898150404, "last_connecting_node":[ "node_5"] },
+            "elevator": { "latitude": 45.45895337253184, "longitude": -73.63819335094439, "last_connecting_node": ["node_5"] },
+            "building_entrance": { "latitude": 45.45912541331684, "longitude": -73.63862920372623, "last_connecting_node": ["node_1"] },
+            "exit":{ "latitude": 45.458914311689526, "longitude": -73.63821898150404, "last_connecting_node": ["node_1"] }, //same as escalators
+            "imageFloorPath": require('../assets/floor_plans/VL-1.png')
+    },
+        "floor-2":{
+                "VL-203": { "latitude": 45.45904676633085, "longitude": -73.63860904734719, "last_connecting_node":["node_3"]},
+                "node_1":{ "latitude": 45.45893064485964, "longitude": -73.63820745053077, "connected_nodes":["node_2"]},
+                "node_2":{ "latitude":45.45897101316622 , "longitude":-73.63829436140915, "connected_nodes":["node_1","node_3",]},
+                "node_3":{ "latitude": 45.45903655451709, "longitude":  -73.63856587933401, "connected_nodes":["node_2"]},
+                "escalator_up": { "latitude": 45.458911524898866, "longitude": -73.63822343560838, "last_connecting_node": ["node_1"] },
+                "escalator_down":{ "latitude": 45.458911524898866, "longitude": -73.63822343560838, "last_connecting_node":[ "node_1"] },
+                "elevator": { "latitude": 45.45895042230208, "longitude": -73.63818825183922, "last_connecting_node": ["node_1"] },
+                "entrance": { "latitude": 45.458911524898866, "longitude": -73.63822343560838, "last_connecting_node": ["node_1"] },// same as escalator up & down
+                "exit":{ "latitude": 45.458911524898866, "longitude": -73.63822343560838, "last_connecting_node": ["node_1"] },// same as escalator up & down
+                "imageFloorPath": require('../assets/floor_plans/VL-2.png')
+        },
+        
+    },
 ]
 }
 

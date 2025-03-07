@@ -564,7 +564,7 @@ const TempMap = () => {
                                 {building.name === "Vanier Library Building"  && (
                                   <BuildingOverlay
                                   coordinates={building.coordinates}
-                                  image={require('../assets/floor_plans/VL-2.png')}/>)}
+                                  image={require('../assets/floor_plans/VL-1.png')}/>)}
 
                                 {full_path && showPath && (
                                     <PathOverlay path={full_path.find(floorData => floorData.floor === selectedFloor)?.coordinates || []} />
