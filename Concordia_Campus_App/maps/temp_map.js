@@ -246,6 +246,12 @@ const TempMap = () => {
         longitudeDelta: 0.002,
       }, 1000);
     };
+
+    useEffect(() => {
+      if (wheelChairToggle) {
+        onPressShowPath();
+      }
+    }, [wheelChairToggle]);
       
       // useEffect(() => {
       //     fetchUserLocation();
@@ -509,8 +515,7 @@ const TempMap = () => {
                           <TouchableOpacity
                                     style={activeButton === 'Accessibility' ? styles.sgwButtonActive : styles.sgwButton}
                                     onPress={ () =>{
-                                      wheelChairToggle ? setWheelChairToggle(false) : setWheelChairToggle(true);
-                                      onPressShowPath();
+                                      setWheelChairToggle(prev => !prev);
                                     }
                                     }
                                     testID="sgwButton"
