@@ -32,7 +32,7 @@ const MapDirections = ({userLocation, destinationLocation}) => {
                 mode="WALKING"
                 apikey={API_KEY}
                 strokeWidth={4}
-                strokeColor="orange" />
+                strokeColor="blue" />
         </>
     );
 
