@@ -59,6 +59,8 @@ const MapScreen = ({route}) => {
     setShowDirections(false);
     setEta(null);
     setDistance(null);
+    setStartQuery(null);
+    setDestinationQuery(null);
   };
   
   const campusLocations = {
@@ -592,21 +594,21 @@ const handleUserLocation = () => {
               position: 'absolute',
               bottom: 10,
               left: 10,
-              zIndex: 30,
+              zIndex: 1,
             }}
           >
             <TouchableOpacity
               style={[
                 styles.searchBar,
                 {
-                  backgroundColor: '#800000',
+                  backgroundColor: 'red',
                   paddingVertical: 10,
                   paddingHorizontal: 20,
                   alignSelf: 'flex-start',
                   borderColor: 'black',
                   flexDirection: 'row',
-                  top: 40,
-                  left: 13
+                  bottom: 620,
+                  
                 },
               ]}
               onPress={handleReturn}
@@ -619,12 +621,13 @@ const handleUserLocation = () => {
             style={[
                 styles.searchBar,
                 {
-                  backgroundColor: '#800000',
+                  backgroundColor: 'green',
                   paddingVertical: 10,
                   paddingHorizontal: 20,
                   borderColor: 'black',
                   flexDirection: 'row',
-                  left: 270,
+                  left: 285,
+                  bottom: 660,
                 },
               ]}>
               <Text style={{ color: '#FFFFFF', textAlign: 'center' }} >Get Directions</Text>
