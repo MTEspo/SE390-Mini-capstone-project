@@ -7,7 +7,7 @@ export default RouteInfoContainer = ({eta, distance}) => {
       <>
         {eta !== null && distance !== null && (
           <View testID="route-info-container" style={[styles.routeInfoContainer, { flexDirection: 'row'}]}>
-            <Text style={styles.routeInfoText}>Distance: {Math.round(distance)} km</Text>
+            <Text style={styles.routeInfoText}>Distance: {(distance >= 1) ? Math.round(distance) + " km" : Math.round(distance*1000) + " m"}</Text>
             <Text style={styles.routeInfoText}>      ETA: {Math.round(eta)} mins</Text>
           </View>
         )}
