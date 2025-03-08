@@ -83,5 +83,10 @@ describe('BuildingDirectionsMapScreen - Start and Destination Selection', () => 
     );
     expect(startInput).toBeTruthy();
     expect(getLocationSpy).toHaveBeenCalled();
+
+    await act(async () => {
+      fireEvent.press(await findByText("Get Directions"));
+      fireEvent.press(await findByText("Return"));
+    });
   });
 });

@@ -5,7 +5,7 @@ import { API_KEY } from '@env';
 import styles from './styles/mapScreenStyles'; 
 
 
-const TransitScreen = ({showDirections, campus, routeData}) => {
+const TransitScreen = ({showDirections, campus, routeData, origin, destination}) => {
   const [mode, setMode] = useState('DRIVING');
 
   const campusLocations = {
@@ -23,18 +23,20 @@ const TransitScreen = ({showDirections, campus, routeData}) => {
     },
   };
 
-  // Current campus location
-  const location = campusLocations[campus];
-  const destinationLocation = campus === 'SGW' ? campusLocations.Loyola : campusLocations.SGW;
+  // If there origin location is null set the location to the current campus
+  const location =  (origin == null) ? campusLocations[campus]: origin;
+
+  // If there destination location is null set the destinatio to the other campus
+  const destinationLocation = (destination == null) ? ((campus === 'SGW') ? campusLocations.Loyola : campusLocations.SGW) : destination;
 
   const handleDirections = (result) => {
     routeData(result.duration, result.distance);
   };
 
   return (
-    <View style={styles.container}>
-      {showDirections && (
-        <>
+    <>
+    {showDirections && (
+      <View style={styles.container}>
           {/* For driving mode (always blue) */}
           {mode === 'DRIVING' && (
             <MapViewDirections
@@ -73,9 +75,7 @@ const TransitScreen = ({showDirections, campus, routeData}) => {
               onReady={handleDirections}
             />
           )}
-        </>
-      )}
-      {showDirections && (
+
         <View style={styles.modeContainer}>
           <TouchableOpacity 
             testID="driving-button"
@@ -98,8 +98,9 @@ const TransitScreen = ({showDirections, campus, routeData}) => {
             <Text style={styles.modeText}>Transit</Text>
           </TouchableOpacity>
         </View>
-      )}
     </View>
+    )}
+    </>
   );
 };
 export default TransitScreen;

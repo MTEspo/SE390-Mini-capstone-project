@@ -3,15 +3,11 @@ const buildingsData = {
     {
       "name": "John Molson School of Business",
       "coordinates": [
-        { "latitude": 45.495359016476655, "longitude": -73.57936484536624 },
-        { "latitude": 45.495517888088095, "longitude": -73.57920123061729 },
-        { "latitude": 45.49518698339788, "longitude": -73.57852665505398 },
-        { "latitude": 45.49500554903502, "longitude": -73.57873452625142 },
-        { "latitude": 45.495037511607705, "longitude": -73.57878951153589 },
-        { "latitude": 45.49500836926276, "longitude": -73.5788216980439 },
-        { "latitude": 45.49516630179018, "longitude": -73.57916904410929 },
-        { "latitude": 45.49522082601229, "longitude": -73.57911539992931 },
-        { "latitude": 45.495359016476655, "longitude": -73.57936618647074 }
+        { "latitude":  45.49527954386114, "longitude": -73.57949167923474 },
+        { "latitude": 45.49498333158708  , "longitude": -73.57877435264534  },
+        { "latitude": 45.49518374386017  , "longitude": -73.57851570127877  },
+        { "latitude": 45.495528705363796  , "longitude": -73.57925141294227  },
+
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
@@ -464,24 +460,34 @@ const buildingsData = {
     {
       "name": "Vanier Library Building",
       "coordinates": [
-        { "latitude": 45.45931317341766, "longitude": -73.63866511498837 },
-        { "latitude": 45.45915702171947, "longitude": -73.63878849659288 },
-        { "latitude": 45.45919464867425, "longitude": -73.63889042052703 },
-        { "latitude": 45.459091174488194, "longitude": -73.63896820458206 },
-        { "latitude": 45.45904978476062, "longitude": -73.6388635984391 },
-        { "latitude": 45.45884847974324, "longitude": -73.63902721317551 },
-        { "latitude": 45.458632123082104, "longitude": -73.63846663153767 },
-        { "latitude": 45.45896512385879, "longitude": -73.63820913948784 },
-        { "latitude": 45.45890115776002, "longitude": -73.63800260939931 },
-        { "latitude": 45.45910152191424, "longitude": -73.63784704128929 },
-        { "latitude": 45.45921064012132, "longitude": -73.6381326965258 },
-        { "latitude": 45.45913350485889, "longitude": -73.63819706953683 }
+        { latitude: 45.45892959207609, longitude: -73.63892943784158 },
+      { latitude: 45.45871968918475, longitude: -73.63837353009328 },
+      { latitude: 45.458866404017456, longitude: -73.63824268504662 },
+      { latitude: 45.4588992444746, longitude: -73.63797926342369 },
+      { latitude: 45.45908372381156, longitude: -73.63784711558233 },
+      { latitude: 45.45919933924507, longitude: -73.63813577179297 },
+      { latitude: 45.45914278579167, longitude: -73.6381960251453 },
+      { latitude: 45.459291749810085, longitude: -73.6386241072904 },
+      { latitude: 45.458930633676275, longitude: -73.63891725960285 },
       ],
       "fillColor": "#800000",
       "strokeColor": "#000000",
       "popUp": { "name": "Vanier Library Building","address": "7141 Sherbrooke St W, Montreal, Quebec H4B 1R6", "codes":"Class Codes: VL"},
-      "markerCoord": { "latitude": 45.45908740777437, "longitude": -73.63861054581692 }
-    },
+      "markerCoord": { "latitude": 45.45910034196574,  "longitude": -73.63869257592627 }
+      },
+      {
+        "name": "Vanier Extension",
+        "coordinates": [
+          { latitude: 45.458934357795, longitude: -73.63895569145663 },
+          { latitude: 45.458854870455035, longitude: -73.63901738226397 },
+          { latitude: 45.45863663244851, longitude: -73.63845344781859 },
+          { latitude: 45.458716590436936, longitude: -73.63839041590674 },
+        ],
+        "fillColor": "#800000",
+        "strokeColor": "#000000",
+        "popUp": { "name": "Vanier Extension","address": "7141 Sherbrooke St W, Montreal, Quebec H4B 1R6", "codes":"Class Codes: VL"},
+        "markerCoord": { "latitude": 45.45900063031391, "longitude": -73.6381588163619 }
+        },
     {
       "name": "Oscar Peterson Concert Hall",
       "coordinates": [
