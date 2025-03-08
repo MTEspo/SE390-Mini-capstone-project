@@ -607,7 +607,8 @@ const handleUserLocation = () => {
                   alignSelf: 'flex-start',
                   borderColor: 'black',
                   flexDirection: 'row',
-                  bottom: 10,
+                  bottom: -40,
+                  right: -15
                   
                 },
               ]}
