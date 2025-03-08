@@ -607,7 +607,7 @@ const handleUserLocation = () => {
                   alignSelf: 'flex-start',
                   borderColor: 'black',
                   flexDirection: 'row',
-                  bottom: 620,
+                  bottom: 10,
                   
                 },
               ]}
@@ -626,8 +626,8 @@ const handleUserLocation = () => {
                   paddingHorizontal: 20,
                   borderColor: 'black',
                   flexDirection: 'row',
-                  left: 285,
-                  bottom: 660,
+                  left: 0,
+                  bottom: 550,
                 },
               ]}>
               <Text style={{ color: '#FFFFFF', textAlign: 'center' }} >Get Directions</Text>
