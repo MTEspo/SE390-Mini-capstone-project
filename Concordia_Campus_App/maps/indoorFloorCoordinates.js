@@ -116,7 +116,7 @@ const indoorFloorData = {
             "escalator_down":{ "latitude": 45.458914311689526, "longitude": -73.63821898150404, "last_connecting_node":[ "node_5"] },
             "elevator": { "latitude": 45.45895337253184, "longitude": -73.63819335094439, "last_connecting_node": ["node_5"] },
             "node_6": { "latitude": 45.45912541331684, "longitude": -73.63862920372623, "last_connecting_node": ["node_1"] },
-            "exit":{ "latitude": 45.458914311689526, "longitude": -73.63821898150404, "last_connecting_node": ["node_1"] }, //same as escalators
+            "exit":{ "latitude": 45.458914311689526, "longitude": -73.63821898150404, "last_connecting_node": ["node_5"] }, //same as escalators
             "node_7": { "latitude": 45.45917539034466, "longitude": -73.63879626683736, "last_connecting_node": ["node_6"] },
             "building_entrance": { "latitude": 45.459074227779034, "longitude": -73.63891446924218, "last_connecting_node": ["node_7"] },
             "imageFloorPath": require('../assets/floor_plans/VL-1.png')
