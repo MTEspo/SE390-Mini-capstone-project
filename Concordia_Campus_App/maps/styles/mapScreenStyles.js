@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 5,
-    flexDirection: 'row',
+    flexDirection: 'column',
+    alignItems: 'stretch'
   },
   searchBar: {
     height: 40,
