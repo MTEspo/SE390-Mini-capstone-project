@@ -511,17 +511,28 @@ const TempMap = () => {
                             <Text style={activeButton === 'Loyola' ? styles.highlightedText : styles.normalText}>LOY</Text>
                           </TouchableOpacity>
 
-                        {showPath &&(
+                          {showPath && (
                           <TouchableOpacity
-                                    style={activeButton === 'Accessibility' ? styles.sgwButtonActive : styles.sgwButton}
-                                    onPress={ () =>{
-                                      setWheelChairToggle(prev => !prev);
-                                    }
-                                    }
-                                    testID="sgwButton"
-                                  >
-                              <Text style={activeButton === 'Accessibility' ? styles.highlightedText : styles.normalText}>&#9855;</Text>
-                          </TouchableOpacity>)}
+                            style={{
+                              backgroundColor: wheelChairToggle ? 'green' : '#800000',
+                              borderRadius: 10,
+                              paddingVertical: 8,
+                              paddingHorizontal: 15,
+                              width: 'auto',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              borderWidth: 1,
+                              borderColor: 'black',
+                              marginRight: 5
+                            }}
+                            onPress={() => {
+                              setWheelChairToggle(prev => !prev);
+                            }}
+                            testID="sgwButton"
+                          >
+                            <Icon name="wheelchair" size={22} color="white" />
+                          </TouchableOpacity>
+                        )}
 
                   </View>
                 </View>
@@ -707,6 +718,30 @@ const style = StyleSheet.create({
       flexDirection: 'row',
       width: 250,
     },
+    wheelchairButton: {
+      backgroundColor: '#800000', 
+      borderRadius: 10,
+      paddingVertical: 8,
+      paddingHorizontal: 15,
+      width: 'auto',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginRight: 5
+  },
+  wheelchairButtonActive: {
+    backgroundColor: 'white', 
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    width: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'black',
+    marginRight: 5
+  },
+
+
 });
 
 export default TempMap;
