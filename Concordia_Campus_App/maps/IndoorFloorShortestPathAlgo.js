@@ -2,8 +2,10 @@ import indoorFloorData from './indoorFloorCoordinates.js';
 
 export function findShortestPath(start, end, floorData) {
     let graph = {};
-    
-    // Build graph from nodes
+    if (start == end){
+        return ["elevator", "elevator"];
+    }
+
     for (const [node, data] of Object.entries(floorData)) {
         if (data.connected_nodes) {
             graph[node] = data.connected_nodes;
@@ -66,6 +68,7 @@ export function findShortestPath(start, end, floorData) {
         path.unshift(current);
         current = previous[current];
     }
+    console.log(path)
 
     return path.length > 1 ? path : null;
 }

@@ -43,6 +43,7 @@ const TempMap = () => {
 
     const [isSelectingStart, setIsSelectingStart] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
+    const [wheelChairToggle, setWheelChairToggle] = useState(false);
   
 
     const buildings = indoorFloorData.buildings.map(building => {
@@ -110,6 +111,10 @@ const TempMap = () => {
     const handleSameBuildingPath =  (startBuilding, startFloor, endFloor, endpoint,counter) => {
       let stRoom = startingRoom
       let dstRoom = destinationRoom
+      let up = "escalator_up"
+      let down = "escalator_down"
+      let exit = "exit";
+      let entrance = "entrance"
       if(endpoint != null){
         if(counter == 1){
           dstRoom = endpoint
@@ -117,6 +122,10 @@ const TempMap = () => {
         else{
           stRoom = endpoint
         }
+      }
+
+      if(wheelChairToggle){
+        exit = entrance = up = down = "elevator"
       }
 
 
@@ -162,17 +171,16 @@ const TempMap = () => {
         } else if (i === 0) {
           // First floor in multi-floor path
           startNode = stRoom;
-          endNode = startFloorNumber > endFloorNumber ? "escalator_down" : "escalator_up";
+          endNode = startFloorNumber > endFloorNumber ? down : up;
         } else if (i === filteredFloors.length - 1) {
           // Last floor in multi-floor path
-          startNode = startFloorNumber > endFloorNumber ? "exit" : "entrance";
+          startNode = startFloorNumber > endFloorNumber ? exit : entrance;
           endNode = dstRoom;
         } else {
           // Middle floors in multi-floor path
-          startNode = startFloorNumber > endFloorNumber ? "exit" : "entrance";
-          endNode = startFloorNumber > endFloorNumber ? "escalator_down" : "escalator_up";
+          startNode = startFloorNumber > endFloorNumber ? exit  : entrance;
+          endNode = startFloorNumber > endFloorNumber ? down : up;
         }
-
     
         const shortestPath = findShortestPath(startNode, endNode, floor);
     
@@ -195,11 +203,12 @@ const TempMap = () => {
           coordinates: pathWithCoordinates
         });
       }
-    
+      console.log(JSON.stringify(paths))
       return paths;
     };
     
     const onPressShowPath = () => {
+     
       setShowPath(true);
     
       // Clear the previous interval if it exists
@@ -494,6 +503,18 @@ const TempMap = () => {
                             testID="loyolaButton"
                           >
                             <Text style={activeButton === 'Loyola' ? styles.highlightedText : styles.normalText}>LOY</Text>
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
+                                    style={activeButton === 'Accessibility' ? styles.sgwButtonActive : styles.sgwButton}
+                                    onPress={ () =>{
+                                      wheelChairToggle ? setWheelChairToggle(false) : setWheelChairToggle(true);
+                                      onPressShowPath();
+                                    }
+                                    }
+                                    testID="sgwButton"
+                                  >
+                              <Text style={activeButton === 'Accessibility' ? styles.highlightedText : styles.normalText}>Accessibility</Text>
                           </TouchableOpacity>
 
                   </View>
