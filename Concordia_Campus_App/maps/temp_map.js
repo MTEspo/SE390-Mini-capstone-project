@@ -203,7 +203,6 @@ const TempMap = () => {
           coordinates: pathWithCoordinates
         });
       }
-      console.log(JSON.stringify(paths))
       return paths;
     };
     
@@ -264,6 +263,7 @@ const TempMap = () => {
     }, [campus, zoomLevel]);
 
     useEffect(() => {
+      console.log(wheelChairToggle)
         return () => {
             if (pathUpdateInterval.current) {
                 clearInterval(pathUpdateInterval.current);
@@ -505,6 +505,7 @@ const TempMap = () => {
                             <Text style={activeButton === 'Loyola' ? styles.highlightedText : styles.normalText}>LOY</Text>
                           </TouchableOpacity>
 
+                        {showPath &&(
                           <TouchableOpacity
                                     style={activeButton === 'Accessibility' ? styles.sgwButtonActive : styles.sgwButton}
                                     onPress={ () =>{
@@ -515,7 +516,7 @@ const TempMap = () => {
                                     testID="sgwButton"
                                   >
                               <Text style={activeButton === 'Accessibility' ? styles.highlightedText : styles.normalText}>&#9855;</Text>
-                          </TouchableOpacity>
+                          </TouchableOpacity>)}
 
                   </View>
                 </View>
