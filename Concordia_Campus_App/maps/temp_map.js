@@ -507,7 +507,7 @@ const TempMap = () => {
                                     }
                                     testID="sgwButton"
                                   >
-                              <Text style={activeButton === 'Accessibility' ? styles.highlightedText : styles.normalText}>Accessibility</Text>
+                              <Text style={activeButton === 'Accessibility' ? styles.highlightedText : styles.normalText}>&#9855;</Text>
                           </TouchableOpacity>
 
                   </View>
@@ -607,7 +607,6 @@ const TempMap = () => {
 };
 
 const style = StyleSheet.create({
-
   inputRowFloorButtons: {
     flexDirection: 'row',
     marginTop: 44,
@@ -694,7 +693,6 @@ const style = StyleSheet.create({
       alignItems: 'center',
       flexDirection: 'row',
       width: 250,
-      flexWrap: 'wrap'
     },
 });
 
