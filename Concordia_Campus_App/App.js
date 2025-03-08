@@ -25,7 +25,7 @@ export default function App() {
         <Drawer.Screen name="Calendar" component={Calendar} />
         <Drawer.Screen name="Shuttle Bus Schedule" component={FullShuttleSchedule} />
         <Drawer.Screen name="Indoor map" component={IndoorMaps}/>
-        <Drawer.Screen name="Indoor Directions Map (temp)" component={TempMap}/>
+        <Drawer.Screen name="Indoor Directions Map" component={TempMap}/>
       </Drawer.Navigator>
     </NavigationContainer>
     </PaperProvider>

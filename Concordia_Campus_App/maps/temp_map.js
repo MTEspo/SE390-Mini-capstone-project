@@ -269,7 +269,6 @@ const TempMap = () => {
     }, [campus, zoomLevel]);
 
     useEffect(() => {
-      console.log(wheelChairToggle)
         return () => {
             if (pathUpdateInterval.current) {
                 clearInterval(pathUpdateInterval.current);

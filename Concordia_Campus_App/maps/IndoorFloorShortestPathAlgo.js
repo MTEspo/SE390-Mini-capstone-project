@@ -68,7 +68,6 @@ export function findShortestPath(start, end, floorData) {
         path.unshift(current);
         current = previous[current];
     }
-    console.log(path)
 
     return path.length > 1 ? path : null;
 }
