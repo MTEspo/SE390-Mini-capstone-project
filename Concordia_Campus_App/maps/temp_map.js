@@ -248,9 +248,7 @@ const TempMap = () => {
     };
 
     useEffect(() => {
-      if (wheelChairToggle) {
         onPressShowPath();
-      }
     }, [wheelChairToggle]);
       
       // useEffect(() => {
