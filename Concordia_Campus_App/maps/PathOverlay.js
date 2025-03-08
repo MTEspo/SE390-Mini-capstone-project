@@ -3,7 +3,6 @@ import { Polyline, Marker } from 'react-native-maps';
 
 const PathOverlay = ({ path }) => {
   const [delayedPath, setDelayedPath] = useState(null);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setDelayedPath(path);
