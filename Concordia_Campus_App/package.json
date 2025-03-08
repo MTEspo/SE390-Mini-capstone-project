@@ -25,6 +25,11 @@
     ],
     "testMatch": [
       "**/__tests__/*.js"
+    ],
+    "collectCoverageFrom": [
+      "calendar/**/*.{ts,tsx,js,jsx}",
+      "maps/**/*.{ts,tsx,js,jsx}",
+      "shuttle_bus/**/*.{ts,tsx,js,jsx}"
     ]
   },
   "dependencies": {
