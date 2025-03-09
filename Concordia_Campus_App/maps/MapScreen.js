@@ -722,22 +722,35 @@ const handleUserLocation = () => {
           <MapDirections userLocation={userLocation} destinationLocation={shuttleStop} />
         )}
 
-        {buildingsData.buildings.map((building, index) => {
-          let polygonFillColor = building.fillColor;
-          if (building === selectedBuilding) polygonFillColor = 'blue';
+                  {buildingsData.buildings.map((building, index) => {
+                            let polygonFillColor = building.fillColor;
+                            if (building === selectedBuilding) polygonFillColor = 'blue';
 
-          return (
-            <Polygon
-              key={index}
-              coordinates={building.coordinates}
-              fillColor={polygonFillColor}
-              strokeColor={building.strokeColor}
-              strokeWidth={2}
-              onPress={() => handlePolygonPress(building)} 
-              testID={`polygon-${index}`}
-            />
-          );
-        })}
+                      return (
+                        <View key={index}>
+                          <Polygon
+                            key={building.name}
+                            coordinates={building.coordinates}
+                            fillColor={polygonFillColor}
+                            strokeColor={building.strokeColor}
+                            strokeWidth={2}
+                            tappable
+                            geodesic
+                            onPress={() => handlePolygonPress(building)} 
+                            testID={`polygon-${index}`}
+                          />
+                          <Marker
+                            testID={`polygon-marker-${index}`}
+                            zIndex={10}
+                            coordinate={building.markerCoord}
+                            onPress={() => {handlePolygonPress(building)}} 
+                          >
+                            <Text note style={{ color: "#800000", fontSize: 10 }}>
+                            </Text>
+                          </Marker>
+                        </View>
+                      );
+                    })}
         
         <TransitScreen showDirections={(showDirections) ? showDirections : showBuildingDirections} campus={campus} routeData={handleDirectionsToMap} origin={selectedStart} destination={selectedEnd} />
 

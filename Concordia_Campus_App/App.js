@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View,TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import MapScreen from './maps/MapScreen';
@@ -28,6 +28,7 @@ export default function App() {
         <Drawer.Screen name="Indoor Directions Map" component={TempMap}/>
       </Drawer.Navigator>
     </NavigationContainer>
+    
     </PaperProvider>
   );
 }

@@ -3,6 +3,7 @@ import { render, fireEvent, act } from "@testing-library/react-native";
 import Calendar from "../calendar/calendar";
 import { extractTokens } from "../calendar/calendarUtils";
 import * as axios from "axios";
+import * as Location from "expo-location";
 
 const mockedNavigate = jest.fn();
 
@@ -49,8 +50,16 @@ jest.mock("@supabase/supabase-js", () => ({
   })),
 }));
 
+jest.mock("expo-location", () => ({
+  requestForegroundPermissionsAsync: jest.fn(),
+  getCurrentPositionAsync: jest.fn(),
+}));
 
 describe("Calendar Tests That Should Pass", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test("renders sign-in button when no session exists", async () => {
     const tree = render(<Calendar />);
     
@@ -240,6 +249,9 @@ describe("Calendar Tests That Should Pass", () => {
   test("getting calendar event directions", async () => {
     const { findByText } = render(<Calendar />);
     
+    Location.requestForegroundPermissionsAsync.mockResolvedValue({ status: "granted" });
+    Location.getCurrentPositionAsync.mockResolvedValue({coords: { latitude: 45.4940785853885, longitude: -73.57821171941591 }});
+
     axios.get
     .mockImplementationOnce(() => Promise.resolve(
       {data: {items: [{
@@ -277,5 +289,139 @@ describe("Calendar Tests That Should Pass", () => {
     })
 
     expect(mockedNavigate).toHaveBeenCalled();
+  });
+
+  test("getting calendar event directions failure", async () => {
+    const { findByText } = render(<Calendar />);
+    
+    Location.requestForegroundPermissionsAsync.mockResolvedValue({ status: "denied" });
+
+    axios.get
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{
+                       id: "mock-id1", 
+                       summary: "Schedule 1"
+                      },
+                      {
+                        id: "mock-id2",
+                        summary: "schedule 2"
+                      }
+                     ], 
+                       nextPageToken: null}}
+    ))
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "Event 1",
+                       description: "H123",
+                       start: {dateTime: "2025-02-14T05:45:00.00Z"}, 
+                       end: {dateTime: "2025-02-14T06:45:00.00Z"} }]}}
+    ));
+
+    await act(async () => {
+      fireEvent.press(await findByText("Sign in with Google"));
+      
+      const calendarButton = await findByText("Schedule 1");
+      expect(findByText("Schedule 1")).toBeTruthy();
+      const event1 = await findByText("Event 1");
+      
+      fireEvent.press(event1);
+      
+      expect(await findByText("Location")).toBeTruthy();
+      expect(await findByText("Directions")).toBeTruthy();
+
+      fireEvent.press(await findByText("Directions"));
+    })
+
+    expect(mockedNavigate).not.toHaveBeenCalled();
+  });
+
+  test("getting calendar event directions failure no building", async () => {
+    const { findByText } = render(<Calendar />);
+    
+    Location.requestForegroundPermissionsAsync.mockResolvedValue({ status: "granted" });
+    Location.getCurrentPositionAsync.mockResolvedValue({coords: { latitude: 45.4940785853885, longitude: -73.57821171941591 }});
+
+    axios.get
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{
+                       id: "mock-id1", 
+                       summary: "Schedule 1"
+                      },
+                      {
+                        id: "mock-id2",
+                        summary: "schedule 2"
+                      }
+                     ], 
+                       nextPageToken: null}}
+    ))
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "Event 1",
+                       description: "",
+                       start: {dateTime: "2025-02-14T05:45:00.00Z"}, 
+                       end: {dateTime: "2025-02-14T06:45:00.00Z"} }]}}
+    ));
+
+    await act(async () => {
+      fireEvent.press(await findByText("Sign in with Google"));
+      
+      const calendarButton = await findByText("Schedule 1");
+      expect(findByText("Schedule 1")).toBeTruthy();
+      const event1 = await findByText("Event 1");
+      
+      fireEvent.press(event1);
+      
+      expect(await findByText("Location")).toBeTruthy();
+      expect(await findByText("Directions")).toBeTruthy();
+
+      fireEvent.press(await findByText("Directions"));
+    })
+
+    expect(mockedNavigate).not.toHaveBeenCalled();
+  });
+
+  test("getting calendar event directions failure no building in list", async () => {
+    const { findByText } = render(<Calendar />);
+    
+    Location.requestForegroundPermissionsAsync.mockResolvedValue({ status: "granted" });
+    Location.getCurrentPositionAsync.mockResolvedValue({coords: { latitude: 45.4940785853885, longitude: -73.57821171941591 }});
+    
+    axios.get
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{
+                       id: "mock-id1", 
+                       summary: "Schedule 1"
+                      },
+                      {
+                        id: "mock-id2",
+                        summary: "schedule 2"
+                      }
+                     ], 
+                       nextPageToken: null}}
+    ))
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "Event 1",
+                       description: "CC123",
+                       start: {dateTime: "2025-02-14T05:45:00.00Z"}, 
+                       end: {dateTime: "2025-02-14T06:45:00.00Z"} }]}}
+    ));
+
+    await act(async () => {
+      fireEvent.press(await findByText("Sign in with Google"));
+      
+      const calendarButton = await findByText("Schedule 1");
+      expect(findByText("Schedule 1")).toBeTruthy();
+      const event1 = await findByText("Event 1");
+      
+      fireEvent.press(event1);
+      
+      expect(await findByText("Location")).toBeTruthy();
+      expect(await findByText("Directions")).toBeTruthy();
+
+      fireEvent.press(await findByText("Directions"));
+    })
+
+    expect(mockedNavigate).not.toHaveBeenCalled();
   });
 });

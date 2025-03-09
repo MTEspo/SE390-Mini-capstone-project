@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 16,
         backgroundColor: '#fff',
+        zIndex: 10
     },
     scheduleBlock: {
         marginBottom: 24,

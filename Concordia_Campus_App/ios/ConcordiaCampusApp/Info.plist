@@ -70,5 +70,9 @@
     <string>Light</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false />
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Your location is needed to provide personalized services based on your campus location.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Your location is needed for continuous tracking while using the app for campus navigation.</string>
   </dict>
 </plist>
