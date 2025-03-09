@@ -722,52 +722,35 @@ const handleUserLocation = () => {
           <MapDirections userLocation={userLocation} destinationLocation={shuttleStop} />
         )}
 
+                  {buildingsData.buildings.map((building, index) => {
+                            let polygonFillColor = building.fillColor;
+                            if (building === selectedBuilding) polygonFillColor = 'blue';
 
-        {selectedStart && selectedEnd && showBuildingDirections && (
-              <MapViewDirections
-                origin={selectedStart}
-                destination={selectedEnd}
-                apikey={API_KEY}
-                strokeWidth={5}
-                strokeColor="blue"
-                onReady={handleDirections}
-              />
-         )}
-         
-         {buildingsData.buildings.map((building, index) => {
-            const isDestinationLoc = building.name === destinationLoc;
-            const isDestinationCoords = building.name === destinationCoords;
-            const polygonFillColor =
-              (isDestinationCoords || isDestinationLoc) && destinationActive
-                ? "orange"
-                : building.fillColor;
-
-            return (
-              <View key={index}>
-                <Polygon
-                  key={building.name}
-                  coordinates={building.coordinates}
-                  fillColor={polygonFillColor}
-                  strokeColor={building.strokeColor}
-                  strokeWidth={2}
-                  tappable
-                  geodesic
-                  onPress={() => handlePolygonPress(building)} 
-                  testID={`polygon-${index}`}
-                />
-                <Marker
-                  testID={`polygon-marker-${index}`}
-                  zIndex={10}
-                  coordinate={building.markerCoord}
-                  onPress={() => {handlePolygonPress(building)}} 
-                >
-                  <Text note style={{ color: "#800000", fontSize: 10 }}>
-                  </Text>
-                </Marker>
-              </View>
-            );
-          })}
-
+                      return (
+                        <View key={index}>
+                          <Polygon
+                            key={building.name}
+                            coordinates={building.coordinates}
+                            fillColor={polygonFillColor}
+                            strokeColor={building.strokeColor}
+                            strokeWidth={2}
+                            tappable
+                            geodesic
+                            onPress={() => handlePolygonPress(building)} 
+                            testID={`polygon-${index}`}
+                          />
+                          <Marker
+                            testID={`polygon-marker-${index}`}
+                            zIndex={10}
+                            coordinate={building.markerCoord}
+                            onPress={() => {handlePolygonPress(building)}} 
+                          >
+                            <Text note style={{ color: "#800000", fontSize: 10 }}>
+                            </Text>
+                          </Marker>
+                        </View>
+                      );
+                    })}
         
         <TransitScreen showDirections={(showDirections) ? showDirections : showBuildingDirections} campus={campus} routeData={handleDirectionsToMap} origin={selectedStart} destination={selectedEnd} />
 
