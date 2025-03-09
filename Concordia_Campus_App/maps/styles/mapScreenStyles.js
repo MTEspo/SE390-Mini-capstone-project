@@ -187,11 +187,11 @@ modeContainer: {
 },
 modeButton: { 
   zIndex: 1,
-  marginHorizontal: 15,
+  marginHorizontal: 25,
   backgroundColor: '#800000',
-  paddingVertical: 10,
-  paddingHorizontal: 20,
-  borderRadius: 20,
+  paddingVertical: 5,
+  paddingHorizontal: 25,
+  borderRadius: 12,
   justifyContent: 'center',
   alignItems: 'center',
   borderWidth: 0.5,
@@ -255,7 +255,11 @@ modeText: {
   marginTop: 5,
   flexDirection: 'row',
   width: 'auto',
- }
+ },
+ modeImage: {
+  width: 40,  
+  height: 40, 
+},
 });
 
 export default styles;

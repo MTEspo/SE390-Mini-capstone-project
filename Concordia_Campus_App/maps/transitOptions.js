@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity} from 'react-native';
+import { View, Text, TouchableOpacity , Image} from 'react-native';
 import MapViewDirections from 'react-native-maps-directions';
 import { API_KEY } from '@env';
 import styles from './styles/mapScreenStyles'; 
@@ -81,21 +81,33 @@ const TransitScreen = ({showDirections, campus, routeData, origin, destination})
             testID="driving-button"
             onPress={() => setMode('DRIVING')} 
             style={[styles.modeButton, mode === 'DRIVING' && { backgroundColor: 'blue' }]}>
-            <Text style={styles.modeText}>Driving</Text>
+            <Image 
+              source={require('../assets/Car_GPS.png')} 
+              style={styles.modeImage}
+              resizeMode="contain"
+            />
           </TouchableOpacity>
 
           <TouchableOpacity
             testID="walking-button"
             onPress={() => setMode('WALKING')} 
             style={[styles.modeButton, mode === 'WALKING' && { backgroundColor: 'blue' }]}>
-            <Text style={styles.modeText}>Walking</Text>
+            <Image 
+              source={require('../assets/Walk_GPS.png')} 
+              style={styles.modeImage}
+              resizeMode="contain"
+            />
           </TouchableOpacity>
 
           <TouchableOpacity 
             testID="transit-button"
             onPress={() => setMode('TRANSIT')} 
             style={[styles.modeButton, mode === 'TRANSIT' && { backgroundColor: 'green' }]}>
-            <Text style={styles.modeText}>Transit</Text>
+           <Image 
+             source={require('../assets/Bus_GPS.png')} 
+              style={styles.modeImage}
+              resizeMode="contain"
+            />
           </TouchableOpacity>
         </View>
     </View>
