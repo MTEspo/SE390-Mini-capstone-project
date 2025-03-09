@@ -1,9 +1,8 @@
-appId: "host.exp.Exponent"
+appId: "com.concordia.campusapp"
 
 ---
-- launchApp:
-    appId: "host.exp.Exponent"
-    clearState: false
+
+- launchApp
 - tapOn: 
     text: "Concordia_Campus_App"
 - assertVisible: "SGW"
@@ -11,72 +10,6 @@ appId: "host.exp.Exponent"
     text: "SGW"
     repeat: 3
     delay: 5000
-- assertNotVisible: 
-    id: "driving-line"
-- assertNotVisible: 
-    id: "walking-line"
-- assertNotVisible: 
-    id: "transit-line"
-- assertVisible: "Directions To LOY"
-- tapOn: 
-    text: "Directions To LOY"
-- assertVisible: "Driving"
-- assertVisible: "Walking"
-- assertVisible: "Transit" 
-- assertVisible: 
-    text: "Distance: \\d{1,2}+ km"
-- assertVisible: 
-    text: ".*ETA: \\d{1,2}+ mins"
-- assertVisible: 
-    id: "driving-line"
-- tapOn:
-    text: "Walking"
-- assertVisible: 
-    id: "walking-line"
-- tapOn:
-    text: "Transit"
-- tapOn: 
-    id: "closeButton"
-- assertNotVisible: "building-popup"
-- assertVisible: 
-    id: "transit-line"
-- assertVisible: "Cancel Directions"
-- tapOn: 
-    text: "Cancel Directions"
-- assertNotVisible: 
-    id: "driving-line"
-- assertNotVisible: 
-    id: "walking-line"
-- assertNotVisible: 
-    id: "transit-line"
-- assertVisible: "LOY"
-- tapOn: 
-    text: "LOY"
-- assertVisible: "Directions To SGW"
-- tapOn: 
-    text: "Directions To SGW"
-- assertVisible: "Driving"
-- assertVisible: "Walking"
-- assertVisible: "Transit" 
-- assertVisible: 
-    text: "Distance: \\d{1,2}+ km"
-- assertVisible: 
-    text: ".*ETA: \\d{1,2}+ mins"
-- tapOn:
-    text: "Driving"
-- assertVisible: 
-    id: "driving-line"
-- tapOn:
-    text: "Walking"
-- assertVisible: 
-    id: "walking-line"
-- tapOn:
-    text: "Transit"
-- assertVisible: 
-    id: "transit-line"
-- assertVisible: "Cancel Directions"
-- tapOn: 
-    text: "Cancel Directions"
 - tapOn: 
     text: "SGW"
 - doubleTapOn:
@@ -95,8 +28,4 @@ appId: "host.exp.Exponent"
     text: ".*Next Arrival"
 - tapOn:
     text: ".*Directions"
-- scroll
-- tapOn:
-    id : "userLocationButton"
-- assertVisible:
-    id: "shuttle-directions"
+

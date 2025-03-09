@@ -1,11 +1,8 @@
-appId: "host.exp.Exponent"
+appId: "com.concordia.campusapp"
 
 ---
-- launchApp:
-    appId: "host.exp.Exponent"
-    clearState: false
-- tapOn: 
-    text: "Concordia_Campus_App"
+
+- launchApp
 - tapOn: 
     text: "SGW"
     repeat: 2
