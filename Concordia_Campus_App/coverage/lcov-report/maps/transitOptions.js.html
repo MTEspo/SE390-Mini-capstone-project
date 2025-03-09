@@ -168,22 +168,17 @@
 <a name='L103'></a><a href='#L103'>103</a>
 <a name='L104'></a><a href='#L104'>104</a>
 <a name='L105'></a><a href='#L105'>105</a>
-<a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L106'></a><a href='#L106'>106</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">46x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">40x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">46x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -197,18 +192,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">40x</span>
-<span class="cline-any cline-yes">40x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">46x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">46x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">46x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">40x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">46x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -269,7 +264,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -286,7 +280,7 @@ import { API_KEY } from '@env';
 import styles from './styles/mapScreenStyles'; 
 &nbsp;
 &nbsp;
-const TransitScreen = ({showDirections, campus, routeData}) =&gt; {
+const TransitScreen = ({showDirections, campus, routeData, origin, destination}) =&gt; {
   const [mode, setMode] = useState('DRIVING');
 &nbsp;
   const campusLocations = {
@@ -304,9 +298,11 @@ const TransitScreen = ({showDirections, campus, routeData}) =&gt; {
     },
   };
 &nbsp;
-  // Current campus location
-  const location =  campusLocations[campus];
-  const destinationLocation = (campus === 'SGW') ? campusLocations.Loyola : campusLocations.SGW;
+  // If there origin location is null set the location to the current campus
+  const location =  (origin == null) ? campusLocations[campus]: origin;
+&nbsp;
+  // If there destination location is null set the destinatio to the other campus
+  const destinationLocation = (destination == null) ? ((campus === 'SGW') ? campusLocations.Loyola : campusLocations.SGW) : destination;
 &nbsp;
   const handleDirections = <span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; {
 <span class="cstat-no" title="statement not covered" >    routeData(result.duration, result.distance);</span>
@@ -316,8 +312,6 @@ const TransitScreen = ({showDirections, campus, routeData}) =&gt; {
     &lt;&gt;
     {showDirections &amp;&amp; (
       &lt;View style={styles.container}&gt;
-      {showDirections &amp;&amp; (
-        &lt;&gt;
           {/* For driving mode (always blue) */}
           {mode === 'DRIVING' &amp;&amp; (
             &lt;MapViewDirections
@@ -356,9 +350,7 @@ const TransitScreen = ({showDirections, campus, routeData}) =&gt; {
               onReady={handleDirections}
             /&gt;
           )}
-        &lt;/&gt;
-      )}
-      {showDirections &amp;&amp; (
+&nbsp;
         &lt;View style={styles.modeContainer}&gt;
           &lt;TouchableOpacity 
             testID="driving-button"
@@ -381,7 +373,6 @@ const TransitScreen = ({showDirections, campus, routeData}) =&gt; {
             &lt;Text style={styles.modeText}&gt;Transit&lt;/Text&gt;
           &lt;/TouchableOpacity&gt;
         &lt;/View&gt;
-      )}
     &lt;/View&gt;
     )}
     &lt;/&gt;
@@ -394,7 +385,7 @@ export default TransitScreen;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-27T01:28:08.405Z
+                at 2025-03-08T04:28:50.461Z
             </div>
         <script src="../prettify.js"></script>
         <script>

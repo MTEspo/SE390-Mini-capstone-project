@@ -7,6 +7,10 @@ on:
   pull_request:
     branches:
       - main
+permissions:
+  contents: read
+  actions: read
+  checks: write
 
 jobs:
   test:
@@ -43,6 +47,14 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: MTEspo/SE390-Mini-capstone-project
+      
+      - name: Test Report
+        uses: dorny/test-reporter@v1.9.1
+        if: success() || failure()    
+        with:
+          name: JEST Tests            
+          path: Concordia_Campus_App/reports/jest-*.xml    
+          reporter: jest-junit        
 
       # - name: Setup EAS
       #   uses: expo/expo-github-action@v8

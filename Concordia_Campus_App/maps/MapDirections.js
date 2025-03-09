@@ -29,9 +29,10 @@ const MapDirections = ({userLocation, destinationLocation}) => {
                     latitude: destinationLocation.latitude,
                     longitude: destinationLocation.longitude,
                 }}
+                mode="WALKING"
                 apikey={API_KEY}
                 strokeWidth={4}
-                strokeColor="orange" />
+                strokeColor="blue" />
         </>
     );
 
