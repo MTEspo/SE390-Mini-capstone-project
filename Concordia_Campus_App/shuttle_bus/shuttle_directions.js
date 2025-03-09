@@ -4,6 +4,7 @@ import MapViewDirections from 'react-native-maps-directions';
 import { getLocation } from '../maps/locationUtils';
 import styles from './styles/shuttle_directions_styles';
 import { API_KEY } from '@env';
+import {  Marker } from 'react-native-maps';
 
 const DirectionsDisplay = ({ stop }) => {
   const [location, setLocation] = useState(null);
@@ -53,6 +54,7 @@ const DirectionsDisplay = ({ stop }) => {
   return (
     <View style={{ flex: 1 }}>
       {location && stop && (
+        <View>
           <MapViewDirections
             origin={{ latitude: location.latitude, longitude: location.longitude }}
             destination={{ latitude: stop.latitude, longitude: stop.longitude }}
@@ -60,6 +62,15 @@ const DirectionsDisplay = ({ stop }) => {
             strokeWidth={4}
             strokeColor="blue"
           />
+          <Marker
+                  testID={`shuttle-directions`}
+                  zIndex={10}
+                  coordinate={location}
+                >
+                  <Text note style={{ color: "#800000", fontSize: 10 }}>
+                  </Text>
+                </Marker>
+                </View>
       )}
 
       <View style={styles.container}>

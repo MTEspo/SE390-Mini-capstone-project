@@ -60,6 +60,7 @@ exports[`BuildingPopup renders correctly 1`] = `
         "zIndex": 2,
       }
     }
+    testID="closeButton"
   >
     <Text
       style={
