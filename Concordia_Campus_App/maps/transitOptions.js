@@ -5,7 +5,10 @@ import { API_KEY } from '@env';
 import styles from './styles/mapScreenStyles';
 import {  Marker } from 'react-native-maps';
 
-const TransitScreen = ({ showDirections, campus, routeData }) => {
+
+
+const TransitScreen = ({showDirections, campus, routeData, origin, destination}) => {
+
   const [mode, setMode] = useState('DRIVING');
 
   const campusLocations = {
@@ -23,8 +26,13 @@ const TransitScreen = ({ showDirections, campus, routeData }) => {
     },
   };
 
-  const location = campusLocations[campus];
-  const destinationLocation = campus === 'SGW' ? campusLocations.Loyola : campusLocations.SGW;
+
+  // If there origin location is null set the location to the current campus
+  const location =  (origin == null) ? campusLocations[campus]: origin;
+
+  // If there destination location is null set the destinatio to the other campus
+  const destinationLocation = (destination == null) ? ((campus === 'SGW') ? campusLocations.Loyola : campusLocations.SGW) : destination;
+
 
   const handleDirections = (result) => {
     routeData(result.duration, result.distance);

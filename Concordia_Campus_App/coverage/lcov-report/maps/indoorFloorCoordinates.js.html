@@ -1,0 +1,505 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for maps/indoorFloorCoordinates.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">maps</a> indoorFloorCoordinates.js</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line low'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const indoorFloorData = <span class="cstat-no" title="statement not covered" >{</span>
+"buildings": [
+    {
+        "name": "Henry F.Hall Building",
+        "floor-1":{
+                "H-110": { "latitude": 45.497108735151485, "longitude": -73.57893689860926, "last_connecting_node":["node_4"]},
+                "node_1":{ "latitude": 45.49704709346159, "longitude": -73.57870881910416, "connected_nodes":["node_3","node_5"]},
+                "node_3":{ "latitude": 45.497083347532964, "longitude":  -73.57874286468316, "connected_nodes":["node_1","node_4","node_5"]},
+                "node_4":{ "latitude":45.49709762269207, "longitude":  -73.57878851166575, "connected_nodes":["node_3","node_5","node_8"]},
+                "node_5":{ "latitude": 45.49713273628391, "longitude":  -73.57869698361705, "connected_nodes":["node_3","node_4","node_8","node_6"]},
+                "node_6":{ "latitude": 45.49717408497438, "longitude":  -73.57864782532806, "connected_nodes":["node_5","node_7","node_8"]},
+                "node_7":{ "latitude": 45.49719621004974, "longitude":  -73.57861435087062, "connected_nodes":["node_6"]},
+                "node_8":{ "latitude": 45.49721182383456, "longitude":  -73.57871196519791, "connected_nodes":["node_9","node_6","node_5","node_4"]},
+                "node_9":{ "latitude": 45.49723479529576, "longitude":  -73.57876557113804, "connected_nodes":["node_8","node_10"]},
+                "node_10":{ "latitude": 45.49729731046027, "longitude":  -73.57870915615288, "connected_nodes":["node_9"]},
+                "escalator_up": { "latitude": 45.49728029519156, "longitude": -73.57856168535761, "last_connecting_node": ["node_7"] },
+                "escalator_down":{ "latitude": 45.497212132955724, "longitude": -73.57864730686212, "last_connecting_node":[ "node_7"] },
+                "elevator": { "latitude": 45.49727891671142, "longitude": -73.5786661115211, "last_connecting_node": ["node_10"] },
+                "building_entrance": { "latitude": 45.49703513985683, "longitude": -73.57867423689423, "last_connecting_node": ["node_1"] },
+                "exit":{ "latitude": 45.497212132955724, "longitude": -73.57864730686212, "last_connecting_node":[ "node_7"] },
+                "imageFloorPath": require('../assets/floor_plans/Hall-1.png')
+        },
+        "floor-2":{
+                "node_1":{ "latitude": 45.497289106308045, "longitude":-73.57875773778838, "connected_nodes":["node_2","node_4"]},
+                "node_2":{ "latitude": 45.49733135820939, "longitude":-73.57885815532305, "connected_nodes":["node_1","node_3"]},
+                "node_3":{ "latitude": 45.497311379081786, "longitude":  -73.57893464394255, "connected_nodes":["node_2"]},
+                "node_4":{ "latitude":45.49721695047203, "longitude":  -73.57878353632223, "connected_nodes":["node_1"]},
+                "escalator_up": { "latitude": 45.497291680773145, "longitude": -73.5789156351803, "last_connecting_node": ["node_3"] },
+                "escalator_down":{ "latitude": 45.49721831262093, "longitude": -73.57880257754711, "last_connecting_node":[ "node_4"] },
+                "elevator": { "latitude": 45.497291520968666, "longitude": -73.57868839449006, "last_connecting_node": ["node_1"] },
+                "entrance":{ "latitude": 45.49733234330694, "longitude": -73.57866423077638, "last_connecting_node": ["node_1"] },
+                "exit":{ "latitude": 45.49725785948051, "longitude": -73.57872848452577, "last_connecting_node": ["node_1","node_4"] },
+                "imageFloorPath": require('../assets/floor_plans/Hall-2.png')
+        },
+        "floor-8":{
+            "H-831": { "latitude": 45.49718353071313, "longitude": -73.57942766173308, "last_connecting_node":["node_9"]},
+            "H-820": { "latitude": 45.49715481967915, "longitude": -73.57899370470575, "last_connecting_node":["node_11","node_13"]},
+            "node_1":{ "latitude": 45.49724031377742, "longitude": -73.57885075811465, "connected_nodes":["node_2","node_3"]},
+            "node_2":{ "latitude": 45.49720449198724, "longitude": -73.57888448670585, "connected_nodes":["node_1","node_4","node_5"]},
+            "node_3":{ "latitude": 45.49731475495636, "longitude":  -73.57878055204614, "connected_nodes":["node_1"]},
+            "node_4":{ "latitude": 45.497142326175315, "longitude":  -73.57874341241356, "connected_nodes":["node_2","node_14"]},
+            "node_5":{ "latitude": 45.49729464097251, "longitude":  -73.5790534330916, "connected_nodes":["node_2","node_6","node_7"]},
+            "node_6":{ "latitude": 45.49733040509946, "longitude":  -73.57902603190709, "connected_nodes":["node_5"]},
+            "node_7":{ "latitude": 45.4973426750073, "longitude":  -73.57916528995467, "connected_nodes":["node_5","node_8"]},
+            "node_8":{ "latitude": 45.49720740822167, "longitude":  -73.57930441205546, "connected_nodes":["node_7","node_9","node_10"]},
+            "node_9":{ "latitude": 45.49718465692337, "longitude":  -73.5793455476141, "connected_nodes":["node_8"]},
+            "node_10":{ "latitude": 45.49709715658615, "longitude":  -73.57909762017272, "connected_nodes":["node_8","node_11","node_12"]},
+            "node_11":{ "latitude": 45.497125710848046, "longitude":  -73.5790843684466, "connected_nodes":["node_10"]},
+            "node_12":{ "latitude": 45.49706000164386, "longitude":  -73.57901663740206, "connected_nodes":["node_10","node_13","node_14"]},
+            "node_13":{ "latitude": 45.49708477161859, "longitude":  -73.57899651440307, "connected_nodes":["node_12"]},
+            "node_14":{ "latitude": 45.49699463636985, "longitude":  -73.57888608335224, "connected_nodes":["node_12","node_4"]},
+            "escalator_up": { "latitude": 45.4972717500672, "longitude": -73.5789019818176, "last_connecting_node": ["node_1"] },
+            "escalator_down":{ "latitude": 45.497302657035235, "longitude": -73.57896357181264, "last_connecting_node":[ "node_6"] },
+            "elevator": { "latitude": 45.49729026677937, "longitude": -73.57875190045378, "last_connecting_node": ["node_3"] },
+            "entrance": { "latitude": 45.4972717500672, "longitude": -73.5789019818176, "last_connecting_node": ["node_1"] }, // same as escalator up
+            "exit":{ "latitude": 45.497302657035235, "longitude": -73.57896357181264, "last_connecting_node":[ "node_6"] },// same as escalator down
+            "imageFloorPath": require('../assets/floor_plans/Hall-8.png')
+        },
+        "floor-9":{
+            "H-937": { "latitude": 45.49734371711722 , "longitude":-73.57916179626424 , "last_connecting_node":["node_13"]},
+            "H-963": { "latitude": 45.497459190173984, "longitude":-73.57868994786249 , "last_connecting_node":["node_6"]},
+            "node_1":{ "latitude": 45.49725438280765, "longitude": -73.57884397140393, "connected_nodes":["node_2","node_8","node_4"]},
+            "node_2":{ "latitude":45.497230495167464 , "longitude":-73.57886963727913, "connected_nodes":["node_1","node_8","node_3"]},
+            "node_3":{ "latitude":45.49716596171168 , "longitude": -73.57874375666093 , "connected_nodes":["node_2","node_7"]},
+            "node_4":{ "latitude":45.49731198149953 , "longitude": -73.57878786775773 , "connected_nodes":["node_1","node_5"]},
+            "node_5":{ "latitude":45.49739955206823 , "longitude":  -73.57870924072002, "connected_nodes":["node_4","node_6","node_7"]},
+            "node_6":{ "latitude": 45.49741258400346, "longitude": -73.57872105842756 , "connected_nodes":["node_5"]},
+            "node_7":{ "latitude":45.49734334163928 , "longitude": -73.5785803720853 , "connected_nodes":["node_5","node_3"]},
+            "node_8":{ "latitude": 45.49724945181983, "longitude":  -73.57890505941543, "connected_nodes":["node_9","node_2","node_1"]},
+            "node_9":{ "latitude": 45.49729145675457, "longitude": -73.57899471475994 , "connected_nodes":["node_8","node_10"]},
+            "node_10":{ "latitude":45.49731114655464 , "longitude":  -73.57904059583481, "connected_nodes":["node_9","node_11"]},
+            "node_11":{ "latitude": 45.49724075548781, "longitude": -73.5791045015969 , "connected_nodes":["node_10","node_12"]},
+            "node_12":{ "latitude": 45.49727816614321, "longitude": -73.57918830476792 , "connected_nodes":["node_11","node_13"]},
+            "node_13":{ "latitude": 45.49729244125229, "longitude": -73.57916840736969 , "connected_nodes":["node_12"]},
+            "escalator_up": { "latitude": 45.497312211471396, "longitude": -73.57897960517127, "last_connecting_node": ["node_9"] },
+            "escalator_down":{ "latitude": 45.497265437958, "longitude": -73.57887387390885, "last_connecting_node":[ "node_1","node_8"] },
+            "elevator": { "latitude": 45.49729026677937, "longitude": -73.57875190045378, "last_connecting_node": ["node_4"] },
+            "entrance": { "latitude": 45.497312211471396, "longitude": -73.57897960517127, "last_connecting_node": ["node_9"] },// same as escalator up
+            "exit":{ "latitude": 45.497265437958, "longitude": -73.57887387390885, "last_connecting_node":[ "node_1","node_8"] },// same as escalator down
+            "imageFloorPath": require('../assets/floor_plans/Hall-9.png')
+        },
+    },
+    {
+        "name": "John Molson School of Business",
+        "floor-1":{
+                "MB-1.210": { "latitude": 45.495255445952, "longitude": -73.57889029229129, "last_connecting_node":["node_6"]},
+                "MB-1.301": { "latitude": 45.49526392732338, "longitude": -73.57916898427824, "last_connecting_node":["node_9"]},
+                "node_1":{ "latitude": 45.495458095730825, "longitude": -73.57924119031567, "connected_nodes":["node_2"]},
+                "node_2":{ "latitude":45.495427399896336 , "longitude":-73.5791545664648, "connected_nodes":["node_1","node_3","node_4"]},
+                "node_3":{ "latitude": 45.49545767483711, "longitude":  -73.57912561167194, "connected_nodes":["node_2"]},
+                "node_4":{ "latitude":45.49535257671732, "longitude":  -73.57903205196267, "connected_nodes":["node_2","node_5"]},
+                "node_5":{ "latitude": 45.49532031638483, "longitude":  -73.57898589967473, "connected_nodes":["node_4","node_6","node_7"]},
+                "node_6":{ "latitude": 45.49529072564589, "longitude":  -73.5789363344617, "connected_nodes":["node_5"]},
+                "node_7":{ "latitude": 45.495272417492586, "longitude":  -73.57903000277251, "connected_nodes":["node_5","node_8"]},
+                "node_8":{ "latitude": 45.495235480958655, "longitude": -73.57905274028364, "connected_nodes":["node_7","node_9"]},
+                "node_9":{ "latitude": 45.49525234377117, "longitude": -73.57909000002424, "connected_nodes":["node_8"]},
+                "escalator_up": { "latitude": 45.495420803406866, "longitude": -73.57905559002522, "last_connecting_node": ["node_3"] },
+                "escalator_down":{ "latitude": 45.495420803406866, "longitude": -73.57905559002522, "last_connecting_node":[ "node_3"] },
+                "elevator": { "latitude": 45.49529020572514, "longitude": -73.57906292356449, "last_connecting_node": ["node_7"] },
+                "building_entrance":{ "latitude": 45.49549607659399, "longitude": -73.57921570098344, "last_connecting_node": ["node_1"] },
+                "exit":{ "latitude": 45.495420803406866, "longitude": -73.57905559002522, "last_connecting_node": ["node_3"] },
+                "imageFloorPath": require('../assets/floor_plans/MB-1.png')
+        },
+        
+    },
+    {
+        "name": "Vanier Library Building",
+        "floor-1":{
+            "VL-122": { "latitude": 45.45897317757964, "longitude": -73.6384588390033, "last_connecting_node":["node_3"]},
+            "node_1":{ "latitude": 45.459064364787544, "longitude": -73.63858107542114, "connected_nodes":["node_2","node_3"]},
+            "node_2":{ "latitude":45.4590268776782 , "longitude":-73.6384611143011, "connected_nodes":["node_1","node_3","node_4"]},
+            "node_3":{ "latitude": 45.45898332647579, "longitude":  -73.63848796053296, "connected_nodes":["node_2","node_1"]},
+            "node_4":{ "latitude": 45.45895533374485, "longitude":  -73.63824950515938, "connected_nodes":["node_2","node_5"]},
+            "node_5":{ "latitude": 45.45893098200943, "longitude":  -73.63820173912639, "connected_nodes":["node_4"]},
+            "escalator_up": { "latitude": 45.458914311689526, "longitude": -73.63821898150404, "last_connecting_node": ["node_5"] },
+            "escalator_down":{ "latitude": 45.458914311689526, "longitude": -73.63821898150404, "last_connecting_node":[ "node_5"] },
+            "elevator": { "latitude": 45.45895337253184, "longitude": -73.63819335094439, "last_connecting_node": ["node_5"] },
+            "node_6": { "latitude": 45.45912541331684, "longitude": -73.63862920372623, "last_connecting_node": ["node_1"] },
+            "exit":{ "latitude": 45.458914311689526, "longitude": -73.63821898150404, "last_connecting_node": ["node_5"] }, //same as escalators
+            "node_7": { "latitude": 45.45917539034466, "longitude": -73.63879626683736, "last_connecting_node": ["node_6"] },
+            "building_entrance": { "latitude": 45.459074227779034, "longitude": -73.63891446924218, "last_connecting_node": ["node_7"] },
+            "imageFloorPath": require('../assets/floor_plans/VL-1.png')
+    },
+        "floor-2":{
+                "VL-203": { "latitude": 45.45904676633085, "longitude": -73.63860904734719, "last_connecting_node":["node_3"]},
+                "node_1":{ "latitude": 45.45893064485964, "longitude": -73.63820745053077, "connected_nodes":["node_2"]},
+                "node_2":{ "latitude":45.45897101316622 , "longitude":-73.63829436140915, "connected_nodes":["node_1","node_3",]},
+                "node_3":{ "latitude": 45.45903655451709, "longitude":  -73.63856587933401, "connected_nodes":["node_2"]},
+                "escalator_up": { "latitude": 45.458911524898866, "longitude": -73.63822343560838, "last_connecting_node": ["node_1"] },
+                "escalator_down":{ "latitude": 45.458911524898866, "longitude": -73.63822343560838, "last_connecting_node":[ "node_1"] },
+                "elevator": { "latitude": 45.45895042230208, "longitude": -73.63818825183922, "last_connecting_node": ["node_1"] },
+                "entrance": { "latitude": 45.458911524898866, "longitude": -73.63822343560838, "last_connecting_node": ["node_1"] },// same as escalator up &amp; down
+                "exit":{ "latitude": 45.458911524898866, "longitude": -73.63822343560838, "last_connecting_node": ["node_1"] },// same as escalator up &amp; down
+                "imageFloorPath": require('../assets/floor_plans/VL-2.png')
+        },
+        
+    },
+]
+}
+&nbsp;
+export default indoorFloorData;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2025-03-08T17:50:19.336Z
+            </div>
+        <script src="../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../sorter.js"></script>
+        <script src="../block-navigation.js"></script>
+    </body>
+</html>
+    
