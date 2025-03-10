@@ -4,7 +4,7 @@ import MapViewDirections from 'react-native-maps-directions';
 import { API_KEY } from '@env';
 import styles from './styles/mapScreenStyles';
 import {  Marker } from 'react-native-maps';
-
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
 const TransitScreen = ({showDirections, campus, routeData, origin, destination}) => {
@@ -116,22 +116,22 @@ const TransitScreen = ({showDirections, campus, routeData, origin, destination})
             <TouchableOpacity 
               testID="driving-button"
               onPress={() => setMode('DRIVING')} 
-              style={[styles.modeButton, mode === 'DRIVING' && { backgroundColor: 'blue' }]}>
-              <Text style={styles.modeText}>Driving</Text>
+              style={[styles.modeButton,{ marginHorizontal: 30}, mode === 'DRIVING' && { backgroundColor: 'blue' }]}>
+              <FontAwesome5 name="car" size={40} color="white" />
             </TouchableOpacity>
 
             <TouchableOpacity
               testID="walking-button"
               onPress={() => setMode('WALKING')} 
-              style={[styles.modeButton, mode === 'WALKING' && { backgroundColor: 'blue' }]}>
-              <Text style={styles.modeText}>Walking</Text>
+              style={[styles.modeButton,{ marginHorizontal: 55}, mode === 'WALKING' && { backgroundColor: 'blue' }]}>
+              <FontAwesome5 name="walking" size={40} color="white" />
             </TouchableOpacity>
 
             <TouchableOpacity 
               testID="transit-button"
               onPress={() => setMode('TRANSIT')} 
-              style={[styles.modeButton, mode === 'TRANSIT' && { backgroundColor: 'green' }]}>
-              <Text style={styles.modeText}>Transit</Text>
+              style={[styles.modeButton,{ marginHorizontal: 30}, mode === 'TRANSIT' && { backgroundColor: 'green' }]}>
+              <FontAwesome5 name="bus" size={40} color="white" />
             </TouchableOpacity>
           </View>
         </View>

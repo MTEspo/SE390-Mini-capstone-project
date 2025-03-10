@@ -5,6 +5,8 @@ import * as locationUtils from '../maps/locationUtils';
 import buildingsData from '../maps/buildingCoordinates';
 import MapScreen from '../maps/MapScreen';
 
+jest.mock('react-native-vector-icons/FontAwesome5', () => 'FontAwesome5');
+
 jest.mock('@react-native-async-storage/async-storage', () => require('@react-native-async-storage/async-storage/jest/async-storage-mock') );
 jest.mock('react-native-vector-icons/FontAwesome', () => 'Icon');
 
