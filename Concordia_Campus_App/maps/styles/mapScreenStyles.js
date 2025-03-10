@@ -187,10 +187,10 @@ modeContainer: {
 },
 modeButton: { 
   zIndex: 1,
-  marginHorizontal: 40,
+  marginHorizontal: 21,
   backgroundColor: '#800000',
   paddingVertical: 5,
-  paddingHorizontal: 10,
+  paddingHorizontal: 20,
   borderRadius: 12,
   justifyContent: 'center',
   alignItems: 'center',
