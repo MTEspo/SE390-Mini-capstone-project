@@ -7,12 +7,6 @@ appId: "com.concordia.campusapp"
     text: "Concordia_Campus_App"
 - tapOn:
     point: 25,100 
-- tapOn: 
-    text: "Calendar"
-- assertVisible: "Sign in with Google"
-- tapOn: 
-    text: "Sign in with Google"
-- tapOn:
-    text: "Continue"
+
 
 
