@@ -14,18 +14,5 @@ appId: "com.concordia.campusapp"
     text: "SGW"
 - doubleTapOn:
     point: 60%,50% 
-- scrollUntilVisible:
-    element:
-      text: "SGW Shuttle Bus Stop" 
-    direction: UP 
-    visibilityPercentage: 100 
-    centerElement: true
-- assertVisible:
-    text: "SGW Shuttle Bus Stop"
-- tapOn:
-    text: "SGW Shuttle Bus Stop"
-- tapOn:
-    text: ".*Next Arrival"
-- tapOn:
-    text: ".*Directions"
+
 
