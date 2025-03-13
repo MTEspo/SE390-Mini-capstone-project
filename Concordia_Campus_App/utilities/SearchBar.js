@@ -23,8 +23,8 @@ const SearchBar = ({searchText, isOrigin, placeHolderTxt, iconName, iconSize, ic
                         style={style.input}
                         placeholder={placeHolderTxt}
                         value={searchText}
-                        onFocus={() => startingCallback(isOrigin)}
-                        onChangeText={(text) => searchCallback(text, isOrigin)}
+                        onFocus={() => (isOrigin !== undefined) ? startingCallback(isOrigin) : null}
+                        onChangeText={(text) => (isOrigin !== undefined) ? searchCallback(text, isOrigin) : searchCallback(text)}
                     />
                     {searchText.length > 0 && (
                         <TouchableOpacity onPress={() => {resetCallback()}}>

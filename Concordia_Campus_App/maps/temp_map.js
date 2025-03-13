@@ -473,6 +473,7 @@ const TempMap = () => {
                     isOrigin={isSelectingStart} 
                     handleOriginCallback={handleStartingSelection} 
                     handleDestinationCallback={handleDestinationSelection}
+                    screen={"indoor"}
                   />
                 )}
                     
