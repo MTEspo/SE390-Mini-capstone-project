@@ -752,7 +752,7 @@ const handleUserLocation = () => {
                       );
                     })}
         
-        <TransitScreen showDirections={(showDirections) ? showDirections : showBuildingDirections} campus={campus} routeData={handleDirectionsToMap} origin={selectedStart} destination={selectedEnd} />
+        <TransitScreen showDirections={(showDirections) ? showDirections : showBuildingDirections} campus={campus} routeData={handleDirectionsToMap} origin={selectedStart} destination={selectedEnd} defaultMode={"DRIVING"}/>
 
         {currentScreen === 'Building Map Directions' ? (
           <>

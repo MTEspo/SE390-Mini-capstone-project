@@ -7,9 +7,8 @@ import {  Marker } from 'react-native-maps';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
-const TransitScreen = ({showDirections, campus, routeData, origin, destination}) => {
-
-  const [mode, setMode] = useState('DRIVING');
+const TransitScreen = ({showDirections, campus, routeData, origin, destination, strokeWidth, defaultMode}) => {
+  const [mode, setMode] = useState(defaultMode);
 
   const campusLocations = {
     SGW: {
@@ -71,11 +70,11 @@ const TransitScreen = ({showDirections, campus, routeData, origin, destination})
                 origin={location}
                 destination={destinationLocation}
                 apikey={API_KEY}
-                strokeWidth={5}
+                strokeWidth={(strokeWidth) ? strokeWidth : 5}
                 strokeColor="blue" 
                 mode={mode}
                 onReady={handleDirections}
-                lineDashPattern={[2, 10]} 
+                lineDashPattern={(strokeWidth) ? [5, 5] : [2, 10]} 
                 zIndex={10}
               />
               <Marker

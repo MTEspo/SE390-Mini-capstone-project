@@ -10,9 +10,9 @@ import BuildingOverlay from './BuildingOverlay.js';
 import indoorFloorData from './indoorFloorCoordinates.js';
 import {findShortestPath} from './IndoorFloorShortestPathAlgo.js';
 import FloorButtons from './FloorButtons.js';
-import DirectionsTransitScreen from './DirectionsTransitScreen.js';
 import SearchBar from '../utilities/SearchBar.js';
 import SearchResults from '../utilities/SearchResults.js';
+import TransitScreen from './transitOptions.js';
 
 const TempMap = () => {
     const [campus, setCampus] = useState('SGW');
@@ -46,6 +46,9 @@ const TempMap = () => {
     const [isSelectingStart, setIsSelectingStart] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
     const [wheelChairToggle, setWheelChairToggle] = useState(false);
+
+    const [eta, setEta] = useState(null);
+    const [distance, setDistance] = useState(null);
   
 
     const buildings = indoorFloorData.buildings.map(building => {
@@ -410,8 +413,15 @@ const TempMap = () => {
       onPressClearPath();
     }
 
+    // Gets route data of outdoor directions
+    const handleRouteData  = (eta, distance) => {
+      setEta(eta);
+      setDistance(distance);
+    }
+  
+
     return (
-        <View>             
+        <View style={{alignItems: 'center'}}>             
                 <View style={style.inputContainer}>
                   {/* Searchbar for start class */}
                   <SearchBar 
@@ -599,11 +609,20 @@ const TempMap = () => {
                         );
                     })}
                     {showPath && startLocation != destinationLocation && (
-                      <DirectionsTransitScreen showDirections={true}
-                              location={indoorFloorData.buildings.find(building => building.name == startLocation )["floor-1"]["building_entrance"]} 
-                              destinationLocation={indoorFloorData.buildings.find(building => building.name == destinationLocation )["floor-1"]["building_entrance"]}/>
+                      <TransitScreen 
+                        showDirections={true} 
+                        origin={indoorFloorData.buildings.find(building => building.name == startLocation )["floor-1"]["building_entrance"]}
+                        destination={indoorFloorData.buildings.find(building => building.name == destinationLocation )["floor-1"]["building_entrance"]}
+                        routeData={handleRouteData}
+                        strokeWidth={1}
+                        defaultMode={"WALKING"}
+                      />
                     )}
-                </MapView>        
+                </MapView>       
+
+                {showPath && startLocation != destinationLocation && (
+                  <RouteInfoContainer eta={eta} distance={distance}/>
+                )}
         </View>
     );
 };
