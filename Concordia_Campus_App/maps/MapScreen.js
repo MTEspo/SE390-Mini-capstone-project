@@ -23,6 +23,7 @@ const MapScreen = ({route}) => {
   const [selectedBuilding, setSelectedBuilding] = useState(null); 
   const mapRef = useRef(null);
   const [selectedMarker, setSelectedMarker] = useState(null);
+  const [selectedPOI, setSelectedPOI] = useState(null);
   const [showDirections, setShowDirections] = useState(false);
   const [showBuildingDirections, setShowBuildingDirections] = useState(false);
   const [eta, setEta] = useState(null);
@@ -201,6 +202,12 @@ const MapScreen = ({route}) => {
     setEta(eta);
     setDistance(distance);
   }
+
+  const handleDirections = (result) => {
+    setEta(result.duration);
+    setDistance(result.distance);
+  };
+ 
 
   const handleSelectSGW = () => {
     if (activeButton === 'SGW') {
@@ -489,7 +496,7 @@ const handleUserLocation = () => {
             }}
             onPress={(data, details = null) => {
               moveToLocation(details?.geometry?.location.lat, details?.geometry?.location.lng);
-              setSelectedMarker({
+              setSelectedPOI({
                 latitude: details?.geometry?.location.lat,
                 longitude: details?.geometry?.location.lng,
               });
@@ -721,6 +728,23 @@ const handleUserLocation = () => {
         {!showDirections && toggleMapDirections && userLocation && shuttleStop && (
           <MapDirections userLocation={userLocation} destinationLocation={shuttleStop} />
         )}
+
+{selectedPOI && userLocation && (
+ <MapViewDirections
+   origin={{
+     latitude: userLocation.latitude,
+     longitude: userLocation.longitude,
+   }}
+   destination={{
+     latitude: selectedPOI.latitude,
+     longitude: selectedPOI.longitude,
+   }}
+   apikey={API_KEY}
+   strokeWidth={5}
+   strokeColor="blue"
+   onReady={handleDirections}
+ />
+)}
 
                   {buildingsData.buildings.map((building, index) => {
                             let polygonFillColor = building.fillColor;
