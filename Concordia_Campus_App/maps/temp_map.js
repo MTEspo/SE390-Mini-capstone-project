@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Keyboard, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Keyboard} from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; 
 import buildingsData from './buildingCoordinates.js';
@@ -10,7 +10,9 @@ import BuildingOverlay from './BuildingOverlay.js';
 import indoorFloorData from './indoorFloorCoordinates.js';
 import {findShortestPath} from './IndoorFloorShortestPathAlgo.js';
 import FloorButtons from './FloorButtons.js';
-import DirectionsTransitScreen from './DirectionsTransitScreen.js';
+import SearchBar from '../utilities/SearchBar.js';
+import SearchResults from '../utilities/SearchResults.js';
+import TransitScreen from './transitOptions.js';
 
 const TempMap = () => {
     const [campus, setCampus] = useState('SGW');
@@ -44,6 +46,9 @@ const TempMap = () => {
     const [isSelectingStart, setIsSelectingStart] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
     const [wheelChairToggle, setWheelChairToggle] = useState(false);
+
+    const [eta, setEta] = useState(null);
+    const [distance, setDistance] = useState(null);
   
 
     const buildings = indoorFloorData.buildings.map(building => {
@@ -394,29 +399,39 @@ const TempMap = () => {
         }
     };
 
+    // Resets the start class search bar 
+    const resetStartingSearchBar = () => {
+      setSearchStartingText('');
+      setStartLocation('');
+      onPressClearPath();
+    }
+
+    // Resets the destination class search bar 
+    const resetDestinationSearchBar = () => {
+      setSearchDestinationText('');
+      setDestinationLocation('');
+      onPressClearPath();
+    }
+
+    // Gets route data of outdoor directions
+    const handleRouteData  = (eta, distance) => {
+      setEta(eta);
+      setDistance(distance);
+    }
+  
+
     return (
-        <View>             
+        <View style={{alignItems: 'center'}}>             
                 <View style={style.inputContainer}>
-                <View style={style.inputRow}>
-                  <View style={style.iconContainer}>
-                      <View style={style.iconDot} />
-                      <View style={style.iconDots} />
-                  </View>
-                  <View style={style.textInputWrapper}>
-                      <TextInput
-                          style={style.input}
-                          placeholder="Choose starting class"
-                          value={searchStartingText}
-                          onFocus={() => setIsSelectingStart(true)}
-                          onChangeText={(text) => handleSearch(text, true)}
-                      />
-                      {searchStartingText.length > 0 && (
-                          <TouchableOpacity onPress={() => {setSearchStartingText(''), setStartLocation(''), onPressClearPath()}}>
-                              <Icon name="times-circle" size={18} color="gray" />
-                          </TouchableOpacity>
-                      )}
-                  </View>
-                </View>
+                  {/* Searchbar for start class */}
+                  <SearchBar 
+                    searchText={searchStartingText} 
+                    isOrigin={true} 
+                    placeHolderTxt={"Choose starting class"} 
+                    searchCallback={handleSearch} 
+                    startingCallback={setIsSelectingStart} 
+                    resetCallback={resetStartingSearchBar}
+                  />
 
                 {full_path && showPath && (
                   <View style={style.inputRowFloorButtons}>
@@ -426,28 +441,20 @@ const TempMap = () => {
                             startLocation={startLocation}
                         />
                   </View>
-                  
                 )}
 
-                <View style={style.inputRow}>
-                    <View style={style.iconContainer}>
-                        <Icon name="map-marker" size={20} color="red" />
-                    </View>
-                    <View style={style.textInputWrapper}>
-                        <TextInput
-                            style={style.input}
-                            placeholder="Choose destination"
-                            value={searchDestinationText}
-                            onFocus={() => setIsSelectingStart(false)}
-                            onChangeText={(text) => handleSearch(text, false)}
-                        />
-                        {searchDestinationText.length > 0 && (
-                            <TouchableOpacity onPress={() => {setSearchDestinationText(''), setDestinationLocation(''), onPressClearPath()}}>
-                                <Icon name="times-circle" size={18} color="gray" />
-                            </TouchableOpacity>
-                        )}
-                    </View>
-                </View>
+                  {/* Searchbar for destination class */}
+                  <SearchBar 
+                    searchText={searchDestinationText} 
+                    isOrigin={false} 
+                    placeHolderTxt={"Choose destination"} 
+                    iconName={"map-marker"}
+                    iconSize={20}
+                    iconColor={"red"}
+                    searchCallback={handleSearch} 
+                    startingCallback={setIsSelectingStart} 
+                    resetCallback={resetDestinationSearchBar}
+                  />
                 
                 {full_path && showPath && startLocation != destinationLocation &&(
                 <View style={style.inputRowFloorButtons2}>
@@ -461,30 +468,12 @@ const TempMap = () => {
                 </View>)}
 
                 {isSearching && filteredBuildings.length > 0 && (
-                  <FlatList
-                    style={{ marginTop: 5, width: '100%', backgroundColor: 'white', borderRadius: 8 }}
-                    data={filteredBuildings.flatMap(building => 
-                      building.rooms.map(room => ({ room, building }))
-                    )}
-                    renderItem={({ item, index, separators }) => {
-                      const totalItems = filteredBuildings.flatMap(building => 
-                        building.rooms.map(room => ({ room, building }))
-                      ).length;
-                      
-                      const showSeparator = totalItems > 1 && index < totalItems - 1;
-                      
-                      return (
-                        <TouchableOpacity 
-                          onPress={() => isSelectingStart ? handleStartingSelection(item) : handleDestinationSelection(item)}>
-                          <View style={style.item}>
-                            <Text style={style.title}>{item.room}</Text>
-                          </View>
-                          {showSeparator && <View style={style.separator} />}
-                        </TouchableOpacity>
-                      );
-                    }}
-                    keyExtractor={(item, index) => `${item.building.names[0]}-${index}`}
-                    maxHeight={115}
+                  <SearchResults 
+                    searchableData={filteredBuildings} 
+                    isOrigin={isSelectingStart} 
+                    handleOriginCallback={handleStartingSelection} 
+                    handleDestinationCallback={handleDestinationSelection}
+                    screen={"indoor"}
                   />
                 )}
                     
@@ -522,14 +511,15 @@ const TempMap = () => {
                               alignItems: 'center',
                               borderWidth: 1,
                               borderColor: 'black',
-                              marginRight: 5
+                              marginRight: 5,
+                              marginBottom: 6
                             }}
                             onPress={() => {
                               setWheelChairToggle(prev => !prev);
                             }}
                             testID="sgwButton"
                           >
-                            <Icon name="wheelchair" size={22} color="white" />
+                            <Icon name="wheelchair" size={19} color="white" />
                           </TouchableOpacity>
                         )}
 
@@ -620,11 +610,20 @@ const TempMap = () => {
                         );
                     })}
                     {showPath && startLocation != destinationLocation && (
-                      <DirectionsTransitScreen showDirections={true}
-                              location={indoorFloorData.buildings.find(building => building.name == startLocation )["floor-1"]["building_entrance"]} 
-                              destinationLocation={indoorFloorData.buildings.find(building => building.name == destinationLocation )["floor-1"]["building_entrance"]}/>
+                      <TransitScreen 
+                        showDirections={true} 
+                        origin={indoorFloorData.buildings.find(building => building.name == startLocation )["floor-1"]["building_entrance"]}
+                        destination={indoorFloorData.buildings.find(building => building.name == destinationLocation )["floor-1"]["building_entrance"]}
+                        routeData={handleRouteData}
+                        strokeWidth={1}
+                        defaultMode={"WALKING"}
+                      />
                     )}
-                </MapView>        
+                </MapView>       
+
+                {showPath && startLocation != destinationLocation && (
+                  <RouteInfoContainer eta={eta} distance={distance}/>
+                )}
         </View>
     );
 };
@@ -638,94 +637,42 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 44,
   },
-    inputContainer: {
-        position: 'absolute',
-        top: 10,
-        left: 50,
-        right: 50,
-        zIndex: 1000,
-        backgroundColor: 'transparent',
-    },
-    inputRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: 'white',
-        borderRadius: 1,
-        padding: 10,
-        marginBottom: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-    },
-    iconContainer: {
-        marginRight: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    iconDot: {
-        width: 8,
-        height: 8,
-        borderRadius: 4,
-        backgroundColor: 'black',
-    },
-    iconDots: {
-        width: 2,
-        height: 10,
-        backgroundColor: 'gray',
-        marginVertical: 2,
-    },
-    input: {
-        flex: 1,
-        height: 25,
-        paddingHorizontal: 10,
-      },
-      textInputWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
-    },
-    pathButton: {
-        backgroundColor: '#3498db',
-        padding: 10,
-        borderRadius: 8,
-        marginTop: 8,
-        alignItems: 'center',
-    },
-    pathButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-    title: {
-      fontSize: 10,
-      fontWeight: '500',
-    },
-    item: {
-      padding: 15,
-      paddingBottom: 15,
-    },
-    separator: {
-      height: 1,
-      backgroundColor: 'black',
-      marginHorizontal: 10,
-    },
-    toggleButtonContainer: {
-      top: 5,
-      zIndex: 1,
-      justifyContent: 'flex-start',
+  inputContainer: {
+      position: 'absolute',
+      top: 10,
+      left: 50,
+      right: 50,
+      zIndex: 1000,
+      backgroundColor: 'transparent',
+  },
+  pathButton: {
+      backgroundColor: '#3498db',
+      padding: 10,
+      borderRadius: 8,
+      marginTop: 8,
       alignItems: 'center',
-      flexDirection: 'row',
-      width: 250,
-    },
-    wheelchairButton: {
-      backgroundColor: '#800000', 
-      borderRadius: 10,
-      paddingVertical: 8,
-      paddingHorizontal: 15,
-      width: 'auto',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginRight: 5
+  },
+  pathButtonText: {
+      color: 'white',
+      fontWeight: 'bold',
+  },
+  toggleButtonContainer: {
+    top: 5,
+    zIndex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: 250,
+  },
+  wheelchairButton: {
+    backgroundColor: '#800000', 
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    width: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 5
   },
   wheelchairButtonActive: {
     backgroundColor: 'white', 
@@ -738,9 +685,7 @@ const style = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
     marginRight: 5
-  },
-
-
+  }
 });
 
 export default TempMap;

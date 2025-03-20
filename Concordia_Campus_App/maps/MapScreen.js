@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import 'react-native-get-random-values';
-import { View, Text, TouchableOpacity, Image, FlatList, TextInput, Alert} from 'react-native';
+import { View, Text, TouchableOpacity, Image, Alert, Keyboard} from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; 
 import buildingsData from './buildingCoordinates.js';
 import BuildingPopup from './BuildingPopup'; 
-import MapViewDirections from 'react-native-maps-directions';
 import { API_KEY } from '@env';
 import ShuttleBusMarker from './ShuttleBusMarker';
 import { getLocation } from './locationUtils';
@@ -15,6 +14,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { getDistance } from 'geolib';
 import TransitScreen from './transitOptions.js';
 import RouteInfoContainer from './RouteInfoContainer.js';
+import SearchBar from '../utilities/SearchBar.js';
+import SearchResults from '../utilities/SearchResults.js';
 
 
 const MapScreen = ({route}) => {
@@ -59,8 +60,8 @@ const MapScreen = ({route}) => {
     setShowDirections(false);
     setEta(null);
     setDistance(null);
-    setStartQuery(null);
-    setDestinationQuery(null);
+    setStartQuery('');
+    setDestinationQuery('');
   };
   
   const campusLocations = {
@@ -473,6 +474,47 @@ const handleUserLocation = () => {
     }
   }, [destinationCoords, route.params?.startCoords]);
   
+  // Clears the start building search bar and removes the highlighted building
+  const clearOriginSearchBar = () =>{
+    setSelectedStartBuilding(null);
+    setSelectedStart(null);
+    setStartQuery("");
+    setShowBuildingDirections(false);
+    setEta(null);
+    setDistance(null);
+  }
+
+  // Clears the desitnation building search bar and removes the highlighted building
+  const clearDestinationSearchBar = () =>{
+    setSelectedDestination(null);
+    setSelectedEnd(null);
+    setDestinationQuery("");
+    setShowBuildingDirections(false);
+    setEta(null);
+    setDistance(null);
+  }
+
+  // When the searchbar provides results for start building this will be what happens when an item is clicked
+  const handleOriginSearch = (building, buildingCoord, buildingName) => {
+    setSelectedStartBuilding(building);
+    setSelectedStart(buildingCoord);
+    setStartQuery(buildingName);
+    setFilteredStartBuildings([]);
+  }
+
+  // When the searchbar provides results for destination building this will be what happens when an item is clicked
+  const handleDestinationBuildingSearch = (bulding, buildingCoord, buildingname) => {
+    setSelectedDestination(bulding);
+    setSelectedEnd(buildingCoord);
+    setDestinationQuery(buildingname);
+    setFilteredDestinationBuildings([]);
+  }
+
+    //helper for node coordinates (used when setting up path config file)
+    const handleMapPress = () => {
+        Keyboard.dismiss();
+    };
+
   return (
     <View style={styles.container}>
       {currentScreen === 'Map' ? (
@@ -500,93 +542,67 @@ const handleUserLocation = () => {
       ) : (
         <>
           <View
-            style={[
-              styles.searchContainer,
-              {
-                position: 'absolute',
-                left: 10,
-                right: 10,
-                top: 10, 
-                backgroundColor: 'transparent', 
-                padding: 0,
-                borderRadius: 0,
-                zIndex: 20,
-              },
-            ]}
+            style={{
+              position: 'absolute',
+              top: 10,
+              left: 50,
+              right: 50,
+              zIndex: 1000,
+              backgroundColor: 'transparent'}}
           >
-
-            <TextInput
-              style={[
-                styles.searchBar,
-                { backgroundColor: '#800000', color: '#FFFFFF', width: '100%', borderColor: 'black' },
-              ]}
-              placeholder="Select Start Building..."
-              placeholderTextColor="#FFFFFF"
-              value={startQuery}
-              onChangeText={handleStartSearch}
-              onFocus={() => setFilteredStartBuildings([])}
+            {/* Start building search bar */}
+            <SearchBar 
+              searchText={startQuery}
+              placeHolderTxt={"Select Start Building..."}
+              searchCallback={handleStartSearch}
+              resetCallback={clearOriginSearchBar}
             />
+
+            {/* Destination building search bar */}
+            <SearchBar 
+              searchText={destinationQuery} 
+              placeHolderTxt={"Select Destination Building..."} 
+              iconName={"map-marker"}
+              iconSize={20}
+              iconColor={"red"}
+              searchCallback={handleDestinationSearch} 
+              resetCallback={clearDestinationSearchBar}
+            />
+
+            {/* Start building search results */}
             {filteredStartBuildings.length > 0 && (
-              <FlatList
-                style={styles.flatListResult}
-                data={filteredStartBuildings}
-                keyExtractor={(item) => item.name}
-                renderItem={({ item, index }) => (
-                  <TouchableOpacity
-                    style={(index === filteredStartBuildings.length - 1 ) ? styles.searchResultItemNoBorder : styles.searchResultItem}
-                    activeOpacity={0.6}
-                    onPress={() => {
-                      setSelectedStartBuilding(item);
-                      setSelectedStart(item.markerCoord);
-                      setStartQuery(item.name);
-                      setFilteredStartBuildings([]);
-                    }}
-                  >
-                    <Text>{item.name}</Text>
-                  </TouchableOpacity>
-                )}
+              <SearchResults 
+                searchableData={filteredStartBuildings}
+                screen="outdoor"
+                searchCallback={handleOriginSearch}
               />
             )}
-            <TouchableOpacity style={styles.useCurrentLocationBtn} onPress={handleUseCurrentLocation}>
-              <Text style={styles.useCurrentLocationText}>Use My Current Location</Text>
-            </TouchableOpacity>
-            <TextInput
-              style={[
-                styles.searchBar,
-                {
-                  backgroundColor: '#800000',
-                  color: '#FFFFFF',
-                  width: '100%',
-                  marginTop: 10,
-                  borderColor: 'black'
-                },
-              ]}
-              placeholder="Select Destination Building..."
-              placeholderTextColor="#FFFFFF"
-              value={destinationQuery}
-              onChangeText={handleDestinationSearch}
-              onFocus={() => setFilteredDestinationBuildings([])}
-            />
+
+            {/* Destination building search results */}
             {filteredDestinationBuildings.length > 0 && (
-              <FlatList
-                style={styles.flatListResult}
-                data={filteredDestinationBuildings}
-                keyExtractor={(item) => item.name}
-                renderItem={({ item, index }) => (
-                  <TouchableOpacity
-                    style={(index === filteredDestinationBuildings.length - 1 ) ? styles.searchResultItemNoBorder : styles.searchResultItem}
-                    activeOpacity={0.6}
-                    onPress={() => {
-                      setSelectedDestination(item);
-                      setSelectedEnd(item.markerCoord);
-                      setDestinationQuery(item.name);
-                      setFilteredDestinationBuildings([]);
-                    }}
-                  >
-                    <Text>{item.name}</Text>
-                  </TouchableOpacity>
-                )}
+              <SearchResults 
+                searchableData={filteredDestinationBuildings}
+                screen="outdoor"
+                searchCallback={handleDestinationBuildingSearch}
               />
+            )}
+
+            <TouchableOpacity style={styles.useCurrentLocationBtn} onPress={handleUseCurrentLocation}>
+              <Text style={styles.useCurrentLocationText}>Use My Location</Text>
+            </TouchableOpacity>
+
+            {showBuildingDirections && (
+              <TouchableOpacity style={{      
+                backgroundColor: '#3498db',
+                padding: 10,
+                borderRadius: 8,
+                alignItems: 'center',
+                marginTop: 5}}
+              >
+                <Text style={{color: 'white', fontWeight: 'bold'}}>
+                  Show Directions
+                </Text>
+              </TouchableOpacity>
             )}
           </View>
           <View
@@ -597,6 +613,7 @@ const handleUserLocation = () => {
               zIndex: 1,
             }}
           >
+
             <TouchableOpacity
               style={[
                 styles.searchBar,
@@ -607,9 +624,7 @@ const handleUserLocation = () => {
                   alignSelf: 'flex-start',
                   borderColor: 'black',
                   flexDirection: 'row',
-                  bottom: -40,
                   right: -15
-                  
                 },
               ]}
               onPress={handleReturn}
@@ -617,21 +632,6 @@ const handleUserLocation = () => {
               <Text style={{ color: '#FFFFFF', textAlign: 'center' }}>
                 Return
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity               
-            style={[
-                styles.searchBar,
-                {
-                  backgroundColor: 'green',
-                  paddingVertical: 10,
-                  paddingHorizontal: 20,
-                  borderColor: 'black',
-                  flexDirection: 'row',
-                  left: 0,
-                  bottom: 550,
-                },
-              ]}>
-              <Text style={{ color: '#FFFFFF', textAlign: 'center' }} >Get Directions</Text>
             </TouchableOpacity>
           </View>
         </>
@@ -684,6 +684,7 @@ const handleUserLocation = () => {
       <MapView
         ref={mapRef}
         style={styles.map}
+        onPress={handleMapPress}
         initialRegion={{
           latitude: isUserLocationFetched ? userLocation.latitude : location.latitude,
           longitude: isUserLocationFetched ? userLocation.longitude : location.longitude,
@@ -751,8 +752,15 @@ const handleUserLocation = () => {
                         </View>
                       );
                     })}
-        
-        <TransitScreen showDirections={(showDirections) ? showDirections : showBuildingDirections} campus={campus} routeData={handleDirectionsToMap} origin={selectedStart} destination={selectedEnd} />
+        {/* Displays the transit options when any form of directions is requested */}
+        <TransitScreen 
+          showDirections={(showDirections) ? showDirections : showBuildingDirections} 
+          campus={campus} 
+          routeData={handleDirectionsToMap} 
+          origin={selectedStart} 
+          destination={selectedEnd}
+          defaultMode={"DRIVING"}
+        />
 
         {currentScreen === 'Building Map Directions' ? (
           <>
@@ -801,6 +809,7 @@ const handleUserLocation = () => {
         </TouchableOpacity>
       ) : null} 
 
+      {/* Displays the estimated time until arrivate and distances between an origin and distination */}
       <RouteInfoContainer eta={eta} distance={distance}/>
         
     </View>
