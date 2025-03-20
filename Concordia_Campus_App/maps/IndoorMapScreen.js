@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Keyboard} from 'react-native';
+import { View, Text, TouchableOpacity, Keyboard} from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
-import styles from './styles/mapScreenStyles'; 
+import styles from './styles/mapScreenStyles.js'; 
 import buildingsData from './buildingCoordinates.js';
-import { getLocation } from './locationUtils';
+import { getLocation } from './locationUtils.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PathOverlay from './PathOverlay.js';
 import BuildingOverlay from './BuildingOverlay.js';
@@ -13,8 +13,9 @@ import FloorButtons from './FloorButtons.js';
 import SearchBar from '../utilities/SearchBar.js';
 import SearchResults from '../utilities/SearchResults.js';
 import TransitScreen from './transitOptions.js';
+import { style } from './styles/indoorMapScreenStyles.js';
 
-const TempMap = () => {
+const IndoorMapDirections = () => {
     const [campus, setCampus] = useState('SGW');
     const [zoomLevel, setZoomLevel] = useState(0.005);
     const mapRef = useRef(null);
@@ -427,7 +428,10 @@ const TempMap = () => {
                   <SearchBar 
                     searchText={searchStartingText} 
                     isOrigin={true} 
-                    placeHolderTxt={"Choose starting class"} 
+                    placeHolderTxt={"Choose starting class"}
+                    iconName={"map-pin"}
+                    iconSize={20}
+                    iconColor={"green"}
                     searchCallback={handleSearch} 
                     startingCallback={setIsSelectingStart} 
                     resetCallback={resetStartingSearchBar}
@@ -448,9 +452,9 @@ const TempMap = () => {
                     searchText={searchDestinationText} 
                     isOrigin={false} 
                     placeHolderTxt={"Choose destination"} 
-                    iconName={"map-marker"}
+                    iconName={"map-pin"}
                     iconSize={20}
-                    iconColor={"red"}
+                    iconColor={"black"}
                     searchCallback={handleSearch} 
                     startingCallback={setIsSelectingStart} 
                     resetCallback={resetDestinationSearchBar}
@@ -595,10 +599,6 @@ const TempMap = () => {
 
                                     />
                                 )}
-                                {/* {building.name === "Vanier Library Building"  && (
-                                  <BuildingOverlay
-                                  coordinates={building.coordinates}
-                                  image={require('../assets/floor_plans/VL-1.png')}/>)} */}
 
                                 {full_path && showPath && (
                                     <PathOverlay path={full_path.find(floorData => floorData.floor === selectedFloor)?.coordinates || []} />
@@ -628,64 +628,4 @@ const TempMap = () => {
     );
 };
 
-const style = StyleSheet.create({
-  inputRowFloorButtons: {
-    flexDirection: 'row',
-    marginTop: 44,
-  },
-  inputRowFloorButtons2: {
-    flexDirection: 'row',
-    marginTop: 44,
-  },
-  inputContainer: {
-      position: 'absolute',
-      top: 10,
-      left: 50,
-      right: 50,
-      zIndex: 1000,
-      backgroundColor: 'transparent',
-  },
-  pathButton: {
-      backgroundColor: '#3498db',
-      padding: 10,
-      borderRadius: 8,
-      marginTop: 8,
-      alignItems: 'center',
-  },
-  pathButtonText: {
-      color: 'white',
-      fontWeight: 'bold',
-  },
-  toggleButtonContainer: {
-    top: 5,
-    zIndex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    flexDirection: 'row',
-    width: 250,
-  },
-  wheelchairButton: {
-    backgroundColor: '#800000', 
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    width: 'auto',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 5
-  },
-  wheelchairButtonActive: {
-    backgroundColor: 'white', 
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    width: 'auto',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'black',
-    marginRight: 5
-  }
-});
-
-export default TempMap;
+export default IndoorMapDirections;
