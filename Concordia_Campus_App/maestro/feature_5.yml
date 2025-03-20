@@ -1,0 +1,47 @@
+appId: "host.exp.Exponent"
+
+---
+- launchApp:
+    appId: "host.exp.Exponent"
+    clearState: false
+- tapOn: 
+    text: "Concordia_Campus_App"
+- tapOn:
+    point: 10%,10% 
+    delay: 5000
+    repeat: 2
+- assertVisible: "Indoor Directions Map"
+- tapOn: 
+    text: "Indoor Directions Map"
+- tapOn: 
+    text: "Choose starting class"
+- inputText: "H-"
+- assertVisible: "H-110"
+- tapOn: 
+    text: "return"
+- tapOn: 
+    text: "H-110"
+    repeat: 2
+- tapOn: 
+    text: "Choose destination"
+- inputText: "H-"
+- tapOn: 
+    text: "H-831"
+    repeat: 2
+- tapOn:
+    text: "Show Directions"
+# add check for line is showing
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-2-Henry F.Hall Building"
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-8-Henry F.Hall Building"
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-9-Henry F.Hall Building"
+- assertNotVisible: "You"
+- assertNotVisible: "Go To"

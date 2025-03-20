@@ -611,10 +611,14 @@ const TempMap = () => {
                                   image={require('../assets/floor_plans/VL-1.png')}/>)} */}
 
                                 {full_path && showPath && (
-                                    <PathOverlay path={full_path.find(floorData => floorData.floor === selectedFloor)?.coordinates || []} />
+                                    <PathOverlay 
+                                    testID= "path1"
+                                    path={full_path.find(floorData => floorData.floor === selectedFloor)?.coordinates || []} />
                                 )}  
                                 {secondPath && showPath && (
-                                    <PathOverlay path={secondPath.find(floorData => floorData.floor === selectedFloor2)?.coordinates || []} />
+                                    <PathOverlay 
+                                    testID = "path2"
+                                    path={secondPath.find(floorData => floorData.floor === selectedFloor2)?.coordinates || []} />
                                 )}                             
                             </React.Fragment>
                         );

@@ -16,14 +16,21 @@ const PathOverlay = ({ path }) => {
   return (
     <>
       <Polyline
+        id="path-to-destination"
         coordinates={delayedPath}
         strokeColor="blue"
         strokeWidth={1}
         lineDashPattern={[5, 5]}
       />
       
-      <Marker coordinate={delayedPath[0]} pinColor={'green'} />
-      <Marker coordinate={delayedPath[delayedPath.length - 1]} pinColor={'black'} />
+      <Marker 
+      id="start-marker"
+      title="You"
+      coordinate={delayedPath[0]} pinColor={'green'} />
+      <Marker 
+      id="end-marker"
+      title="Go To"
+      coordinate={delayedPath[delayedPath.length - 1]} pinColor={'black'} />
     </>
   );
 };

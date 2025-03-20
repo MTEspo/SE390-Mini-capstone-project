@@ -124,18 +124,22 @@ const IndoorMaps = () => {
       <View style={styles.floorButtonsContainer}>
         {/* Rectangular Box for all Floor Buttons */}
         <View style={styles.floorButtonsBox}>
-        {Object.keys(floorPlans[selectedBuilding].floors).map((floor) => (
-        <TouchableOpacity
-          key={floor}
-          style={[
-            styles.floorButton,
-            selectedFloor === floor && styles.selectedButton, // Highlight selected button
-          ]}
-          onPress={() => setSelectedFloor(floor)} // Set floor on button press
-        >
-          <Text style={styles.floorButtonText}>{floor}</Text>
-        </TouchableOpacity>
-      ))}
+        {Object.keys(floorPlans[selectedBuilding].floors).map((floor) => {
+  console.log(`Rendering floor button for floor ${floor}`);
+  return (
+    <TouchableOpacity
+      key={floor}
+      testID={`floor-${floor}`}
+      style={[
+        styles.floorButton,
+        selectedFloor === floor && styles.selectedButton,
+      ]}
+      onPress={() => setSelectedFloor(floor)}
+    >
+      <Text style={styles.floorButtonText}>{floor}</Text>
+    </TouchableOpacity>
+  );
+})}
       </View>
       </View>
     </ScrollView>

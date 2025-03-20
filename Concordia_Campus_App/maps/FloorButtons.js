@@ -14,23 +14,24 @@ const FloorButtons = ({ selectedFloor, onFloorSelect, startLocation }) => {
 
     return (
         <View style={styles.wrapper}>
-            <View style={styles.buttonContainer}>
-                {floors.map((floor, index) => {
-                    const isSelected = selectedFloor === floor;
-                    
-                    return (
-                        <TouchableOpacity 
-                            key={index} 
-                            style={[styles.button, isSelected && styles.selectedButton]} 
-                            onPress={() => onFloorSelect(parseInt(floor.replace("floor-", "")))}
-                        >
-                            <Text style={styles.buttonText}>{floor.replace("floor-", " ")}</Text>
-                        </TouchableOpacity>
-                    );
-                })}
-            </View>
+          <View style={styles.buttonContainer}>
+            {floors.map((floor, index) => {
+              const isSelected = selectedFloor === floor;
+              console.log(floor)
+              return (
+                <TouchableOpacity 
+                  key={index} 
+                  testID={`floor-button-${floor.replace("floor-", "")}-${startLocation}`} 
+                  style={[styles.button, isSelected && styles.selectedButton]} 
+                  onPress={() => onFloorSelect(parseInt(floor.replace("floor-", "")))}
+                >
+                  <Text style={styles.buttonText}>{floor.replace("floor-", " ")}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </View>
-    );
+      );
 };
 
 const styles = StyleSheet.create({
