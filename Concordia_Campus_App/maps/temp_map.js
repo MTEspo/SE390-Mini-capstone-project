@@ -411,7 +411,7 @@ const TempMap = () => {
                           onChangeText={(text) => handleSearch(text, true)}
                       />
                       {searchStartingText.length > 0 && (
-                          <TouchableOpacity onPress={() => {setSearchStartingText(''), setStartLocation(''), onPressClearPath()}}>
+                          <TouchableOpacity testID = "close-start"onPress={() => {setSearchStartingText(''), setStartLocation(''), onPressClearPath()}}>
                               <Icon name="times-circle" size={18} color="gray" />
                           </TouchableOpacity>
                       )}
@@ -442,7 +442,7 @@ const TempMap = () => {
                             onChangeText={(text) => handleSearch(text, false)}
                         />
                         {searchDestinationText.length > 0 && (
-                            <TouchableOpacity onPress={() => {setSearchDestinationText(''), setDestinationLocation(''), onPressClearPath()}}>
+                            <TouchableOpacity testID = "close-dest"onPress={() => {setSearchDestinationText(''), setDestinationLocation(''), onPressClearPath()}}>
                                 <Icon name="times-circle" size={18} color="gray" />
                             </TouchableOpacity>
                         )}
@@ -527,7 +527,7 @@ const TempMap = () => {
                             onPress={() => {
                               setWheelChairToggle(prev => !prev);
                             }}
-                            testID="sgwButton"
+                            testID="wheelChairIcon"
                           >
                             <Icon name="wheelchair" size={22} color="white" />
                           </TouchableOpacity>

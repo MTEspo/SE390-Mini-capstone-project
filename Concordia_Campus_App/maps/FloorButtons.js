@@ -17,7 +17,6 @@ const FloorButtons = ({ selectedFloor, onFloorSelect, startLocation }) => {
           <View style={styles.buttonContainer}>
             {floors.map((floor, index) => {
               const isSelected = selectedFloor === floor;
-              console.log(floor)
               return (
                 <TouchableOpacity 
                   key={index} 
