@@ -26,6 +26,7 @@ const MapScreen = ({route}) => {
   const [selectedPOI, setSelectedPOI] = useState(null);
   const [showDirections, setShowDirections] = useState(false);
   const [showBuildingDirections, setShowBuildingDirections] = useState(false);
+  const [showPOIdirections, setShowPOIdirections] = useState(false);
   const [eta, setEta] = useState(null);
   const [distance, setDistance] = useState(null);
   const [selectedStartBuilding, setSelectedStartBuilding] = useState(null);
@@ -45,6 +46,7 @@ const MapScreen = ({route}) => {
   const [isUserLocationFetched, setIsUserLocationFetched] = useState(false);
   const [activeButton, setActiveButton] = useState('user');
   const [activeCampusDirections, setActiveCampusDirections] = useState(false);
+  const [isDirectionsActive, setIsDirectionsActive] = useState(false);
   const {destinationLoc} = route.params || {};
   const {destinationCoords} = route.params || {};
   const [routeKey, setRouteKey] = useState(0);
@@ -58,6 +60,7 @@ const MapScreen = ({route}) => {
     setSelectedEnd(null);
     setActiveCampusDirections(false);
     setShowDirections(false);
+    setShowPOIdirections(false);
     setEta(null);
     setDistance(null);
     setStartQuery(null);
@@ -203,12 +206,6 @@ const MapScreen = ({route}) => {
     setDistance(distance);
   }
 
-  const handleDirections = (result) => {
-    setEta(result.duration);
-    setDistance(result.distance);
-  };
- 
-
   const handleSelectSGW = () => {
     if (activeButton === 'SGW') {
       // If already on SGW view, reset the map to SGW center
@@ -221,6 +218,7 @@ const MapScreen = ({route}) => {
     } else {
       // If not on SGW view, switch to SGW view
       setShowDirections(false);
+      setShowPOIdirections(false);
       setEta(null);
       setDistance(null);
       setCampus('SGW');
@@ -248,6 +246,7 @@ const MapScreen = ({route}) => {
     } else {
       // If not on LOY view, switch to LOY view
       setShowDirections(false);
+      setShowPOIdirections(false);
       setEta(null);
       setDistance(null);
       setCampus('Loyola');
@@ -287,6 +286,7 @@ const handleUserLocation = () => {
     setCenterOnUserLocation(true);
   }
   setShowDirections(false);
+  setShowPOIdirections(false);
   setShowBuildingDirections(false);
   setSelectedStart(null);
   setSelectedEnd(null);
@@ -304,6 +304,7 @@ const handleUserLocation = () => {
     setSelectedStart(null);
     setSelectedEnd(null);
     setShowBuildingDirections(false);
+    setShowPOIdirections(false);
     setActiveCampusDirections(true);
 
     if(activeCampusDirections){
@@ -315,6 +316,7 @@ const handleUserLocation = () => {
   };
 
   const handleBuildingDirections = async () => {
+    setShowDirections(false);
     setShowDirections(false);
     if(currentScreen === 'Map'){
       setCurrentScreen("Building Map Directions");
@@ -351,10 +353,19 @@ const handleUserLocation = () => {
     }
   };
 
+
+  const handlePOICancel = () => {
+    setShowPOIdirections(false);
+    setEta(null);
+    setDistance(null); 
+    setSelectedPOI(null);
+  };
+
   useEffect(() => {
       return () => {
         setShowBuildingDirections(false);
         setShowDirections(false);
+        setShowPOIdirections(false);
         setEta(null);
         setDistance(null);
       };
@@ -437,7 +448,9 @@ const handleUserLocation = () => {
   }, [selectedStart, selectedEnd]);
   
   
-  
+  useEffect(() => {
+    console.log('showPOIDirections changed:', showPOIdirections);
+  }, [showPOIdirections]);
 
   useEffect(() => {
     if (destinationLoc) {
@@ -503,6 +516,23 @@ const handleUserLocation = () => {
             }}
             onFail={(error) => console.log('Error:', error)}
           />
+          
+         {selectedPOI && (
+            <TouchableOpacity
+               onPress={() => {
+               if (showPOIdirections) {
+                   handlePOICancel();
+                } else {
+                  setShowPOIdirections(true);
+                }
+              }}
+              style={[styles.startPOIbutton, { backgroundColor: showPOIdirections ? 'white' : '#800000' }]}
+             >
+              <Text style={{ color: showPOIdirections ? 'blue' : 'white', fontSize: 16 }}>
+              {showPOIdirections ? 'Cancel' : 'Start'}
+              </Text>
+           </TouchableOpacity>
+        )}
         </View>
       ) : (
         <>
@@ -720,7 +750,15 @@ const handleUserLocation = () => {
         )}
         <Marker coordinate={location} title={location.title} description={location.description} />
         <Marker coordinate={destinationLocation} title={destinationLocation.title} description={destinationLocation.description} />
-  
+
+     {selectedPOI && (
+       <Marker
+        coordinate={selectedPOI}
+        title="Selected POI"
+        description="This is your selected point of interest."
+        pinColor="blue" // Change the pin color if you want
+      />
+    )}
         {!showDirections && (currentScreen === "Map") &&(
           <ShuttleBusMarker setToggleMapDirections={setToggleMapDirections} setShuttleStop={setShuttleStop} />
         )}  
@@ -729,21 +767,19 @@ const handleUserLocation = () => {
           <MapDirections userLocation={userLocation} destinationLocation={shuttleStop} />
         )}
 
-{selectedPOI && userLocation && (
- <MapViewDirections
-   origin={{
-     latitude: userLocation.latitude,
-     longitude: userLocation.longitude,
-   }}
-   destination={{
-     latitude: selectedPOI.latitude,
-     longitude: selectedPOI.longitude,
-   }}
-   apikey={API_KEY}
-   strokeWidth={5}
-   strokeColor="blue"
-   onReady={handleDirections}
- />
+{selectedPOI && userLocation && showPOIdirections &&  (
+  <TransitScreen
+    showDirections={true}
+    routeData={handleDirectionsToMap}
+    origin={{
+      latitude: userLocation.latitude,
+      longitude: userLocation.longitude,
+    }}
+    destination={{
+      latitude: selectedPOI.latitude,
+      longitude: selectedPOI.longitude,
+    }}
+  />
 )}
 
                   {buildingsData.buildings.map((building, index) => {

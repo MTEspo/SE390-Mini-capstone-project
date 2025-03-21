@@ -21,7 +21,8 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
     flexDirection: 'column',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
+    flexDirection: 'row'
   },
   searchBar: {
     height: 40,
@@ -255,6 +256,13 @@ modeText: {
   marginTop: 5,
   flexDirection: 'row',
   width: 'auto',
+ },
+ startPOIbutton: {
+  backgroundColor: '#800000',
+  paddingVertical: 12,
+  paddingHorizontal: 20,
+  borderRadius: 10,
+  marginLeft: 10,
  }
 });
 
