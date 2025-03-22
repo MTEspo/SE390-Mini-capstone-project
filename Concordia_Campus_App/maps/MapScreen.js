@@ -705,6 +705,8 @@ const handleUserLocation = () => {
          {selectedPOI && (
             <TouchableOpacity
                onPress={() => {
+                setShowDirections(false);
+                setActiveCampusDirections(false);
                if (showPOIdirections) {
                    handlePOICancel();
                 } else {
