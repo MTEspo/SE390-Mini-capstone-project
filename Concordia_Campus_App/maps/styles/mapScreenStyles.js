@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   searchBarContainer: {
     position: 'absolute',
     top: 20,
-    width: '70%',
+    width: '80%',
     left: 20,
     zIndex: 2,
     backgroundColor: 'white',
@@ -21,9 +21,11 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
     flexDirection: 'column',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
+    flexDirection: 'row'
   },
   searchBar: {
+    marginLeft: 16,
     height: 40,
     borderWidth: 0.5,
     borderColor: '#ccc',
@@ -256,6 +258,34 @@ modeText: {
   marginTop: 5,
   flexDirection: 'row',
   width: 'auto',
+ },
+ startPOIbutton: {
+  backgroundColor: '#800000', 
+  borderRadius: 10,
+  paddingVertical: 8,
+  paddingHorizontal: 15,
+  width: 'auto',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginRight: 1,
+  marginBottom: 5,
+  borderWidth: 1,
+  borderColor: 'black',
+  marginLeft: 10
+ },
+ startPOIbuttonActive: {
+  backgroundColor: 'white', 
+  borderRadius: 10,
+  paddingVertical: 8,
+  paddingHorizontal: 15,
+  width: 'auto',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginRight: 1,
+  marginBottom: 5,
+  borderWidth: 1,
+  borderColor: 'black',
+  marginLeft: 10
  }
 });
 
