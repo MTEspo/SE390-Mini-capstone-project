@@ -938,6 +938,7 @@ const handleUserLocation = () => {
       latitude: selectedPOI.latitude,
       longitude: selectedPOI.longitude,
     }}
+    defaultMode={"DRIVING"}
   />
 )}
 
