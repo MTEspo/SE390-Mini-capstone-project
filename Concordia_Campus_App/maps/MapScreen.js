@@ -606,13 +606,12 @@ const handleUserLocation = () => {
   onPress={() => setShowCategoryPicker(true)}
   style={{
     position: 'absolute',
-    left: 1,
+    left: 4,
     top: 15,
     zIndex: 2,
     padding: 1,
     backgroundColor: '#fff',
     borderRadius: 20,
-    elevation: 3,
   }}
 >
   <Icon name="filter" size={20} color="#555" />
@@ -623,7 +622,7 @@ const handleUserLocation = () => {
   <FlatList
   data={nearbyPlaces}
   keyExtractor={(item) => item.place_id}
-  style={{ maxHeight: 200, backgroundColor: 'white', marginTop: 5, borderRadius: 10 }}
+  style={{ maxHeight: 200, backgroundColor: 'white', borderRadius: 10, zIndex: 2, right: 5}}
   renderItem={({ item }) => {
     const distanceMeters = userLocation
       ? getDistance(
@@ -639,7 +638,7 @@ const handleUserLocation = () => {
 
     return (
       <TouchableOpacity
-        style={{ padding: 10, borderBottomWidth: 1, borderColor: '#ccc' }}
+        style={{ padding: 10, borderBottomWidth: 1, borderColor: '#ccc'}}
         onPress={() => {
           moveToLocation(item.geometry.location.lat, item.geometry.location.lng);
           setSelectedPOI({
@@ -713,9 +712,9 @@ const handleUserLocation = () => {
                   setShowPOIdirections(true);
                 }
               }}
-              style={[styles.startPOIbutton, { backgroundColor: showPOIdirections ? 'white' : '#800000' }]}
+              style={showPOIdirections ? styles.startPOIbuttonActive : styles.startPOIbutton}
              >
-              <Text style={{ color: showPOIdirections ? 'blue' : 'white', fontSize: 16 }}>
+              <Text style={showPOIdirections ?  styles.highlightedText : styles.normalText }>
               {showPOIdirections ? 'Cancel' : 'Start'}
               </Text>
            </TouchableOpacity>
