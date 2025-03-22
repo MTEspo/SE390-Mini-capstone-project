@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import 'react-native-get-random-values';
-import { View, Text, TouchableOpacity, Image, Alert, Keyboard} from 'react-native';
+import { View, Text, TouchableOpacity, Image, Alert, Keyboard, FlatList} from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles'; 
 import buildingsData from './buildingCoordinates.js';
@@ -56,11 +56,6 @@ const MapScreen = ({route}) => {
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
   const poiSearchRef = useRef();
-
-
-
-
-  
 
   const handleReturn = () => {
     setCurrentScreen("Map");
