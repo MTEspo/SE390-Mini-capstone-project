@@ -324,9 +324,83 @@
 <a name='L259'></a><a href='#L259'>259</a>
 <a name='L260'></a><a href='#L260'>260</a>
 <a name='L261'></a><a href='#L261'>261</a>
-<a name='L262'></a><a href='#L262'>262</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -608,9 +682,11 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
     flexDirection: 'column',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
+    flexDirection: 'row'
   },
   searchBar: {
+    marginLeft: 16,
     height: 40,
     borderWidth: 0.5,
     borderColor: '#ccc',
@@ -774,11 +850,11 @@ modeContainer: {
 },
 modeButton: { 
   zIndex: 1,
-  marginHorizontal: 15,
+  marginHorizontal: 21,
   backgroundColor: '#800000',
-  paddingVertical: 10,
+  paddingVertical: 5,
   paddingHorizontal: 20,
-  borderRadius: 20,
+  borderRadius: 12,
   justifyContent: 'center',
   alignItems: 'center',
   borderWidth: 0.5,
@@ -823,6 +899,7 @@ modeText: {
     borderWidth: 1,
     borderColor: 'black',
     alignSelf: 'flex-start',
+    marginBottom: 5,
   },
   useCurrentLocationText: {
     color: 'white',
@@ -842,6 +919,40 @@ modeText: {
   marginTop: 5,
   flexDirection: 'row',
   width: 'auto',
+ },
+ startPOIbutton: {
+  position: 'absolute',
+  backgroundColor: '#800000', 
+  borderRadius: 10,
+  paddingVertical: 8,
+  paddingHorizontal: 15,
+  width: 'auto',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginRight: 1,
+  marginBottom: 5,
+  borderWidth: 1,
+  borderColor: 'black',
+  marginLeft: 10,
+  right: -80,
+  top: 5
+ },
+ startPOIbuttonActive: {
+  position: 'absolute',
+  backgroundColor: 'white', 
+  borderRadius: 10,
+  paddingVertical: 8,
+  paddingHorizontal: 15,
+  width: 'auto',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginRight: 1,
+  marginBottom: 5,
+  borderWidth: 1,
+  borderColor: 'black',
+  marginLeft: 10,
+  right: -90,
+  top: 5
  }
 });
 &nbsp;
@@ -853,7 +964,7 @@ export default styles;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-08T17:50:19.336Z
+                at 2025-03-22T22:07:39.753Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
