@@ -15,6 +15,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { getDistance } from 'geolib';
 import TransitScreen from './transitOptions.js';
 import RouteInfoContainer from './RouteInfoContainer.js';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+
+
+
+
 
 
 const MapScreen = ({route}) => {
@@ -50,6 +56,13 @@ const MapScreen = ({route}) => {
   const {destinationLoc} = route.params || {};
   const {destinationCoords} = route.params || {};
   const [routeKey, setRouteKey] = useState(0);
+  const [selectedPOICategory, setSelectedPOICategory] = useState(null);
+  const [nearbyPlaces, setNearbyPlaces] = useState([]);
+  const [showCategoryPicker, setShowCategoryPicker] = useState(false);
+  const poiSearchRef = useRef();
+
+
+
 
   
 
@@ -361,6 +374,35 @@ const handleUserLocation = () => {
     setSelectedPOI(null);
   };
 
+  const handleCategorySelect = async (category) => {
+    setSelectedPOICategory(category); 
+  
+    if (!userLocation) {
+      Alert.alert('Location not available yet');
+      return;
+    }
+  
+    const { latitude, longitude } = userLocation;
+    const radius = 5000; 
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${category}&key=${API_KEY}`;
+  
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+  
+      if (data.status === 'OK') {
+        setNearbyPlaces(data.results);
+      } else {
+        console.warn('Places API error:', data.status);
+        Alert.alert('Error', 'No places found for this category.');
+        setNearbyPlaces([]);
+      }
+    } catch (error) {
+      console.error('Failed to fetch places:', error);
+      Alert.alert('Error', 'Something went wrong fetching places.');
+    }
+  };
+  
   useEffect(() => {
       return () => {
         setShowBuildingDirections(false);
@@ -461,7 +503,7 @@ const handleUserLocation = () => {
       );
   
       if (selectedBuilding) {
-        handlePolygonPress(selectedBuilding); // Highlight the building
+        handlePolygonPress(selectedBuilding); 
         moveToLocation(selectedBuilding.markerCoord.latitude + 0.001, selectedBuilding.markerCoord.longitude);
       }
     }
@@ -498,6 +540,7 @@ const handleUserLocation = () => {
       {currentScreen === 'Map' ? (
         <View style={styles.searchBarContainer}>
           <GooglePlacesAutocomplete
+          ref={poiSearchRef}
             fetchDetails={true}
             placeholder="Search for Point of Interest..."
             styles={{
@@ -506,17 +549,127 @@ const handleUserLocation = () => {
             query={{
               key: API_KEY,
               language: 'en',
+              location: userLocation ? `${userLocation.latitude},${userLocation.longitude}` : undefined,
+              radius: 5000, 
             }}
             onPress={(data, details = null) => {
-              moveToLocation(details?.geometry?.location.lat, details?.geometry?.location.lng);
-              setSelectedPOI({
-                latitude: details?.geometry?.location.lat,
-                longitude: details?.geometry?.location.lng,
-              });
+              const placeLat = details?.geometry?.location.lat;
+              const placeLng = details?.geometry?.location.lng;
+              const poiLocation = { latitude: placeLat, longitude: placeLng };
+            
+              moveToLocation(placeLat, placeLng);
+              setSelectedPOI(poiLocation);
+            
+              if (userLocation) {
+                const distanceMeters = getDistance(userLocation, poiLocation);
+                const distanceKm = (distanceMeters / 1000).toFixed(2);
+                setEta(null); 
+                setDistance(`${distanceKm} km`);
+              }
             }}
+            
             onFail={(error) => console.log('Error:', error)}
           />
-          
+    <TouchableOpacity
+  onPress={() => setShowCategoryPicker(true)}
+  style={{
+    position: 'absolute',
+    left: 1,
+    top: 15,
+    zIndex: 2,
+    padding: 1,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    elevation: 3,
+  }}
+>
+  <Icon name="filter" size={20} color="#555" />
+</TouchableOpacity>
+
+
+{nearbyPlaces.length > 0 && (
+  <FlatList
+  data={nearbyPlaces}
+  keyExtractor={(item) => item.place_id}
+  style={{ maxHeight: 200, backgroundColor: 'white', marginTop: 5, borderRadius: 10 }}
+  renderItem={({ item }) => {
+    const distanceMeters = userLocation
+      ? getDistance(
+          { latitude: userLocation.latitude, longitude: userLocation.longitude },
+          {
+            latitude: item.geometry.location.lat,
+            longitude: item.geometry.location.lng,
+          }
+        )
+      : null;
+
+    const distanceKm = distanceMeters !== null ? (distanceMeters / 1000).toFixed(2) : 'N/A';
+
+    return (
+      <TouchableOpacity
+        style={{ padding: 10, borderBottomWidth: 1, borderColor: '#ccc' }}
+        onPress={() => {
+          moveToLocation(item.geometry.location.lat, item.geometry.location.lng);
+          setSelectedPOI({
+            latitude: item.geometry.location.lat,
+            longitude: item.geometry.location.lng,
+          });
+          poiSearchRef.current?.setAddressText(item.name);
+          setNearbyPlaces([]); 
+        }}
+      >
+        <Text style={{ fontWeight: 'bold' }}>
+          {item.name} ({distanceKm} km)
+        </Text>
+        <Text>{item.vicinity}</Text>
+      </TouchableOpacity>
+    );
+  }}
+/>
+)}
+
+{showCategoryPicker && (
+  <View
+    style={{
+      position: 'absolute',
+      top: 55, 
+      left: 10,
+      width: 200, 
+      backgroundColor: 'rgba(255,255,255,0.95)',
+      padding: 10,
+      borderRadius: 10,
+      zIndex: 999,
+      elevation: 5,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+    }}
+  >
+    {[
+      { label: 'Coffee Shops', value: 'cafe', icon: 'local-cafe' },
+      { label: 'Restaurants', value: 'restaurant', icon: 'restaurant' },
+      { label: 'Clothing Stores', value: 'clothing_store', icon: 'store' },
+    ].map((cat) => (
+      <TouchableOpacity
+        key={cat.value}
+        onPress={() => {
+          setShowCategoryPicker(false);
+          handleCategorySelect(cat.value);
+        }}
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingVertical: 8,
+        }}
+      >
+      <MaterialIcons name={cat.icon} size={18} color="#800000" style={{ marginRight: 8 }} />
+        <Text style={{ fontSize: 14 }}>{cat.label}</Text>
+      </TouchableOpacity>
+    ))}
+  </View>
+)}
+
          {selectedPOI && (
             <TouchableOpacity
                onPress={() => {
@@ -718,6 +871,7 @@ const handleUserLocation = () => {
         ) : (null)}
       </View>
   
+
       <MapView
         ref={mapRef}
         style={styles.map}
@@ -756,9 +910,23 @@ const handleUserLocation = () => {
         coordinate={selectedPOI}
         title="Selected POI"
         description="This is your selected point of interest."
-        pinColor="blue" // Change the pin color if you want
+        pinColor="blue" 
       />
     )}
+
+{nearbyPlaces.map((place, index) => (
+  <Marker
+    key={index}
+    coordinate={{
+      latitude: place.geometry.location.lat,
+      longitude: place.geometry.location.lng,
+    }}
+    title={place.name}
+    description={place.vicinity}
+    pinColor="purple"
+  />
+))}
+
         {!showDirections && (currentScreen === "Map") &&(
           <ShuttleBusMarker setToggleMapDirections={setToggleMapDirections} setShuttleStop={setShuttleStop} />
         )}  
