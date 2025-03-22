@@ -5,6 +5,8 @@ import * as locationUtils from '../maps/locationUtils';
 import buildingsData from '../maps/buildingCoordinates';
 import MapScreen from '../maps/MapScreen';
 
+jest.mock('react-native-vector-icons/FontAwesome5', () => 'FontAwesome5');
+
 jest.mock('@react-native-async-storage/async-storage', () => require('@react-native-async-storage/async-storage/jest/async-storage-mock') );
 jest.mock('react-native-vector-icons/FontAwesome', () => 'Icon');
 
@@ -58,34 +60,32 @@ describe('BuildingDirectionsMapScreen - Start and Destination Selection', () => 
 
       expect(startDestination.props.fillColor).toBe("green");
       expect(endDestination.props.fillColor).toBe("blue");
+      fireEvent.press(await findByTestId("search-exit-14"));
 
     });
 
   });
 
-  it('sets the current building as start when "Use My Current Location" is pressed', async () => {       
-    const { findByText, getByDisplayValue } = render(<MapScreen route={{params: "test"}} />);
+  it('sets the current building as start when "Use My Location" is pressed', async () => {       
+    const { findByText, getByDisplayValue, findByTestId } = render(<MapScreen route={{params: "test"}} />);
 
     await act(async () => {
       const directionsButton = await findByText("Building Directions");
       fireEvent.press(directionsButton);
-      expect(await findByText("Use My Current Location")).toBeTruthy();
+      expect(await findByText("Use My Location")).toBeTruthy();
   
       // Press the "Use My Current Location" button.
-      const useMyLocationButton = await findByText('Use My Current Location');
+      const useMyLocationButton = await findByText('Use My Location');
       fireEvent.press(useMyLocationButton);
-    });
 
-      
-    // Verify that the Start input is updated with "John Molson School of Business"
-    const startInput = await waitFor(() =>
-      getByDisplayValue('John Molson School of Business')
-    );
-    expect(startInput).toBeTruthy();
-    expect(getLocationSpy).toHaveBeenCalled();
+      // Verify that the Start input is updated with "John Molson School of Business"
+      const startInput = await waitFor(() =>
+        getByDisplayValue('John Molson School of Business')
+      );
+      expect(startInput).toBeTruthy();
+      expect(getLocationSpy).toHaveBeenCalled();
 
-    await act(async () => {
-      fireEvent.press(await findByText("Get Directions"));
+      fireEvent.press(await findByTestId("search-exit-30"));
       fireEvent.press(await findByText("Return"));
     });
   });

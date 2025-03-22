@@ -112,22 +112,23 @@ const ShuttleBusMarker = ({ setToggleMapDirections, setShuttleStop}) => {
     return (
         <View style={{ flex: 1}}>
             {shuttleStopCoordinates.map((stop) => (
-                <Marker 
-                    testID={`shuttle-stop-${stop.keyID}`}
-                    onPress={() => openBottomSheet(stop)}
-                    style={{ zIndex: 2 }}
-                    key={stop.keyID}
-                    coordinate={{ latitude: stop.latitude, longitude: stop.longitude }}
-                    title={stop.title}
-                    pinColor="#1D9E9A">
-                    <Callout>
-                        <View style={{ alignItems: 'center' }}>
-                            <Text style={{ fontWeight: 'bold', fontSize: 16, padding: 6 }}>
-                                {stop.title}
-                            </Text>
-                        </View>
-                    </Callout>
-                </Marker>
+                <Marker
+                testID={`shuttle-stop-${stop.keyID}`}
+                onPress={() => openBottomSheet(stop)}
+                style={{ zIndex: 2 }}
+                key={stop.keyID}
+                coordinate={{ latitude: stop.latitude, longitude: stop.longitude }}
+                title={stop.title}
+                >
+                <Icon name="bus" size={40} color="#1D9E9A" />
+                <Callout>
+                    <View style={{ alignItems: 'center', padding: 8, minWidth: 100 }}>
+                        <Text style={{ fontWeight: 'bold', fontSize: 16, textAlign: 'center' }}>
+                            {stop.title}
+                        </Text>
+                    </View>
+                </Callout>
+            </Marker>
             ))}
 
             {shuttleData?.d?.Points

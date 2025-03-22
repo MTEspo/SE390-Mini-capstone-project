@@ -21,9 +21,11 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
     flexDirection: 'column',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
+    flexDirection: 'row'
   },
   searchBar: {
+    marginLeft: 16,
     height: 40,
     borderWidth: 0.5,
     borderColor: '#ccc',
@@ -187,11 +189,11 @@ modeContainer: {
 },
 modeButton: { 
   zIndex: 1,
-  marginHorizontal: 15,
+  marginHorizontal: 21,
   backgroundColor: '#800000',
-  paddingVertical: 10,
+  paddingVertical: 5,
   paddingHorizontal: 20,
-  borderRadius: 20,
+  borderRadius: 12,
   justifyContent: 'center',
   alignItems: 'center',
   borderWidth: 0.5,
@@ -236,6 +238,7 @@ modeText: {
     borderWidth: 1,
     borderColor: 'black',
     alignSelf: 'flex-start',
+    marginBottom: 5,
   },
   useCurrentLocationText: {
     color: 'white',
@@ -255,6 +258,40 @@ modeText: {
   marginTop: 5,
   flexDirection: 'row',
   width: 'auto',
+ },
+ startPOIbutton: {
+  position: 'absolute',
+  backgroundColor: '#800000', 
+  borderRadius: 10,
+  paddingVertical: 8,
+  paddingHorizontal: 15,
+  width: 'auto',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginRight: 1,
+  marginBottom: 5,
+  borderWidth: 1,
+  borderColor: 'black',
+  marginLeft: 10,
+  right: -80,
+  top: 5
+ },
+ startPOIbuttonActive: {
+  position: 'absolute',
+  backgroundColor: 'white', 
+  borderRadius: 10,
+  paddingVertical: 8,
+  paddingHorizontal: 15,
+  width: 'auto',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginRight: 1,
+  marginBottom: 5,
+  borderWidth: 1,
+  borderColor: 'black',
+  marginLeft: 10,
+  right: -90,
+  top: 5
  }
 });
 

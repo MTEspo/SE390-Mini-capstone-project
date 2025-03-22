@@ -1,0 +1,18 @@
+appId: "com.concordia.campusapp"
+
+---
+
+- launchApp
+- tapOn: 
+    text: "Concordia_Campus_App"
+- assertVisible: "SGW"
+- tapOn: 
+    text: "SGW"
+    repeat: 3
+    delay: 5000
+- tapOn: 
+    text: "SGW"
+- doubleTapOn:
+    point: 60%,50% 
+
+
