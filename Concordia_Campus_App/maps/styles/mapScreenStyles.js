@@ -237,6 +237,7 @@ modeText: {
     borderWidth: 1,
     borderColor: 'black',
     alignSelf: 'flex-start',
+    marginBottom: 5,
   },
   useCurrentLocationText: {
     color: 'white',
