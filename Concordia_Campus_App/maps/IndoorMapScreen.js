@@ -13,6 +13,7 @@ import FloorButtons from './FloorButtons.js';
 import SearchBar from '../utilities/SearchBar.js';
 import SearchResults from '../utilities/SearchResults.js';
 import TransitScreen from './transitOptions.js';
+import RouteInfoContainer from './RouteInfoContainer.js';
 import { style } from './styles/indoorMapScreenStyles.js';
 
 const IndoorMapDirections = () => {
@@ -423,7 +424,7 @@ const IndoorMapDirections = () => {
 
     return (
         <View style={{alignItems: 'center'}}>             
-                <View style={style.inputContainer}>
+                <View testID="test-searchbar" style={style.inputContainer}>
                   {/* Searchbar for start class */}
                   <SearchBar 
                     searchText={searchStartingText} 
@@ -435,6 +436,7 @@ const IndoorMapDirections = () => {
                     searchCallback={handleSearch} 
                     startingCallback={setIsSelectingStart} 
                     resetCallback={resetStartingSearchBar}
+                    test="test-origin-sb"
                   />
 
                 {full_path && showPath && (
@@ -458,6 +460,7 @@ const IndoorMapDirections = () => {
                     searchCallback={handleSearch} 
                     startingCallback={setIsSelectingStart} 
                     resetCallback={resetDestinationSearchBar}
+                    test="test-destination-sb"
                   />
                 
                 {full_path && showPath && startLocation != destinationLocation &&(
@@ -482,7 +485,7 @@ const IndoorMapDirections = () => {
                 )}
                     
                     {startLocation && destinationLocation && !showPath && (
-                      <TouchableOpacity style={style.pathButton} onPress={onPressShowPath}>
+                      <TouchableOpacity testID="test-directions" style={style.pathButton} onPress={onPressShowPath}>
                       <Text style={style.pathButtonText}>Show Directions</Text>
                       </TouchableOpacity>)
                     }
@@ -521,7 +524,7 @@ const IndoorMapDirections = () => {
                             onPress={() => {
                               setWheelChairToggle(prev => !prev);
                             }}
-                            testID="sgwButton"
+                            testID="wheelchair"
                           >
                             <Icon name="wheelchair" size={19} color="white" />
                           </TouchableOpacity>
