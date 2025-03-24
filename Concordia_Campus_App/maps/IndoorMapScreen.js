@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, Keyboard} from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles.js'; 
 import buildingsData from './buildingCoordinates.js';
-import { getLocation } from './locationUtils.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PathOverlay from './PathOverlay.js';
 import BuildingOverlay from './BuildingOverlay.js';
@@ -365,39 +364,6 @@ const IndoorMapDirections = () => {
             setCampus('Loyola');
             setCenterOnUserLocation(false);
             setActiveButton('Loyola');
-        }
-    };
-    
-    const handleUserLocation = () => {
-        if (!userLocation) {
-            fetchUserLocation();
-            return;
-        }
-        
-        if (centerOnUserLocation) {
-            mapRef.current.animateToRegion({
-                latitude: userLocation.latitude,
-                longitude: userLocation.longitude,
-                latitudeDelta: zoomLevel,
-                longitudeDelta: zoomLevel,
-            }, 1000);
-        } else {
-            setCenterOnUserLocation(true);
-        }
-        setActiveButton('user');
-    };
-    
-    const fetchUserLocation = async () => {
-        try {
-            const location = await getLocation();
-            if(location){
-                setUserLocation(location);
-                setCenterOnUserLocation(true);
-                setIsUserLocationFetched(true);
-            }
-        } catch (error) {
-            console.error("Error fetching location:", error);
-            // Maybe show a user-friendly error message
         }
     };
 
