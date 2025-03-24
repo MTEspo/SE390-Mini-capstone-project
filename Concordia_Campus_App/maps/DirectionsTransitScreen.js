@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import MapViewDirections from 'react-native-maps-directions';
 import { API_KEY } from '@env';
 import styles from './styles/mapScreenStyles';
+import {  Marker } from 'react-native-maps';
 
 
 const DirectionsTransitScreen = ({showDirections,location ,destinationLocation}) => {
@@ -12,6 +13,7 @@ const DirectionsTransitScreen = ({showDirections,location ,destinationLocation})
       {showDirections && (
         <>
           {mode === 'DRIVING' && (
+            <View>  
             <MapViewDirections
               origin={location}
               destination={destinationLocation}
@@ -20,9 +22,19 @@ const DirectionsTransitScreen = ({showDirections,location ,destinationLocation})
               strokeColor="blue"  // Driving mode is always blue
               mode={mode}
             />
+             <Marker
+                              testID={`driving-line`}
+                              zIndex={10}
+                              coordinate={location}
+                            >
+                              <Text note style={{ color: "#800000", fontSize: 10 }}>
+                              </Text>
+                            </Marker>
+                            </View>
           )}
 
-          {mode === 'WALKING' && (           
+          {mode === 'WALKING' && (    
+             <View>      
             <MapViewDirections
               origin={location}
               destination={destinationLocation}
@@ -32,9 +44,19 @@ const DirectionsTransitScreen = ({showDirections,location ,destinationLocation})
               mode={mode}
               lineDashPattern={[5, 5]}  // Small dots (short lines with large gaps)
           />
+          <Marker
+                  testID={`walking-line`}
+                  zIndex={10}
+                  coordinate={location}
+                >
+                  <Text note style={{ color: "#800000", fontSize: 10 }}>
+                  </Text>
+                </Marker>
+          </View> 
         )}
           {/* Transit Mode */}
           {mode === 'TRANSIT' && (
+            <View>
             <MapViewDirections
               origin={location}
               destination={destinationLocation}
@@ -43,6 +65,15 @@ const DirectionsTransitScreen = ({showDirections,location ,destinationLocation})
               strokeColor="green"  // Change color for transit mode
               mode="TRANSIT"
             />
+<Marker
+                              testID={`transit-line`}
+                              zIndex={10}
+                              coordinate={location}
+                            >
+                              <Text note style={{ color: "#800000", fontSize: 10 }}>
+                              </Text>
+                </Marker>
+                  </View>
           )}
         </>
       )}

@@ -1,8 +1,9 @@
-appId: "com.concordia.campusapp"
+appId: "host.exp.Exponent"
 
 ---
-
-- launchApp
+- launchApp:
+    appId: "host.exp.Exponent"
+    clearState: false
 - tapOn: 
     text: "Concordia_Campus_App"
 - assertVisible: "SGW"
@@ -10,9 +11,128 @@ appId: "com.concordia.campusapp"
     text: "SGW"
     repeat: 3
     delay: 5000
+- assertNotVisible: 
+    id: "driving-line"
+- assertNotVisible: 
+    id: "walking-line"
+- assertNotVisible: 
+    id: "transit-line"
+- assertVisible: "Directions To LOY"
+- tapOn: 
+    text: "Directions To LOY"
+- assertVisible: 
+    text: "Distance: \\d{1,2}+ km"
+- assertVisible: 
+    text: ".*ETA: \\d{1,2}+ mins"
+- assertVisible: 
+    id: "driving-line"
+- tapOn:
+    id: "walking-button"
+- assertVisible: 
+    id: "walking-line"
+- tapOn:
+    id: "transit-button"
+- assertVisible: 
+    id: "transit-line"
+- assertVisible: "Cancel Directions"
+- tapOn: 
+    text: "Cancel Directions"
+- assertNotVisible: 
+    id: "driving-line"
+- assertNotVisible: 
+    id: "walking-line"
+- assertNotVisible: 
+    id: "transit-line"
+- assertVisible: "LOY"
+- tapOn: 
+    text: "LOY"
+- assertVisible: "Directions To SGW"
+- tapOn: 
+    text: "Directions To SGW"
+- assertVisible: 
+    text: "Distance: \\d{1,2}+ km"
+- assertVisible: 
+    text: ".*ETA: \\d{1,2}+ mins"
+- tapOn:
+    id: "driving-button"
+- assertVisible: 
+    id: "driving-line"
+- tapOn:
+    id: "walking-button"
+- assertVisible: 
+    id: "walking-line"
+- tapOn:
+    id: "transit-button"
+- assertVisible: 
+    id: "transit-line"
+- assertVisible: "Cancel Directions"
+- tapOn: 
+    text: "Cancel Directions"
 - tapOn: 
     text: "SGW"
+
+- tapOn: "Building Directions"
+- tapOn: "Select Start Building..."
+- inputText: "Henry"
+- tapOn: 
+    text: "Henry F.Hall Building"
+    repeat: 2
+- tapOn: "Select Destination Building..."
+- inputText: "John"
+- tapOn: 
+    text : "John Molson School of Business"
+    repeat : 2
+- tapOn: "Show Directions"
+- tapOn:    
+    id: "driving-button"
+- assertVisible: 
+    id: "driving-line"
+- tapOn:
+    id: "walking-button"
+- assertVisible: 
+    id: "walking-line"
+- tapOn:
+    id: "transit-button"
+- assertVisible: 
+    id: "transit-line"
+- tapOn:    
+    id: "search-exit-21"
+- tapOn:    
+    id: "search-exit-30"
+- tapOn: "Use My Location"
+- tapOn: "Select Destination Building..."
+- inputText: "Vanier Library"
+- tapOn: 
+    text: "Vanier Library Building"
+    repeat: 2
+- tapOn: "Show Directions"
+- tapOn:    
+    id: "driving-button"
+- assertVisible: 
+    id: "driving-line"
+- tapOn:
+    id: "walking-button"
+- assertVisible: 
+    id: "walking-line"
+- tapOn:
+    id: "transit-button"
+- assertVisible: 
+    id: "transit-line"
+- tapOn: "Return"
+- tapOn: "SGW"
+
 - doubleTapOn:
     point: 60%,50% 
+- scrollUntilVisible:
+    element:
+      text: "SGW Shuttle Bus Stop" 
+    direction: UP 
+    visibilityPercentage: 100 
+    centerElement: true
+- assertVisible:
+    text: "SGW Shuttle Bus Stop"
+- tapOn:
+    text: "SGW Shuttle Bus Stop"
+
 
 

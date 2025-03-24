@@ -603,12 +603,13 @@ const handleUserLocation = () => {
             onFail={(error) => console.log('Error:', error)}
           />
     <TouchableOpacity
+    testID='filterButton'
   onPress={() => setShowCategoryPicker(true)}
   style={{
     position: 'absolute',
     left: 4,
     top: 15,
-    zIndex: 2,
+    zIndex: 10,
     padding: 1,
     backgroundColor: '#fff',
     borderRadius: 20,
@@ -617,12 +618,28 @@ const handleUserLocation = () => {
   <Icon name="filter" size={20} color="#555" />
 </TouchableOpacity>
 
+<TouchableOpacity
+        testID='clear-text'
+        onPress={() => poiSearchRef.current.setAddressText('')}
+        style={{
+          position: 'absolute',
+          right: 10,
+          top: 15,
+          zIndex: 2,
+          padding: 1,
+          backgroundColor: '#fff',
+          borderRadius: 20,
+        }}
+      >
+        <Icon name="times-circle" size={20} color="#555" />
+      </TouchableOpacity>
+
 
 {nearbyPlaces.length > 0 && (
   <FlatList
   data={nearbyPlaces}
   keyExtractor={(item) => item.place_id}
-  style={{ maxHeight: 200, backgroundColor: 'white', borderRadius: 10, zIndex: 2, right: 5}}
+  style={{ maxHeight: 200, backgroundColor: 'white', borderRadius: 10, zIndex: 10, right: 5}}
   renderItem={({ item }) => {
     const distanceMeters = userLocation
       ? getDistance(
@@ -638,8 +655,10 @@ const handleUserLocation = () => {
 
     return (
       <TouchableOpacity
+        testID={item.name}
         style={{ padding: 10, borderBottomWidth: 1, borderColor: '#ccc'}}
         onPress={() => {
+          console.log(item.name)
           moveToLocation(item.geometry.location.lat, item.geometry.location.lng);
           setSelectedPOI({
             latitude: item.geometry.location.lat,
@@ -683,6 +702,7 @@ const handleUserLocation = () => {
       { label: 'Clothing Stores', value: 'clothing_store', icon: 'store' },
     ].map((cat) => (
       <TouchableOpacity
+      testID={cat.value}
         key={cat.value}
         onPress={() => {
           setShowCategoryPicker(false);

@@ -27,7 +27,7 @@ const SearchBar = ({searchText, isOrigin, placeHolderTxt, iconName, iconSize, ic
                         onChangeText={(text) => (isOrigin !== undefined) ? searchCallback(text, isOrigin) : searchCallback(text)}
                     />
                     {searchText.length > 0 && (
-                        <TouchableOpacity testID={"search-exit-" + searchText.length} onPress={() => {resetCallback()}}>
+                        <TouchableOpacity testID={"search-exit-"+searchText.length} onPress={() => {resetCallback()}}>
                             <Icon name="times-circle" size={18} color="gray" />
                         </TouchableOpacity>
                     )}
