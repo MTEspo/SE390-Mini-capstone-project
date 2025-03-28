@@ -43,7 +43,6 @@ export default function Calendar() {
     const timeDifference = eventStartTime - currentTime;
 
     if(timeDifference > 0 && timeDifference <= 20 * 60 * 1000) {
-      //console.log("Event is within 20 minutes of the current time.");
       return 1;
     }else if(timeDifference <= 0 && eventEndTime >= currentTime) {
       return 2;
@@ -70,10 +69,8 @@ export default function Calendar() {
 
     if (data?.url) {
       const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUri);
-      console.log(result.type);
       if (result.type === "success" && result.url) {
         const { access_token, refresh_token, provider_token } = extractTokens(result.url);
-        console.log("Extracted tokens:", { access_token, refresh_token, provider_token });
         await supabase.auth.setSession({
           access_token,
           refresh_token,
@@ -83,7 +80,6 @@ export default function Calendar() {
         } = await supabase.auth.getSession();
         setSession(updatedSession);
         setProviderToken(provider_token);
-        console.log("Provider token set:", provider_token);
         // Immediately fetch calendars using the token.
         getGoogleCalendars(provider_token);
       }
@@ -105,7 +101,6 @@ export default function Calendar() {
   // Fetch all calendars using pagination.
   const getGoogleCalendars = async (tokenParam) => {
     const token = tokenParam || providerToken;
-    console.log("Fetching calendars with token:", token);
     if (!token) {
       console.error("No valid token found for calendars.");
       return;
@@ -124,11 +119,9 @@ export default function Calendar() {
             },
           }
         );
-        console.log("Fetched calendars page:", response.data.items);
         fetchedCalendars = fetchedCalendars.concat(response.data.items);
         nextPageToken = response.data.nextPageToken;
       } while (nextPageToken);
-      console.log("All fetched calendars:", fetchedCalendars);
 
       // Sorting calendars with "Schedule 1" first
       fetchedCalendars.sort((a, b) => {
@@ -152,7 +145,6 @@ export default function Calendar() {
   };
 
   const getGoogleCalendarEvents = async (calendarId, token) => {
-    console.log(`Fetching events for calendar ${calendarId} with token:`, token);
     if (!token) {
       console.error("No valid token found for events.");
       return;
@@ -181,7 +173,6 @@ export default function Calendar() {
           },
         }
       );
-      console.log("Fetched events:", response.data.items);
       setEvents(response.data.items);
     } catch (error) {
       console.error("Error fetching Google Calendar events:", error);
@@ -223,14 +214,13 @@ export default function Calendar() {
                 testID="test-menu-close"
                 visible={menuVisibleState}
                 onDismiss={() => {
-                  console.log("Menu dismissed");
+             
                   setMenuVisibleState(false);
                 }}
                 anchor={
                   <Button
                     mode="outlined"
                     onPress={() => {
-                      console.log("Menu button pressed");
                       setMenuVisibleState(true);
                     }}
                   >
@@ -243,7 +233,6 @@ export default function Calendar() {
                     testID={"test"+calendar.id}
                     key={calendar.id}
                     onPress={() => {
-                      console.log("Calendar selected:", calendar.summary);
                       setSelectedCalendar(calendar);
                       getGoogleCalendarEvents(calendar.id, providerToken);
                       setMenuVisibleState(false);
