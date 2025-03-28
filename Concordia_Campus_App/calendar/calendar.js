@@ -32,6 +32,24 @@ export default function Calendar() {
   const [selectedCalendar, setSelectedCalendar] = useState(null);
   const [menuVisibleState, setMenuVisibleState] = useState(false);
   const [expandCards, setExpandCards] = useState({});
+  const moment = require('moment-timezone');
+
+  const check20Minutes = (startTime, endTime) => {
+    const currentTime = moment().tz('America/Toronto').toISOString();
+    //const currentTime = new Date("2025-03-27T20:45:00.000Z"); //If you need to demonstrate an event being within 20 mins, this line can be uncommented to simulate a specific time. Should highlight SOEN342 on the 27th.
+    //const currentTime = new Date("2025-03-27T21:45:00.000Z"); //If you need to demonstrate an event that is ongoing, this line can be uncommented to simulate a specific time. Should highlight SOEN342 on the 27th.
+    const eventStartTime = new Date(startTime);
+    const eventEndTime = new Date(endTime);
+    const timeDifference = eventStartTime - currentTime;
+
+    if(timeDifference > 0 && timeDifference <= 20 * 60 * 1000) {
+      //console.log("Event is within 20 minutes of the current time.");
+      return 1;
+    }else if(timeDifference <= 0 && eventEndTime >= currentTime) {
+      return 2;
+    }
+    return 0;
+  }
   const toggleExpandCard = (eventID) => {
     setExpandCards((otherStates) => ({
       [eventID]: !otherStates[eventID],
@@ -193,6 +211,8 @@ export default function Calendar() {
     return unsubscribe;
   }, [navigation, providerToken]);
 
+
+
   return (
     <Provider>
       <View style={styles.container}>
@@ -236,7 +256,15 @@ export default function Calendar() {
             <ScrollView style={styles.eventList} contentContainerStyle={styles.eventListContent}>
               {events.length > 0 ? (
                 events.map((event) => (
-                  <Card key={event.id} style={styles.card}>
+                  <Card key={event.id} style={[styles.card,  (() => {
+                    const checkResult = check20Minutes(event.start.dateTime || event.start.date, event.end.dateTime || event.end.date);
+                    if (checkResult === 1) {
+                      return { backgroundColor: '#edaf02' }; 
+                    } else if (checkResult === 2) {
+                      return { backgroundColor: '#36c939' }; 
+                    }
+                    return {}; 
+                  })()]}>
                     <Pressable onPress={() => toggleExpandCard(event.id)}>
                       <Card.Content style={styles.cardContent}>
                         <Text variant="titleMedium">{event.summary}</Text>
