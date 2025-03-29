@@ -35,7 +35,7 @@ export default function Calendar() {
   const moment = require('moment-timezone');
 
   const check20Minutes = (startTime, endTime) => {
-    const currentTime = moment().tz('America/Toronto').toISOString();
+    const currentTime = new Date(moment().tz('America/Toronto'));
     //const currentTime = new Date("2025-03-27T20:45:00.000Z"); //If you need to demonstrate an event being within 20 mins, this line can be uncommented to simulate a specific time. Should highlight SOEN342 on the 27th.
     //const currentTime = new Date("2025-03-27T21:45:00.000Z"); //If you need to demonstrate an event that is ongoing, this line can be uncommented to simulate a specific time. Should highlight SOEN342 on the 27th.
     const eventStartTime = new Date(startTime);
@@ -245,7 +245,7 @@ export default function Calendar() {
             <ScrollView style={styles.eventList} contentContainerStyle={styles.eventListContent}>
               {events.length > 0 ? (
                 events.map((event) => (
-                  <Card key={event.id} style={[styles.card,  (() => {
+                  <Card testID={"test-"+event.summary} key={event.id} style={[styles.card,  (() => {
                     const checkResult = check20Minutes(event.start.dateTime || event.start.date, event.end.dateTime || event.end.date);
                     if (checkResult === 1) {
                       return { backgroundColor: '#edaf02' }; 
@@ -363,7 +363,6 @@ const styles = StyleSheet.create({
     alignSelf: "center", 
     width: "90%",  
   },
-  
   cardContent: {
     paddingTop: 10,
   },

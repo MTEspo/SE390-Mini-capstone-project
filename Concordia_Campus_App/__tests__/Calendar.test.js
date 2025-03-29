@@ -55,6 +55,19 @@ jest.mock("expo-location", () => ({
   getCurrentPositionAsync: jest.fn(),
 }));
 
+jest.mock('moment-timezone', () => {
+  const actualMoment = jest.requireActual('moment-timezone');
+
+  // Create a mock function that always returns the fixed date
+  const mockMoment = () => actualMoment.utc('2025-03-27T21:45:00.000Z');
+  
+  // Mock tz() method to return the same fixed date
+  mockMoment.tz = jest.fn(() => actualMoment.utc('2025-03-27T21:45:00.000Z'));
+
+  return mockMoment;
+});
+
+
 describe("Calendar Tests That Should Pass", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -423,5 +436,75 @@ describe("Calendar Tests That Should Pass", () => {
     })
 
     expect(mockedNavigate).not.toHaveBeenCalled();
+  });
+
+  test("calendar highlights the correct color for class in-progress", async () => {
+    const { findByTestId, findByText } = render(<Calendar />);
+
+    axios.get
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{
+                       id: "mock-id1", 
+                       summary: "Schedule 1"
+                      },
+                      {
+                        id: "mock-id2",
+                        summary: "schedule 2"
+                      }
+                     ], 
+                       nextPageToken: null}}
+    ))
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "Event 1", 
+                       start: {dateTime: "2025-03-27T21:00:00.000Z"}, 
+                       end: {dateTime: "2025-03-27T23:00:00.000Z"} }]}}
+    ));
+
+    await act(async () => {
+      fireEvent.press(await findByText("Sign in with Google"));
+      
+      const calendarButton = await findByText("Schedule 1");
+      expect(calendarButton).toBeTruthy();
+    })
+
+    const calendarEvent = await findByTestId("test-Event 1");
+    expect(calendarEvent.props.style.length).toBe(2);
+
+  });
+
+  test("calendar highlights the correct color for class in-progress", async () => {
+    const { findByTestId, findByText } = render(<Calendar />);
+
+    axios.get
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{
+                       id: "mock-id1", 
+                       summary: "Schedule 1"
+                      },
+                      {
+                        id: "mock-id2",
+                        summary: "schedule 2"
+                      }
+                     ], 
+                       nextPageToken: null}}
+    ))
+    .mockImplementationOnce(() => Promise.resolve(
+      {data: {items: [{id: "mock-id", 
+                       summary: "Event 1", 
+                       start: {dateTime: "2025-03-27T22:00:00.000Z"}, 
+                       end: {dateTime: "2025-03-27T23:00:00.000Z"} }]}}
+    ));
+
+    await act(async () => {
+      fireEvent.press(await findByText("Sign in with Google"));
+      
+      const calendarButton = await findByText("Schedule 1");
+      expect(calendarButton).toBeTruthy();
+    })
+
+    const calendarEvent = await findByTestId("test-Event 1");
+    expect(calendarEvent.props.style.length).toBe(2);
+
   });
 });
