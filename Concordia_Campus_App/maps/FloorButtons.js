@@ -19,7 +19,8 @@ const FloorButtons = ({ selectedFloor, onFloorSelect, startLocation }) => {
                     const isSelected = selectedFloor === floor;
                     
                     return (
-                        <TouchableOpacity 
+                        <TouchableOpacity
+                            testID={"test-floor-"+index} 
                             key={index} 
                             style={[styles.button, isSelected && styles.selectedButton]} 
                             onPress={() => onFloorSelect(parseInt(floor.replace("floor-", "")))}

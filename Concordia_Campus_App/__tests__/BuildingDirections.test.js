@@ -44,6 +44,7 @@ describe('BuildingDirectionsMapScreen - Start and Destination Selection', () => 
       fireEvent.press(directionsButton);
       
       const startInput = getByPlaceholderText('Select Start Building...');
+      fireEvent(startInput, 'focus')
       fireEvent.changeText(startInput, startBuildingName);
       
       const startResult = await waitFor(() => findByText(startBuildingName));

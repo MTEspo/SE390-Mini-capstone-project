@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, Keyboard} from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import styles from './styles/mapScreenStyles.js'; 
 import buildingsData from './buildingCoordinates.js';
-import { getLocation } from './locationUtils.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PathOverlay from './PathOverlay.js';
 import BuildingOverlay from './BuildingOverlay.js';
@@ -13,6 +12,7 @@ import FloorButtons from './FloorButtons.js';
 import SearchBar from '../utilities/SearchBar.js';
 import SearchResults from '../utilities/SearchResults.js';
 import TransitScreen from './transitOptions.js';
+import RouteInfoContainer from './RouteInfoContainer.js';
 import { style } from './styles/indoorMapScreenStyles.js';
 
 const IndoorMapDirections = () => {
@@ -366,39 +366,6 @@ const IndoorMapDirections = () => {
             setActiveButton('Loyola');
         }
     };
-    
-    const handleUserLocation = () => {
-        if (!userLocation) {
-            fetchUserLocation();
-            return;
-        }
-        
-        if (centerOnUserLocation) {
-            mapRef.current.animateToRegion({
-                latitude: userLocation.latitude,
-                longitude: userLocation.longitude,
-                latitudeDelta: zoomLevel,
-                longitudeDelta: zoomLevel,
-            }, 1000);
-        } else {
-            setCenterOnUserLocation(true);
-        }
-        setActiveButton('user');
-    };
-    
-    const fetchUserLocation = async () => {
-        try {
-            const location = await getLocation();
-            if(location){
-                setUserLocation(location);
-                setCenterOnUserLocation(true);
-                setIsUserLocationFetched(true);
-            }
-        } catch (error) {
-            console.error("Error fetching location:", error);
-            // Maybe show a user-friendly error message
-        }
-    };
 
     // Resets the start class search bar 
     const resetStartingSearchBar = () => {
@@ -423,7 +390,7 @@ const IndoorMapDirections = () => {
 
     return (
         <View style={{alignItems: 'center'}}>             
-                <View style={style.inputContainer}>
+                <View testID="test-searchbar" style={style.inputContainer}>
                   {/* Searchbar for start class */}
                   <SearchBar 
                     searchText={searchStartingText} 
@@ -435,6 +402,7 @@ const IndoorMapDirections = () => {
                     searchCallback={handleSearch} 
                     startingCallback={setIsSelectingStart} 
                     resetCallback={resetStartingSearchBar}
+                    test="test-origin-sb"
                   />
 
                 {full_path && showPath && (
@@ -458,6 +426,7 @@ const IndoorMapDirections = () => {
                     searchCallback={handleSearch} 
                     startingCallback={setIsSelectingStart} 
                     resetCallback={resetDestinationSearchBar}
+                    test="test-destination-sb"
                   />
                 
                 {full_path && showPath && startLocation != destinationLocation &&(
@@ -482,7 +451,7 @@ const IndoorMapDirections = () => {
                 )}
                     
                     {startLocation && destinationLocation && !showPath && (
-                      <TouchableOpacity style={style.pathButton} onPress={onPressShowPath}>
+                      <TouchableOpacity testID="test-directions" style={style.pathButton} onPress={onPressShowPath}>
                       <Text style={style.pathButtonText}>Show Directions</Text>
                       </TouchableOpacity>)
                     }
@@ -521,7 +490,7 @@ const IndoorMapDirections = () => {
                             onPress={() => {
                               setWheelChairToggle(prev => !prev);
                             }}
-                            testID="sgwButton"
+                            testID="wheelchair"
                           >
                             <Icon name="wheelchair" size={19} color="white" />
                           </TouchableOpacity>
