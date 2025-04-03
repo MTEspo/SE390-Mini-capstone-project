@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -132,42 +132,44 @@
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">78x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">60x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">60x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -205,27 +207,28 @@
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import indoorFloorData from "./indoorFloorCoordinates";
 &nbsp;
-const FloorButtons = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> selectedFloor, onFloorSelect, startLocation }) =&gt; {</span>
+const FloorButtons = ({ selectedFloor, onFloorSelect, startLocation }) =&gt; {
 &nbsp;
 &nbsp;
-    const getBuildingByName = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ame) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        return indoorFloorData.buildings.find(<span class="fstat-no" title="function not covered" >bu</span>ilding =&gt; <span class="cstat-no" title="statement not covered" >building.name === name)</span>;</span>
+    const getBuildingByName = (name) =&gt; {
+        return indoorFloorData.buildings.find(building =&gt; building.name === name);
     };
 &nbsp;
-    const building = <span class="cstat-no" title="statement not covered" >getBuildingByName(startLocation);</span>
-    const floors = <span class="cstat-no" title="statement not covered" >Object.keys(building).filter(<span class="fstat-no" title="function not covered" >ke</span>y =&gt; <span class="cstat-no" title="statement not covered" >key.startsWith("floor-"))</span>;</span>
+    const building = getBuildingByName(startLocation);
+    const floors = Object.keys(building).filter(key =&gt; key.startsWith("floor-"));
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return (</span>
+    return (
         &lt;View style={styles.wrapper}&gt;
             &lt;View style={styles.buttonContainer}&gt;
-                {floors.map(<span class="fstat-no" title="function not covered" >(f</span>loor, index) =&gt; {
-                    const isSelected = <span class="cstat-no" title="statement not covered" >selectedFloor === floor;</span>
+                {floors.map((floor, index) =&gt; {
+                    const isSelected = selectedFloor === floor;
                     
-<span class="cstat-no" title="statement not covered" >                    return (</span>
-                        &lt;TouchableOpacity 
+                    return (
+                        &lt;TouchableOpacity
+                            testID={"test-floor-"+index} 
                             key={index} 
                             style={[styles.button, isSelected &amp;&amp; styles.selectedButton]} 
-                            onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onFloorSelect(parseInt(floor.replace("floor-", "")))}</span>
+                            onPress={() =&gt; onFloorSelect(parseInt(floor.replace("floor-", "")))}
                         &gt;
                             &lt;Text style={styles.buttonText}&gt;{floor.replace("floor-", " ")}&lt;/Text&gt;
                         &lt;/TouchableOpacity&gt;
@@ -236,7 +239,7 @@ const FloorButtons = <span class="cstat-no" title="statement not covered" ><span
     );
 };
 &nbsp;
-const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
+const styles = StyleSheet.create({
     wrapper: {
         position: "absolute",
         bottom: 10,
@@ -277,7 +280,7 @@ export default FloorButtons;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-22T22:07:39.753Z
+                at 2025-04-03T18:35:43.089Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.75% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>7/16</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.5% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -120,40 +120,40 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">44x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">46x</span>
+<span class="cline-any cline-yes">208x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">46x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">46x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">58x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -178,28 +178,28 @@ const SearchResults = ({searchableData, isOrigin, handleOriginCallback, handleDe
         &lt;&gt;
             &lt;FlatList
                 style={{ marginTop: 5, width: '100%', backgroundColor: 'white', borderRadius: 8 }}
-                data={(screen === "indoor") ? <span class="branch-0 cbranch-no" title="branch not covered" >searchableData.flatMap(<span class="fstat-no" title="function not covered" >bu</span>ilding =&gt; </span>
-<span class="cstat-no" title="statement not covered" >                    building.rooms.map(<span class="fstat-no" title="function not covered" >ro</span>om =&gt; (<span class="cstat-no" title="statement not covered" >{ room, building })</span>))</span> :
+                data={(screen === "indoor") ? searchableData.flatMap(building =&gt; 
+                    building.rooms.map(room =&gt; ({ room, building }))) :
                     searchableData
                 }
                 renderItem={({ item, index, separators }) =&gt; {
                     const totalItems = searchableData.flatMap(building =&gt; 
-                        (screen === "indoor") ? <span class="branch-0 cbranch-no" title="branch not covered" >building.rooms.map(<span class="fstat-no" title="function not covered" >ro</span>om =&gt; (<span class="cstat-no" title="statement not covered" >{ room, building })</span>) </span>:
+                        (screen === "indoor") ? building.rooms.map(room =&gt; ({ room, building })) :
                        searchableData 
                     ).length;
-                        const showSeparator = totalItems &gt; 1 &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >index &lt; totalItems - 1;</span>
+                        const showSeparator = totalItems &gt; 1 &amp;&amp; index &lt; totalItems - 1;
                              
                         return (
                             &lt;TouchableOpacity 
-                                onPress={() =&gt; (isOrigin !== undefined) ? (<span class="branch-0 cbranch-no" title="branch not covered" >isOrigin ? handleOriginCallback(item) : handleDestinationCallback(item))</span> : searchCallback(item, item.markerCoord, item.name)}&gt;
+                                onPress={() =&gt; (isOrigin !== undefined) ? (isOrigin ? handleOriginCallback(item) : handleDestinationCallback(item)) : searchCallback(item, item.markerCoord, item.name)}&gt;
                                 &lt;View style={style.item}&gt;
-                                    &lt;Text style={style.title}&gt;{(screen === "indoor") ? <span class="branch-0 cbranch-no" title="branch not covered" >item.room </span>: item.name}&lt;/Text&gt;
+                                    &lt;Text style={style.title}&gt;{(screen === "indoor") ? item.room : item.name}&lt;/Text&gt;
                                 &lt;/View&gt;
-                                {showSeparator &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >&lt;View style={style.separator} /&gt;}</span>
+                                {showSeparator &amp;&amp; &lt;View style={style.separator} /&gt;}
                             &lt;/TouchableOpacity&gt;
                         );
                 }}
-                keyExtractor={(item, index) =&gt; (screen === "indoor") ? <span class="branch-0 cbranch-no" title="branch not covered" >`${item.building.names[0]}-${index}` </span>: item.name}
+                keyExtractor={(item, index) =&gt; (screen === "indoor") ? `${item.building.names[0]}-${index}` : item.name}
                 maxHeight={115}
             /&gt;
         &lt;/&gt;
@@ -229,7 +229,7 @@ export default SearchResults;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-22T22:07:39.753Z
+                at 2025-04-03T18:35:43.089Z
             </div>
         <script src="../prettify.js"></script>
         <script>

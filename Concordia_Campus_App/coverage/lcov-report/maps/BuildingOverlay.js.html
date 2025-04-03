@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -92,21 +92,21 @@
 <a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">44x</span>
+<span class="cline-any cline-yes">44x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">44x</span>
+<span class="cline-any cline-yes">44x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -118,21 +118,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 import { Overlay } from 'react-native-maps';
 &nbsp;
-const BuildingOverlay = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> coordinates, image, opacity }) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  if (!coordinates || !image) {</span>
-<span class="cstat-no" title="statement not covered" >    return null;</span>
+const BuildingOverlay = ({ coordinates, image, opacity }) =&gt; {
+  if (!coordinates || !image) {
+    return null;
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Overlay
       bounds={[
         [
-          Math.min(...coordinates.map(<span class="fstat-no" title="function not covered" >(c</span>oord) =&gt; <span class="cstat-no" title="statement not covered" >coord.latitude)</span>),
-          Math.min(...coordinates.map(<span class="fstat-no" title="function not covered" >(c</span>oord) =&gt; <span class="cstat-no" title="statement not covered" >coord.longitude)</span>),
+          Math.min(...coordinates.map((coord) =&gt; coord.latitude)),
+          Math.min(...coordinates.map((coord) =&gt; coord.longitude)),
         ],
         [
-          Math.max(...coordinates.map(<span class="fstat-no" title="function not covered" >(c</span>oord) =&gt; <span class="cstat-no" title="statement not covered" >coord.latitude)</span>),
-          Math.max(...coordinates.map(<span class="fstat-no" title="function not covered" >(c</span>oord) =&gt; <span class="cstat-no" title="statement not covered" >coord.longitude)</span>),
+          Math.max(...coordinates.map((coord) =&gt; coord.latitude)),
+          Math.max(...coordinates.map((coord) =&gt; coord.longitude)),
         ],
       ]}
       image={image}
@@ -148,7 +148,7 @@ export default BuildingOverlay;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-22T22:07:39.753Z
+                at 2025-04-03T18:35:43.089Z
             </div>
         <script src="../prettify.js"></script>
         <script>
