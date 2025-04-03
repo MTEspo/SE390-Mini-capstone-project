@@ -375,12 +375,11 @@ const handleUserLocation = () => {
   
     const { latitude, longitude } = userLocation;
     const radius = 5000; 
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${category}&key=${API_KEY}`;
-  
+
     try {
-      const response = await fetch(url);
+      const response = await fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${category}&key=${API_KEY}`);
       const data = await response.json();
-  
+      
       if (data.status === 'OK') {
         setNearbyPlaces(data.results);
       } else {
@@ -599,10 +598,10 @@ const handleUserLocation = () => {
                 setDistance(`${distanceKm} km`);
               }
             }}
-            
             onFail={(error) => console.log('Error:', error)}
           />
     <TouchableOpacity
+  testID='test-filter'
   onPress={() => setShowCategoryPicker(true)}
   style={{
     position: 'absolute',
@@ -635,6 +634,7 @@ const handleUserLocation = () => {
       : null;
 
     const distanceKm = distanceMeters !== null ? (distanceMeters / 1000).toFixed(2) : 'N/A';
+    console.log(distanceKm);
 
     return (
       <TouchableOpacity
