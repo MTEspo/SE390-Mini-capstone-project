@@ -17,7 +17,6 @@ const DirectionsDisplay = ({ stop }) => {
     try {
       const response = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${originCoords}&destination=${destCoords}&key=${API_KEY}`);
       const data = await response.json();
-      console.log(data.routes[0].legs[0].steps);
 
       if (data.routes.length) {
         const steps = data.routes[0].legs[0].steps.map((step, index) => ({
@@ -28,6 +27,7 @@ const DirectionsDisplay = ({ stop }) => {
             .trim(),
           distance: step.distance.text,
         }));
+        console.log(steps);
         setDirections(steps);
       }
     } catch (error) {

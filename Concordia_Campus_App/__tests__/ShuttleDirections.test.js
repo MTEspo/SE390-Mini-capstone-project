@@ -18,13 +18,27 @@ jest.mock('react-native-maps-directions', () => {
 
 global.fetch = jest.fn(() => 
     Promise.resolve({
-      json: () => Promise.resolve([{
-        "distance": {
-          "text": "0.1 km",
-          "value": 0
-        },
-        "html_instructions": "Head <b>northwest</b> on <b>Street</b> toward <b>Street 2</b>",
-      }]),
+      json: () => Promise.resolve({
+          "routes": [{
+            "legs": [{
+              "steps": [{
+                "distance": {
+                  "text": "0.1 km",
+                  "value": 0
+                },
+                "html_instructions": "Head <b>northwest</b> on <b>Street</b> toward <b>Street 2</b>",
+              },
+              {
+                "distance": {
+                  "text": "0.1 km",
+                  "value": 0
+                },
+                "html_instructions": "Head <b>northwest</b> on <b>Street</b> toward <b>Street 2</b>",
+              }
+            ]
+            }]
+          }]
+      }),
     })
   );
 
@@ -35,7 +49,9 @@ describe("Bottom Sheet Components for Shuttle Bus tests", () =>{
 
     test("it renderes correctly", async () => {
         const { getByText } = await waitFor(() => render(<DirectionsDisplay stop={selectedMockStop} />)); 
-        expect(getByText("Directions")).toBeTruthy();
+        await act(() =>{
+          expect(getByText("Directions")).toBeTruthy();
+        })
     });
 
     test("render full schedule", () =>{
