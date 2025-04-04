@@ -666,7 +666,6 @@ const handleUserLocation = () => {
     <FlatList
       data={nearbyPlaces}
       keyExtractor={(item) => item.place_id}
-      contentContainerStyle={{ paddingTop: 30 }} 
       style={{
         maxHeight: 200,
         borderRadius: 10,
