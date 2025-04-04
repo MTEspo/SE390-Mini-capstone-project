@@ -35,8 +35,8 @@ export default function Calendar() {
   const moment = require('moment-timezone');
 
   const check20Minutes = (startTime, endTime) => {
-    const currentTime = new Date(moment().tz('America/Toronto'));
-    //const currentTime = new Date("2025-04-03T20:45:00.000Z"); //If you need to demonstrate an event being within 20 mins, this line can be uncommented to simulate a specific time. Should highlight SOEN342 on the 27th.
+    //const currentTime = new Date(moment().tz('America/Toronto'));
+    const currentTime = new Date("2025-04-03T20:45:00.000Z"); //If you need to demonstrate an event being within 20 mins, this line can be uncommented to simulate a specific time. Should highlight SOEN342 on the 27th.
     //const currentTime = new Date("2025-03-27T21:45:00.000Z"); //If you need to demonstrate an event that is ongoing, this line can be uncommented to simulate a specific time. Should highlight SOEN342 on the 27th.
     const eventStartTime = new Date(startTime);
     const eventEndTime = new Date(endTime);
