@@ -3,7 +3,7 @@ import { View, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-const SearchBar = ({searchText, isOrigin, placeHolderTxt, iconName, iconSize, iconColor, searchCallback, startingCallback, resetCallback}) => {
+const SearchBar = ({searchText, isOrigin, placeHolderTxt, iconName, iconSize, iconColor, searchCallback, startingCallback, resetCallback, test}) => {
     return (
         <>
             <View style={style.inputRow}>
@@ -20,6 +20,7 @@ const SearchBar = ({searchText, isOrigin, placeHolderTxt, iconName, iconSize, ic
                 
                 <View style={style.textInputWrapper}>
                     <TextInput
+                        testID={test}
                         style={style.input}
                         placeholder={placeHolderTxt}
                         value={searchText}

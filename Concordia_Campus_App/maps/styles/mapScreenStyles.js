@@ -192,7 +192,7 @@ modeButton: {
   marginHorizontal: 21,
   backgroundColor: '#800000',
   paddingVertical: 5,
-  paddingHorizontal: 20,
+  paddingHorizontal: 15,
   borderRadius: 12,
   justifyContent: 'center',
   alignItems: 'center',

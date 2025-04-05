@@ -56,6 +56,9 @@ const MapScreen = ({route}) => {
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
   const poiSearchRef = useRef();
+  
+
+
 
   const handleReturn = () => {
     setCurrentScreen("Map");
@@ -375,12 +378,11 @@ const handleUserLocation = () => {
   
     const { latitude, longitude } = userLocation;
     const radius = 5000; 
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${category}&key=${API_KEY}`;
-  
+
     try {
-      const response = await fetch(url);
+      const response = await fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${category}&key=${API_KEY}`);
       const data = await response.json();
-  
+      
       if (data.status === 'OK') {
         setNearbyPlaces(data.results);
       } else {
@@ -599,11 +601,16 @@ const handleUserLocation = () => {
                 setDistance(`${distanceKm} km`);
               }
             }}
+            onChangeText={(text) => {
+              setNearbyPlaces([]);          
+              setIsTypingInSearchBar(true);  
+            }}
             
             onFail={(error) => console.log('Error:', error)}
           />
     <TouchableOpacity
-  onPress={() => setShowCategoryPicker(true)}
+  testID='test-filter'
+  onPress={() => setShowCategoryPicker(prev => !prev)}
   style={{
     position: 'absolute',
     left: 4,
@@ -617,47 +624,89 @@ const handleUserLocation = () => {
   <Icon name="filter" size={20} color="#555" />
 </TouchableOpacity>
 
-
 {nearbyPlaces.length > 0 && (
-  <FlatList
-  data={nearbyPlaces}
-  keyExtractor={(item) => item.place_id}
-  style={{ maxHeight: 200, backgroundColor: 'white', borderRadius: 10, zIndex: 2, right: 5}}
-  renderItem={({ item }) => {
-    const distanceMeters = userLocation
-      ? getDistance(
-          { latitude: userLocation.latitude, longitude: userLocation.longitude },
-          {
-            latitude: item.geometry.location.lat,
-            longitude: item.geometry.location.lng,
-          }
-        )
-      : null;
+  <View
+    style={{
+      position: 'absolute',
+      top: 60, 
+      left: 10,
+      right: 10,
+      zIndex: 3,
+      backgroundColor: 'white',
+      borderRadius: 10,
+      paddingTop: 5,
+      paddingBottom: 10,
+      elevation: 5,
+    }}
+  >
+    {/* Cancel Button*/}
+    <TouchableOpacity
+      onPress={() => {
+        setNearbyPlaces([]);
+        setSelectedPOICategory(null);
+      }}
+      style={{
+        position: 'absolute',
+        top: 5,
+        right: 5,
+        zIndex: 10,
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        backgroundColor: '#eee',
+        borderRadius: 20,
+        width: 24,
+        height: 24,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#555' }}>✕</Text>
+    </TouchableOpacity>
 
-    const distanceKm = distanceMeters !== null ? (distanceMeters / 1000).toFixed(2) : 'N/A';
+    <FlatList
+      data={nearbyPlaces}
+      keyExtractor={(item) => item.place_id}
+      style={{
+        maxHeight: 200,
+        borderRadius: 10,
+      }}
+      renderItem={({ item }) => {
+        const distanceMeters = userLocation
+          ? getDistance(
+              { latitude: userLocation.latitude, longitude: userLocation.longitude },
+              {
+                latitude: item.geometry.location.lat,
+                longitude: item.geometry.location.lng,
+              }
+            )
+          : null;
 
-    return (
-      <TouchableOpacity
-        style={{ padding: 10, borderBottomWidth: 1, borderColor: '#ccc'}}
-        onPress={() => {
-          moveToLocation(item.geometry.location.lat, item.geometry.location.lng);
-          setSelectedPOI({
-            latitude: item.geometry.location.lat,
-            longitude: item.geometry.location.lng,
-          });
-          poiSearchRef.current?.setAddressText(item.name);
-          setNearbyPlaces([]); 
-        }}
-      >
-        <Text style={{ fontWeight: 'bold' }}>
-          {item.name} ({distanceKm} km)
-        </Text>
-        <Text>{item.vicinity}</Text>
-      </TouchableOpacity>
-    );
-  }}
-/>
+        const distanceKm = distanceMeters !== null ? (distanceMeters / 1000).toFixed(2) : 'N/A';
+
+        return (
+          <TouchableOpacity
+            style={{ padding: 10, borderBottomWidth: 1, borderColor: '#ccc' }}
+            onPress={() => {
+              moveToLocation(item.geometry.location.lat, item.geometry.location.lng);
+              setSelectedPOI({
+                latitude: item.geometry.location.lat,
+                longitude: item.geometry.location.lng,
+              });
+              poiSearchRef.current?.setAddressText(item.name);
+              setNearbyPlaces([]);
+            }}
+          >
+            <Text style={{ fontWeight: 'bold' }}>{item.name} ({distanceKm} km)</Text>
+            <Text>{item.vicinity}</Text>
+          </TouchableOpacity>
+        );
+      }}
+    />
+  </View>
 )}
+
+
+
 
 {showCategoryPicker && (
   <View
@@ -688,6 +737,7 @@ const handleUserLocation = () => {
           setShowCategoryPicker(false);
           handleCategorySelect(cat.value);
         }}
+        
         style={{
           flexDirection: 'row',
           alignItems: 'center',

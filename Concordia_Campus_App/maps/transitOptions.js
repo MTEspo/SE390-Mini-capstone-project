@@ -122,7 +122,7 @@ const TransitScreen = ({showDirections, campus, routeData, origin, destination, 
             <TouchableOpacity
               testID="walking-button"
               onPress={() => setMode('WALKING')} 
-              style={[styles.modeButton,{ marginHorizontal: 55}, mode === 'WALKING' && { backgroundColor: 'blue' }]}>
+              style={[styles.modeButton,{ marginHorizontal: 35, paddingHorizontal:27}, mode === 'WALKING' && { backgroundColor: 'blue' }]}>
               <FontAwesome5 name="walking" size={40} color="white" />
             </TouchableOpacity>
 
