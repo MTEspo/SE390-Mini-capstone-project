@@ -1,8 +1,11 @@
-appId: "com.concordia.campusapp"
+appId: "host.exp.Exponent"
 
 ---
-
-- launchApp
+- launchApp:
+    appId: "host.exp.Exponent"
+    clearState: false
+- tapOn: 
+    text: "Concordia_Campus_App"
 - tapOn: 
     text: "SGW"
     repeat: 2
@@ -10,4 +13,23 @@ appId: "com.concordia.campusapp"
     id: "polygon-0"
 - assertVisible: 
     id: "polygon-marker-0"
+- tapOn: 
+    id: "polygon-marker-0"
+- assertVisible: "John Molson School of Business"
+- assertVisible: "1450 Rue Guy, Montréal, QC H3H 0A1"  
+- tapOn: 
+    id: "closeButton"
+- assertNotVisible: "building-popup"
+- tapOn: 
+    text: "LOY"
+    repeat: 2
+- assertVisible: 
+    id: "polygon-26"
+- tapOn: 
+    id: "polygon-marker-26"
+- assertVisible: "Vanier Library Building"
+- assertVisible: "7141 Sherbrooke St W, Montreal, Quebec H4B 1R6"  
+- tapOn: 
+    id: "closeButton"  
+- assertNotVisible: "building-popup"
 

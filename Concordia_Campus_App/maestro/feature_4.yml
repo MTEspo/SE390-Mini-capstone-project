@@ -1,0 +1,190 @@
+appId: "host.exp.Exponent"
+
+---
+- launchApp:
+    appId: "host.exp.Exponent"
+    clearState: false
+- tapOn: 
+    text: "Concordia_Campus_App"
+- tapOn:
+    point: 10%,10% 
+    delay: 5000
+    repeat: 2
+- assertVisible: "Indoor Directions Map"
+- tapOn: 
+    text: "Indoor Directions Map"
+- tapOn: 
+    text: "Choose starting class"
+- inputText: "H-"
+- assertVisible: "H-110"
+- tapOn: 
+    text: "return"
+- tapOn: 
+    text: "H-110"
+    repeat: 2
+- tapOn: 
+    text: "Choose destination"
+- inputText: "H-"
+- tapOn: 
+    text: "H-831"
+    repeat: 2
+- tapOn:
+    text: "Show Directions"
+    repeat: 2
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-2-Henry F.Hall Building"
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-8-Henry F.Hall Building"
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-9-Henry F.Hall Building"
+- assertNotVisible: "You"
+- assertNotVisible: "Go To"
+- tapOn:
+    id: "close-start"
+- tapOn:
+    id: "close-dest"
+- tapOn: 
+    text: "Choose starting class"
+- inputText: "H-9"
+- assertVisible: "H-937"
+- tapOn: 
+    text: "return"
+- tapOn: 
+    text: "H-937"
+    repeat: 2
+- tapOn: 
+    text: "Choose destination"
+- inputText: "H-"
+- assertVisible: "H-110"
+- tapOn: 
+    text: "H-110"
+    repeat: 2
+- tapOn:
+    text: "Show Directions"
+- tapOn:
+    point: 50%, 50%
+    repeat: 2
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-8-Henry F.Hall Building"
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-2-Henry F.Hall Building"
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-1-Henry F.Hall Building"
+- tapOn:
+    id: "close-start"
+- tapOn:
+    id: "close-dest"
+- assertNotVisible: "You"
+- assertNotVisible: "Go To"
+
+- tapOn: 
+    text: "Choose starting class"
+- inputText: "H-8"
+- assertVisible: "H-820"
+- tapOn: 
+    text: "return"
+- tapOn: 
+    text: "H-820"
+    repeat: 2
+- tapOn: 
+    text: "Choose destination"
+- inputText: "VL-"
+- assertVisible: "VL-122"
+- tapOn: 
+    text: "VL-122"
+    repeat: 2
+- tapOn:
+    text: "Show Directions"
+
+- assertVisible: ".*Driving.*"
+- assertVisible: ".*Walking.*"
+- assertVisible: ".*Transit.*"
+
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-2-Henry F.Hall Building"
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-1-Henry F.Hall Building"
+- assertVisible: 
+    id: "walking-line"
+- tapOn: "Driving"
+- assertVisible: 
+    id: "driving-line"
+- tapOn: "Transit"
+- assertVisible: 
+    id: "transit-line"
+- tapOn: "LOY"
+- tapOn:
+    point: 50%, 50%
+    repeat: 2
+- tapOn:
+    id: "close-start"
+- tapOn:
+    id: "close-dest"
+- tapOn: "SGW"
+- tapOn: 
+    text: "Choose starting class"
+- inputText: "H-"
+- assertVisible: "H-110"
+- tapOn: 
+    text: "return"
+- tapOn: 
+    text: "H-110"
+    repeat: 2
+- tapOn: 
+    text: "Choose destination"
+- inputText: "H-"
+- tapOn: 
+    text: "H-831"
+    repeat: 2
+- tapOn:
+    text: "Show Directions"
+- tapOn:   
+    id: "wheelChairIcon"
+- tapOn:
+    point: 50%,50%
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-2-Henry F.Hall Building"
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-8-Henry F.Hall Building"
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-9-Henry F.Hall Building"
+- assertNotVisible: "You"
+- assertNotVisible: "Go To"
+- tapOn:   
+    id: "wheelChairIcon"
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-2-Henry F.Hall Building"
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-8-Henry F.Hall Building"
+- assertVisible: "You"
+- assertVisible: "Go To"
+- tapOn:
+    id: "floor-button-9-Henry F.Hall Building"
+- assertNotVisible: "You"
+- assertNotVisible: "Go To"
