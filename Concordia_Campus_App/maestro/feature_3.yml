@@ -1,12 +1,59 @@
-appId: "com.concordia.campusapp"
+appId: "host.exp.Exponent"
 
 ---
-
-- launchApp
+- launchApp:
+    appId: "host.exp.Exponent"
+    clearState: false
 - tapOn: 
     text: "Concordia_Campus_App"
 - tapOn:
-    point: 25,100 
+    point: 10%,10% 
+    delay: 5000
+    repeat: 2
+- tapOn: 
+    text: "Calendar"
+- assertVisible: "Sign in with Google"
+- tapOn: 
+    text: "Sign in with Google"
+- tapOn:
+    text: "Continue"
+
+- tapOn:
+    text: "Schedule 1"
+- tapOn:
+    text: "Schedule 2"
+- assertVisible: "No events found."
+- tapOn:
+    text: "Schedule 2"
+- tapOn:
+    text: "Schedule 1"
+- assertVisible: ".*SOEN 341.*"
+- assertVisible: ".*ENGR 233.*"
+- assertVisible: ".*SOEN 342.*"
+- tapOn:
+    text: ".*SOEN 342.*"
+- assertVisible: "Location"
+- assertVisible: "Directions"
+- tapOn:
+    text: "Location"
+- assertVisible: "Henry F.Hall Building"
+- assertVisible: "1515 Saint-Catherine St, Montreal, QC H3G 1S6"  
+- tapOn: 
+    id: "closeButton"
+- assertNotVisible: "building-popup"
+- tapOn:
+    point: 10%,10% 
+- tapOn: 
+    text: "Calendar"
+- tapOn: 
+    text: "Directions"
+- tapOn:
+    point: 10%,10% 
+- tapOn: 
+    text: "Calendar"
+- tapOn: 
+    text: "Sign Out"
+- assertVisible: "Sign in with Google"
 
 
 

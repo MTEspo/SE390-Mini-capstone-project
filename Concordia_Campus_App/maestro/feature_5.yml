@@ -1,0 +1,55 @@
+appId: "host.exp.Exponent"
+
+---
+- launchApp:
+    appId: "host.exp.Exponent"
+    clearState: false
+- tapOn: 
+    text: "Concordia_Campus_App"
+- tapOn:
+    text: "SGW"
+    repeat: 3
+    delay: 5000
+- tapOn:
+    id: "userLocationButton"
+- assertVisible: "Search for Point of Interest..."
+- tapOn: "Search for Point of Interest..."
+- inputText: "Tim H"
+- tapOn: 
+    text: "Tim Hortons, Rue Desserte Ouest,.*"
+    repeat: 2
+- assertVisible: "Selected POI.*"
+- tapOn: "Selected POI.*"
+- tapOn: "Start"
+- tapOn: 
+    id: "transit-button"
+- tapOn: 
+    id: "walking-button"
+- tapOn: 
+    id: "driving-button"
+- tapOn: Cancel
+- tapOn: 
+    id: "userLocationButton"
+- tapOn: 
+    text: "Tim Hortons, Sources Boulevar.*"
+    repeat: 2
+- tapOn:
+    id: "clear-text"
+- tapOn:
+    id: "filterButton"
+- tapOn: 
+    id: "restaurant"
+- tapOn: 
+    id: "Le Mitoyen"
+- tapOn: 
+    text: ".*Restaurant Le Mitoyen.*"
+- assertVisible: "Selected POI.*"
+- tapOn: "Selected POI.*"
+- tapOn: "Start"
+- tapOn: 
+    id: "transit-button"
+- tapOn: 
+    id: "walking-button"
+- tapOn: 
+    id: "driving-button"
+- tapOn: Cancel
