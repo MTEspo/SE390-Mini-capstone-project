@@ -1,0 +1,12 @@
+appId: "com.concordia.campusapp"
+
+---
+
+- launchApp
+- tapOn: 
+    text: "Concordia_Campus_App"
+- tapOn:
+    point: 25,100 
+
+
+

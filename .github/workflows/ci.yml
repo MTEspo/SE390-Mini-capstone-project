@@ -56,24 +56,24 @@ jobs:
           path: Concordia_Campus_App/reports/jest-*.xml    
           reporter: jest-junit        
 
-      # - name: Setup EAS
-      #   uses: expo/expo-github-action@v8
-      #   with:
-      #     eas-version: latest
-      #     token: ${{ secrets.EXPO_TOKEN }}
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
-      # - name: Create .env file
-      #   run: |
-      #     echo "API_KEY=${{ secrets.API_KEY }}" > Concordia_Campus_App/.env
+      - name: Create .env file
+        run: |
+          echo "API_KEY=${{ secrets.API_KEY }}" > Concordia_Campus_App/.env
 
       
-      # - name: Build with EAS
-      #   run: |
-      #     cd Concordia_Campus_App
-      #     npm install eas-cli
-      #     npx eas build --platform ios --non-interactive --profile build-and-maestro-test
-      #     if [ $? -ne 0 ]; then
-      #       echo "EAS build failed!"
-      #       exit 1
-      #     fi
+      - name: Build with EAS
+        run: |
+          cd Concordia_Campus_App
+          npm install eas-cli
+          npx eas build --platform ios --non-interactive --profile build-and-maestro-test
+          if [ $? -ne 0 ]; then
+            echo "EAS build failed!"
+            exit 1
+          fi
 

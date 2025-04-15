@@ -21,9 +21,11 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
     flexDirection: 'column',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
+    flexDirection: 'row'
   },
   searchBar: {
+    marginLeft: 16,
     height: 40,
     borderWidth: 0.5,
     borderColor: '#ccc',
@@ -190,7 +192,7 @@ modeButton: {
   marginHorizontal: 21,
   backgroundColor: '#800000',
   paddingVertical: 5,
-  paddingHorizontal: 20,
+  paddingHorizontal: 15,
   borderRadius: 12,
   justifyContent: 'center',
   alignItems: 'center',
@@ -236,6 +238,7 @@ modeText: {
     borderWidth: 1,
     borderColor: 'black',
     alignSelf: 'flex-start',
+    marginBottom: 5,
   },
   useCurrentLocationText: {
     color: 'white',
@@ -256,10 +259,40 @@ modeText: {
   flexDirection: 'row',
   width: 'auto',
  },
- modeImage: {
-  width: 40,  
-  height: 40, 
-},
+ startPOIbutton: {
+  position: 'absolute',
+  backgroundColor: '#800000', 
+  borderRadius: 10,
+  paddingVertical: 8,
+  paddingHorizontal: 15,
+  width: 'auto',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginRight: 1,
+  marginBottom: 5,
+  borderWidth: 1,
+  borderColor: 'black',
+  marginLeft: 10,
+  right: -80,
+  top: 5
+ },
+ startPOIbuttonActive: {
+  position: 'absolute',
+  backgroundColor: 'white', 
+  borderRadius: 10,
+  paddingVertical: 8,
+  paddingHorizontal: 15,
+  width: 'auto',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginRight: 1,
+  marginBottom: 5,
+  borderWidth: 1,
+  borderColor: 'black',
+  marginLeft: 10,
+  right: -90,
+  top: 5
+ }
 });
 
 export default styles;

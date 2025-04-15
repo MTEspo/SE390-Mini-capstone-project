@@ -1,20 +1,13 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import MapScreen from './maps/MapScreen';
-import TransitScreen from './maps/transitOptions.js';
-import { StatusBar } from 'expo-status-bar';
 import Calendar from './calendar/calendar';
 import { PaperProvider } from 'react-native-paper';
 import FullShuttleSchedule from './shuttle_bus/full_schedule'
-import IndoorMaps from './maps/IndoorMaps.js';
-import TempMap from './maps/temp_map.js';
-
-
+import IndoorMapDirections from './maps/IndoorMapScreen.js';
 
 const Drawer = createDrawerNavigator();
-
 
 export default function App() {
   return (
@@ -24,23 +17,10 @@ export default function App() {
         <Drawer.Screen name="Map" component={MapScreen}/>
         <Drawer.Screen name="Calendar" component={Calendar} />
         <Drawer.Screen name="Shuttle Bus Schedule" component={FullShuttleSchedule} />
-        <Drawer.Screen name="Indoor map" component={IndoorMaps}/>
-        <Drawer.Screen name="Indoor Directions Map" component={TempMap}/>
+        <Drawer.Screen name="Indoor Directions Map" component={IndoorMapDirections}/>
       </Drawer.Navigator>
     </NavigationContainer>
+    
     </PaperProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  map: {
-    width: '100%',
-    height: '100%',
-  },
-});

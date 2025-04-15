@@ -16,6 +16,7 @@ jest.mock('react-native-maps-directions', () => {
   });
 
 jest.mock('react-native-vector-icons/FontAwesome', () => 'Icon');
+jest.mock('react-native-vector-icons/FontAwesome5', () => 'FontAwesome5');
 
 describe("Tests to get directions between campuses", () => {
     beforeEach(() => {

@@ -17,7 +17,7 @@ const BuildingPopup = ({ building, onClose }) => {
 
   return (
     <View style={styles.popupContainer} testID="building-popup">
-      <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+      <TouchableOpacity onPress={onClose} style={styles.closeButton} testID="closeButton">
         <Text style={styles.closeButtonText}>X</Text>
       </TouchableOpacity>
       <Text style={styles.popupTitle}>{building.popUp.name}</Text>

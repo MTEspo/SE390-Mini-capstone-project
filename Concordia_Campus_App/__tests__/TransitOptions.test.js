@@ -7,30 +7,32 @@ jest.mock('react-native-maps-directions', () => {
   return MockMapViewDirections;
 });
 
+jest.mock('react-native-vector-icons/FontAwesome5', () => 'FontAwesome5');
+
 describe('TransitScreen Component', () => {
   test('renders correctly', () => {
-    const { getByPlaceholderText, getByText } = render(<TransitScreen showDirections={true} campus={""} routeData={null}/>);
+    const { getByTestId } = render(<TransitScreen showDirections={true} campus={""} routeData={null}/>);
     // Check if directions button renders
-    expect(getByText('Driving')).toBeTruthy();
-    expect(getByText('Walking')).toBeTruthy();
-    expect(getByText('Transit')).toBeTruthy();
+    expect(getByTestId('driving-button')).toBeTruthy();
+    expect(getByTestId('walking-button')).toBeTruthy();
+    expect(getByTestId('transit-button')).toBeTruthy();
   });
 
 test('shows directions when button is pressed', async () => {
-    const { getByText, findByText } = render(<TransitScreen showDirections={true} campus={"SGW"} routeData={null}/>);
+    const { getByTestId } = render(<TransitScreen showDirections={true} campus={"SGW"} routeData={null}/>);
   
-    const directionsButton = getByText('Driving');
+    const directionsButton = getByTestId('driving-button');
     fireEvent.press(directionsButton);
   
     // Check if MapViewDirections is rendered
-    const mapDirections = await findByText('Driving');
+    const mapDirections = getByTestId('driving-button');
     expect(mapDirections).toBeTruthy();
   });
 
   test('sets default mode to driving', async () => {
-    const { getByText, getByTestId } = render(<TransitScreen showDirections={true} campus={"SGW"} routeData={null}/>);
+    const { getByTestId } = render(<TransitScreen showDirections={true} campus={"SGW"} routeData={null}/>);
   
-    const directionsButton = getByText('Driving');
+    const directionsButton = getByTestId('driving-button');
     fireEvent.press(directionsButton);
   
     // Driving button should be highlighted by default
@@ -44,7 +46,7 @@ test('shows directions when button is pressed', async () => {
 test('updates mode when mode buttons are pressed', () => {
     const { getByText, getByTestId } = render(<TransitScreen showDirections={true} campus={"SGW"} routeData={null}/>);
   
-    const directionsButton = getByText('Driving');
+    const directionsButton = getByTestId('driving-button');
     fireEvent.press(directionsButton);
   
     const walkingButton = getByTestId('walking-button');

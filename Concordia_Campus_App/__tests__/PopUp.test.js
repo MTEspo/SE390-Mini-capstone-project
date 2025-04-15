@@ -86,7 +86,7 @@ describe('MapScreen', () => {
       
             expect(polygons.length).toBeGreaterThan(0);
             polygons.forEach((polygon) => {
-              expect(polygon.props.fillColor).toBeDefined();
+              expect(polygon.props.fillColor).not.toBeNull();
 
           });
         });

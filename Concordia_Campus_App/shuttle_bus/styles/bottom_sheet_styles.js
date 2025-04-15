@@ -4,6 +4,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         flex: 1,
         padding: 10,
+        zIndex:10
     },
     buttonContainer: {
         flexDirection: 'row', 

@@ -1,0 +1,13 @@
+appId: "com.concordia.campusapp"
+
+---
+
+- launchApp
+- tapOn: 
+    text: "SGW"
+    repeat: 2
+- assertVisible: 
+    id: "polygon-0"
+- assertVisible: 
+    id: "polygon-marker-0"
+
